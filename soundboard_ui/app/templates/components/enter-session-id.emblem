@@ -1,0 +1,4 @@
+= yield
+form submit="submitSessionId"
+  = input type=text value=sessionId placeholder="Session ID"
+  = input type="submit" value="Join Session"
