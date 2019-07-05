@@ -1,0 +1,3 @@
+
+* TODO *
+[*] allow multiple users - don't broadcast messages to all clients, only broadcast messaages for a session id to clients of that session id

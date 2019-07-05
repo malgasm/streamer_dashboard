@@ -1,4 +1,16 @@
-= yield
-form submit="submitSessionId"
-  = input type=text value=sessionId placeholder="Session ID"
-  = input type="submit" value="Join Session"
+.row.enterSessionIdContainer
+  if hasCurrentSession
+    .col-10
+      p.alert.alert-primary
+        | Welcome. You are in session&nbsp;
+        = session.sessionId
+        |.
+    .col-2
+      a.btn.btn-danger click="clearSession" leave this session
+  else
+    form submit="(action 'submitSessionId')"
+      div.form-group.row
+        .col-10
+          = input class="form-control form-control-lg" type=text value=sessionId placeholder="Session ID"
+        .col-2
+          = input type="submit" value="Join Session" class="btn btn-primary"

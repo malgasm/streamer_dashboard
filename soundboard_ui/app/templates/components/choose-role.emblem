@@ -1,12 +1,21 @@
-h3
-  | Please choose your role!
+.row.chooseRoleContainer
+  if hasCurrentRole
+    .col-10
+      h1
+        | you haz a role,&nbsp;
+        = session.currentRole
+        |.
+    .col-2
+      a.btn.btn-danger click="clearRole" change your role
+  else
+    .col-12
+      h3
+        | Please choose your role!
 
-h3 are you a...
+      h3 are you a...
 
-div.roleSelectorContainer
-  div.roleSelectionChoice.streamer click="'chooseRole' 'streamer'"
-    a Streamer
-  div.roleSelectSpacerText
-    span or
-  div.roleSelectionChoice.controller click="'chooseRole' 'controller'"
-    a Controller
+      .row.roleSelectorContainer
+        div.col-6.roleSelectionChoice.streamer click="'chooseRole' 'streamer'"
+          a Streamer
+        div.col-6.roleSelectionChoice.controller click="'chooseRole' 'controller'"
+          a Controller

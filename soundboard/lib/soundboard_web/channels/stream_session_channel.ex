@@ -5,13 +5,8 @@ defmodule SoundboardWeb.StreamSessionChannel do
     {:ok, socket}
   end
 
-  def handle_in("play_sound", %{"sound_id" => sound_id}, socket) do
-    broadcast!(socket, "play_sound", %{sound_id: sound_id})
-    {:noreply, socket}
-  end
-
-  def handle_in("shout_out", %{"username" => username}, socket) do
-    broadcast!(socket, "shout_out", %{username: username})
+  def handle_in("stream_action", %{"type" => type, "value" => value}, socket) do
+    broadcast!(socket, "stream_action", %{type: type, value: value})
     {:noreply, socket}
   end
 end

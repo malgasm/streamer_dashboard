@@ -1,20 +1,2 @@
+streamer-ui
 = yield
-
-if session.hasCurrentSession
-  p.alert.alert-primary
-    | Welcome. You are in session&nbsp;
-    = session.sessionId
-    |.
-  a.btn.btn-danger click="clearSession" leave this session
-
-  if session.hasCurrentRole
-    h1
-      | you haz a role,&nbsp;
-      = session.currentRole
-      |.
-    a.btn.btn-danger click="clearRole" change your role
-    component componentForRole
-  else
-    choose-role
-else
-  enter-session-id hasInputSessionId=(action 'hasInputSessionId')

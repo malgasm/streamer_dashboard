@@ -1,0 +1,9 @@
+p event log
+
+div.eventLogEventsContainer
+  ul.eventLogEventsList
+    li.eventLogItem
+      em events will be listed here
+    each events as |event|
+      li.eventLogItem
+        span = event.text

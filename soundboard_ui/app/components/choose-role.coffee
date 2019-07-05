@@ -4,4 +4,9 @@ export default Ember.Component.extend
   session: Em.inject.service()
   actions:
     chooseRole: (role) ->
-      @get('session').setCurrentRole(role)
+      @chooseRole(role)
+
+    clearRole: ->
+      @clearRole()
+
+
