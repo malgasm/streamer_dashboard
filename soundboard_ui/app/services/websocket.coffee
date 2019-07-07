@@ -1,12 +1,13 @@
 import Ember from 'ember'
 import {Socket} from "phoenix"
+import ENV from "soundboard-ui/config/environment"
 
 export default Ember.Service.extend
   messageBus: Em.inject.service()
   channel: null
   joined_channel: null
   connect: (key) ->
-    socket = new Socket("ws://10.0.0.45:4000/socket/websocket") #todo: env
+    socket = new Socket(ENV.websocketURL)
 
     socket.connect()
 
@@ -24,15 +25,10 @@ export default Ember.Service.extend
 
     @set('channel', chan)
 
-    Em.run.later @, ->
-      chan.push('stream_action',
-        {
-          type: 'derp',
-          value: 'herp'
-        })
+    Em.run.later =>
+      @sendMessage('First', 'test message')
     , 200
 
-    window.z = chan
-
   sendMessage: (type, value) ->
+    console.log 'sendMessage', type, value
     @get('channel').push('stream_action', {type: type, value: value})
