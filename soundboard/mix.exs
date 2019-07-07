@@ -19,6 +19,7 @@ defmodule Soundboard.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
+      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc],
       mod: {Soundboard.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
@@ -33,6 +34,7 @@ defmodule Soundboard.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:exirc, "~> 1.1"},
       {:phoenix, "~> 1.4.7"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},
