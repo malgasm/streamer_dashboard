@@ -25,10 +25,6 @@ export default Ember.Service.extend
 
     @set('channel', chan)
 
-    Em.run.later =>
-      @sendMessage('First', 'test message')
-    , 200
-
   sendMessage: (type, value) ->
     console.log 'sendMessage', type, value
     @get('channel').push('stream_action', {type: type, value: value})

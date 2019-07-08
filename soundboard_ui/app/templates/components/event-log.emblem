@@ -1,9 +1,18 @@
 p event log
 
 div.eventLogEventsContainer
+  hr
   ul.eventLogEventsList
-    li.eventLogItem
-      em events will be listed here
     each events as |event|
       li.eventLogItem
-        span = event.text
+        if event.user
+          strong
+            = event.user
+            |:&nbsp;
+          em = event.value
+        else
+          em
+            strong
+              = event.type
+              |:&nbsp;
+          p = event.value

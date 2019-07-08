@@ -73,7 +73,7 @@ defmodule SoundboardWeb.TwitchHandler do
   end
   def handle_info({:joined, channel}, config) do
     Logger.debug "Joined #{channel}"
-    Client.msg config.client, :privmsg, config.channel, "cmonBruh"
+    SoundboardWeb.MessagingHelper.send_twitch_chat_message("cmonBruh")
     {:noreply, config}
   end
   def handle_info({:names_list, channel, names_list}, config) do
@@ -87,6 +87,7 @@ defmodule SoundboardWeb.TwitchHandler do
     SoundboardWeb.ProcessHelper.send_process(SoundboardWeb.IncomingMessageHandler, {:message_sent, channel, nick, msg})
     {:noreply, config}
   end
+
   def handle_info({:mentioned, msg, %SenderInfo{:nick => nick}, channel}, config) do
     Logger.warn "#{nick} mentioned you in #{channel}"
     case String.contains?(msg, "hi") do

@@ -9,4 +9,5 @@ export default Ember.Component.extend
     @get('messageBus').subscribe('stream_action', @, @didReceiveStreamAction)
 
   didReceiveStreamAction: (payload) ->
-    @get('events').addObject(text: "key: #{payload.type}, value: #{payload.value}")
+    console.log 'dRSA', payload
+    @get('events').unshiftObject(Em.Object.create(payload))

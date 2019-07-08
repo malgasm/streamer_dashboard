@@ -1,7 +1,19 @@
 defmodule SoundboardWeb.MessagingHelper do
   require Logger
-  def send_message(message) do
+
+  def send_twitch_chat_message(message) do
     Logger.debug "sent message #{message}"
     SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.TwitchHandler, {:send_message, message})
+  end
+
+  def broadcast_new_twitch_message(channel, user, message) do
+    SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
+      %{
+        type: "message",
+        user: user,
+        channel: channel,
+        value: message
+      }
+    )
   end
 end
