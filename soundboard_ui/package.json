@@ -27,6 +27,7 @@
     "broccoli-merge-trees": "^3.0.2",
     "ember-ajax": "^5.0.0",
     "ember-bootstrap": "^3.0.0-rc.0",
+    "ember-browserify": "^1.2.2",
     "ember-cli": "~3.10.1",
     "ember-cli-app-version": "^3.2.0",
     "ember-cli-babel": "^7.7.3",
@@ -58,5 +59,7 @@
   },
   "engines": {
     "node": "8.* || >= 10.*"
+  },
+  "dependencies": {
   }
 }

@@ -35,5 +35,21 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     if sanitized_message == "jango" do
       SoundboardWeb.MessagingHelper.send_twitch_chat_message("rules")
     end
+
+    if sanitized_message == "psi" do
+      SoundboardWeb.MessagingHelper.send_twitch_chat_message("guy")
+    end
+
+    if sanitized_message == "dude" do
+      SoundboardWeb.MessagingHelper.send_twitch_chat_message("sup?")
+    end
+
+    if sanitized_message == "bruh" do
+      SoundboardWeb.MessagingHelper.send_twitch_chat_message("cmonBruh")
+    end
+
+    if sanitized_message == "!lurk" do
+      SoundboardWeb.MessagingHelper.send_twitch_chat_message("oh, you lurkin'? cool. enjoy it, #{user}.")
+    end
   end
 end
