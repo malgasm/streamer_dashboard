@@ -11,9 +11,11 @@ defmodule Soundboard.Application do
       # Start the Ecto repository
       # Soundboard.Repo,
       # Start the endpoint when the application starts
-      SoundboardWeb.Endpoint
+      SoundboardWeb.Endpoint,
       # Starts a worker by calling: Soundboard.Worker.start_link(arg)
       # {Soundboard.Worker, arg},
+      SoundboardWeb.TwitchHandler,
+      SoundboardWeb.IncomingMessageHandler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
