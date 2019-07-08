@@ -15,6 +15,9 @@ module.exports = function(defaults) {
       'importBootstrapFont': false,
       'importBootstrapCSS': false
     },
+    fingerprint: {
+      exclude: ['audio']
+    }
     sassOptions: {
       extension: 'sass'
     }
@@ -33,13 +36,13 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
-    var phoenixAmdFiles = new ES6Modules(phoenixTree, {
-        format: 'amd',
-        esperantoOptions: {
-            strict: true,
-            amdName: "phoenix"
-        }
-    });
+  var phoenixAmdFiles = new ES6Modules(phoenixTree, {
+      format: 'amd',
+      esperantoOptions: {
+          strict: true,
+          amdName: "phoenix"
+      }
+  });
 
   var phoenixTranspiledFiles = esTranspiler(phoenixAmdFiles, {});
 

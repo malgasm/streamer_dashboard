@@ -24,6 +24,10 @@ export default Ember.Service.extend
       )
 
     @set('channel', chan)
+    window.d = @
+    # Em.run.later @, =>
+    #   @sendMessage('play-sound', 'airhorn')
+    # , 1000
 
   sendMessage: (type, value) ->
     console.log 'sendMessage', type, value

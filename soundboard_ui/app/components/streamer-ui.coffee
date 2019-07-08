@@ -3,6 +3,7 @@ import Ember from 'ember'
 export default Ember.Component.extend
   session: Em.inject.service()
   websocket: Em.inject.service()
+  sounds: Em.inject.service()
 
   actions:
     hasInputSessionId: (sessionId) ->

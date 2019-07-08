@@ -1,0 +1,5 @@
+p audio player
+each currentAudios as |sound|
+  p = sound.path
+  audio onloadeddata="this.play();" autoplay="autoplay"
+    source src=sound.path
