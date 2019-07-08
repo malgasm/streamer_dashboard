@@ -21,8 +21,19 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     #send message to web clients
     SoundboardWeb.MessagingHelper.broadcast_new_twitch_message(channel, user, message)
 
-    if user == "malgasm" && message == "<3" do
-      SoundboardWeb.MessagingHelper.send_twitch_chat_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
+    sanitized_message = String.downcase(message)
+
+    if user == "malgasm" do
+      case sanitized_message do
+        "<3" -> SoundboardWeb.MessagingHelper.send_twitch_chat_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
+        "sherad" -> SoundboardWeb.MessagingHelper.send_twitch_chat_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
+        "medic" -> SoundboardWeb.MessagingHelper.send_twitch_chat_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
+        _ -> nil
+      end
+    end
+
+    if sanitized_message == "jango" do
+      SoundboardWeb.MessagingHelper.send_twitch_chat_message("rules")
     end
   end
 end
