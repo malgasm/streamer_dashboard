@@ -16,4 +16,13 @@ defmodule SoundboardWeb.MessagingHelper do
       }
     )
   end
+
+  def broadcast_new_play_sound_event(sound) do
+    SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
+      %{
+        type: "play_sound",
+        value: sound
+      }
+    )
+  end
 end

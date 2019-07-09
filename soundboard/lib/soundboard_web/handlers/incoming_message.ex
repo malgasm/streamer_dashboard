@@ -2,6 +2,23 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   use GenServer
   require Logger
 
+  #todo: yaml-ize the commands here
+  # important points of data:
+  # - user with access to commands
+  # - name of command
+  # - command message
+  # - matching (beginning, end, any)
+  #
+  # commands.yaml
+  #
+  # commands:
+  #   - command: '!hug'
+  #     message: 'barf'
+  #     matching: 'beginning'
+  #   - command: '!lurk'
+  #     message: 'you are lurking $username'
+  #     matching: ''
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, [%{}])
   end
@@ -23,36 +40,36 @@ defmodule SoundboardWeb.IncomingMessageHandler do
 
     sanitized_message = String.downcase(message)
 
-    if user == "malgasm" do
-      case sanitized_message do
-        "<3" -> SoundboardWeb.MessagingHelper.send_twitch_chat_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
-        "sherad" -> SoundboardWeb.MessagingHelper.send_twitch_chat_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
-        "medic" -> SoundboardWeb.MessagingHelper.send_twitch_chat_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
-        _ -> nil
-      end
+    process_message_for_user(user, message)
+  end
+
+  defp process_message_for_user("malgasm", message) do
+    IO.puts "received a message from malgasm :o"
+    case message do
+      "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
+      "sherad" -> send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
+      "medic" -> send_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
+      "hondo" -> send_message("Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo")
+      _ -> process_message_for_user("bruh", message)
+    end
+  end
+
+  defp process_message_for_user(user, message) do
+    IO.puts "received a message from #{user}"
+    case message do
+      "jango" -> send_message("rules")
+      "psi" -> send_message("guy")
+      "dude" -> send_message("sup?")
+      "bruh" -> send_message("cmonBruh")
+      "gay" -> SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("gay")
+      "!lurk" -> send_message("oh, you lurkin'? cool. enjoy it, #{user}.")
+      _ -> nil
     end
 
-    if sanitized_message == "jango" do
-      send_message("rules")
-    end
-
-    if sanitized_message == "psi" do
-      send_message("guy")
-    end
-
-    if sanitized_message == "dude" do
-      send_message("sup?")
-    end
-
-    if sanitized_message == "bruh" do
-      send_message("cmonBruh")
-    end
-
-    if sanitized_message == "!lurk" do
-      send_message("oh, you lurkin'? cool. enjoy it, #{user}.")
+    if String.starts_with?(message, "!hug") do
+      send_message("barf")
     end
   end
 
   defp send_message(msg), do: SoundboardWeb.MessagingHelper.send_twitch_chat_message(msg)
-
 end
