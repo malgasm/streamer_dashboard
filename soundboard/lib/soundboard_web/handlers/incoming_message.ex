@@ -46,10 +46,6 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   defp process_message_for_user("malgasm", message) do
     IO.puts "received a message from malgasm :o"
     case message do
-      "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
-      "sherad" -> send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
-      "medic" -> send_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
-      "hondo" -> send_message("Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo")
       _ -> process_message_for_user("bruh", message)
     end
   end
@@ -57,6 +53,13 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   defp process_message_for_user(user, message) do
     IO.puts "received a message from #{user}"
     case message do
+      "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
+      "sherad" ->
+        # SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("awaken")
+        send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
+      "medic" -> send_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
+      "hondo" -> send_message("Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo")
+      "discord" -> send_message("Join malgasm's Chatgasm at https://discord.gg/hkP56Et malgasLove")
       "jango" -> send_message("rules")
       "psi" -> send_message("guy")
       "dude" -> send_message("sup?")

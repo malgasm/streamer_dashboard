@@ -1,0 +1,3 @@
+p audio controller
+each allSounds as |sound|
+  p.audioItem click="'playSound' sound.title" = sound.title

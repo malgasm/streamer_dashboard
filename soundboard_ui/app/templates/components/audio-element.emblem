@@ -1,0 +1,3 @@
+p = sound.path
+audio onloadstart="this.volume=0.5" onloadeddata="this.play();" autoplay="autoplay"
+  source src=sound.path

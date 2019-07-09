@@ -20,7 +20,7 @@ defmodule SoundboardWeb.MessagingHelper do
   def broadcast_new_play_sound_event(sound) do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
       %{
-        type: "play_sound",
+        type: "play-sound",
         value: sound
       }
     )
