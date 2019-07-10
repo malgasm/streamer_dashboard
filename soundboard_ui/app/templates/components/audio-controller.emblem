@@ -1,3 +1,7 @@
 p audio controller
-each allSounds as |sound|
-  p.audioItem click="'playSound' sound.title" = sound.title
+ul.soundControllerSoundsList
+  each allSounds as |sound|
+    li.soundControllerAudioItem click="'playSound' sound.title"
+      span = sound.title
+
+span.btn.btn-danger click='(action "clearAllSounds")' Clear all sounds
