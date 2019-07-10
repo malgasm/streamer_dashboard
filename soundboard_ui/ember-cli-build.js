@@ -17,7 +17,7 @@ module.exports = function(defaults) {
     },
     fingerprint: {
       exclude: ['audio']
-    }
+    },
     sassOptions: {
       extension: 'sass'
     }
