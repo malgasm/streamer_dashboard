@@ -52,27 +52,39 @@ defmodule SoundboardWeb.IncomingMessageHandler do
 
   defp process_message_for_user(user, message) do
     IO.puts "received a message from #{user}"
-    case message do
+    sanitized_message = String.downcase(message)
+
+    case sanitized_message do
       "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
       "sherad" ->
-        # SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("awaken")
+        SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("awaken")
         send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
       "medic" -> send_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
       "hondo" -> send_message("Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo")
+      "sooner" ->
+        play_sound("sooner")
+        send_message("Go check out SoonerChemical - Twitch's most awesome variety streamer! https://twitch.tv/soonerchemical")
       "discord" -> send_message("Join malgasm's Chatgasm at https://discord.gg/hkP56Et malgasLove")
       "jango" -> send_message("rules")
       "psi" -> send_message("guy")
       "dude" -> send_message("sup?")
       "bruh" -> send_message("cmonBruh")
-      "gay" -> SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("gay")
-      "!lurk" -> send_message("oh, you lurkin'? cool. enjoy it, #{user}.")
       _ -> nil
     end
 
-    if String.starts_with?(message, "!hug") do
+    if String.starts_with?(sanitized_message, "!hug") do
       send_message("barf")
+    end
+
+    if String.contains?(sanitized_message, "gay") do
+      SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("gay")
+    end
+
+    if String.starts_with?(sanitized_message, "hi") do
+      send_message("hi #{user}!")
     end
   end
 
   defp send_message(msg), do: SoundboardWeb.MessagingHelper.send_twitch_chat_message(msg)
+  defp play_sound(sound), do: SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event(sound)
 end

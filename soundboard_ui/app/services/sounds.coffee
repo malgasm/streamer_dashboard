@@ -13,11 +13,13 @@ export default Ember.Service.extend
     poop1:                    'effects/poop1.mp3'
     poop2:                    'effects/poop2.mp3'
     poop3:                    'effects/poop3.mp3'
+    sooner:                    'clips/sooner.mp3'
 
   SOUNDS_EVENTS_MAP:
     gay: 'everyones_gay'
     airhorn: 'airhorn'
     awaken: 'awaken'
+    sooner: 'sooner'
     poop1: 'poop1'
     poop2: 'poop2'
     poop3: 'poop3'
