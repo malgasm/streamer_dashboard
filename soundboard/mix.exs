@@ -35,6 +35,7 @@ defmodule Soundboard.MixProject do
   defp deps do
     [
       {:exirc, "~> 1.1"},
+      {:floki, "~> 0.21.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.7"},

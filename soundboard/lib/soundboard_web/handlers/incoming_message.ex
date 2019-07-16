@@ -69,6 +69,8 @@ defmodule SoundboardWeb.IncomingMessageHandler do
       "psi" -> send_message("guy")
       "dude" -> send_message("sup?")
       "bruh" -> send_message("cmonBruh")
+      "huzzah" -> play_sound("applause")
+      "gimme the codes" -> send_message(SoundboardWeb.NukaCrypt.get_nukacrypt_code_text)
       _ -> nil
     end
 
