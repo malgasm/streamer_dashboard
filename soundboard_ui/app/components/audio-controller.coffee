@@ -7,11 +7,8 @@ export default Ember.Component.extend
   classNames: ['audioControllerComponent']
 
   didInsertElement: ->
-    allSounds = @get('sounds').allSounds()
-    Object.keys(allSounds).forEach (key) =>
-      @get('allSounds').addObject(
-        Em.Object.create(title: key, id: allSounds[key])
-      )
+    @get('sounds').getSounds().then (sounds) =>
+      @set('allSounds', sounds)
 
   actions:
     clearAllSounds: ->
@@ -19,5 +16,4 @@ export default Ember.Component.extend
 
     playSound: (sound) ->
       console.log 'playing sound', sound
-      @get('sounds').triggerSound(sound)
-
+      @get('sounds').triggerSound(sound.path)

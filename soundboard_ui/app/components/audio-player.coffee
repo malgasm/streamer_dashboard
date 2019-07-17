@@ -14,15 +14,13 @@ export default Ember.Component.extend
     #sounds from chat
     @get('messageBus').subscribe('stream_action', @, (payload) ->
       if payload && payload.type && payload.type == 'play-sound'
-        @playSound(@get('sounds').getSoundFilePath(@get('sounds').getSoundFromWebsocketEvent(payload.value)))
+        @playSound(@get('sounds').getSoundFilePath(payload.value))
       else if payload && payload.type && payload.type == 'clear-all-sounds'
         @set('currentAudios', [])
-        console.log 'currentAudios', @get('currentAudios')
     )
 
     #internal sounds (for testing?)
     @get('messageBus').subscribe('play-sound', @, (payload) ->
-      console.log 'audio player playSound', payload
       @playSound(payload)
     )
 

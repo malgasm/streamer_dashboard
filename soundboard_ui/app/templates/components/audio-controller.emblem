@@ -1,7 +1,7 @@
 p audio controller
 ul.soundControllerSoundsList
   each allSounds as |sound|
-    li.soundControllerAudioItem click="'playSound' sound.title"
-      span = sound.title
+    li.soundControllerAudioItem click="'playSound' sound"
+      span = sound.key
 
 span.btn.btn-danger click='(action "clearAllSounds")' Clear all sounds

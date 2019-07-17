@@ -15,4 +15,4 @@ div.eventLogEventsContainer
             strong
               = event.type
               |:&nbsp;
-          p = event.value
+          span = event.value

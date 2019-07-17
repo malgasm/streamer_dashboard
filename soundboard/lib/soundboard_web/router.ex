@@ -9,6 +9,12 @@ defmodule SoundboardWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  scope "api", SoundboardWeb do
+    pipe_through :browser
+
+    resources "/sounds", SoundsController
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
