@@ -21,7 +21,7 @@ defmodule SoundboardWeb.MessagingHelper do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
       %{
         type: "play-sound",
-        value: sound
+        value: SoundboardWeb.Sounds.get_sound_relative_path_for_web(sound)
       }
     )
   end

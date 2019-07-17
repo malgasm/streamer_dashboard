@@ -4,8 +4,7 @@ defmodule SoundboardWeb.Sounds do
   end
 
   def get_sound_relative_path_for_web(sound) do
-    sound_key = String.to_atom(sound)
-    {sound_key, path} = List.keyfind(get_sounds, sound_key, 0)
+    %{key: sound_key, path: path} = Enum.at(Enum.filter(get_sounds, fn(item) -> item.key == sound end), 0)
     path
   end
 end

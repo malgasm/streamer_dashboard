@@ -79,7 +79,7 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     end
 
     if String.contains?(sanitized_message, "gay") do
-      SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("gay")
+      SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("everyonesgay")
     end
 
     if String.starts_with?(sanitized_message, "hi") do

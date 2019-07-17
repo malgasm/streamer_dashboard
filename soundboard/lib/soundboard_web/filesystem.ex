@@ -17,6 +17,7 @@ defmodule SoundboardWeb.Filesystem do
   defp process_file_read({:ok, file}), do: file
   defp process_file_read({:error, error}), do: error
 
+  #creates sound objects in an ember-friendly format
   defp process_ls_result({:ok, files}, path, sounds) do
     sounds_list = List.flatten(Enum.map(files, fn(entry) ->
       sounds = sounds ++ if String.contains?(entry, ".") do #is a file
@@ -28,6 +29,7 @@ defmodule SoundboardWeb.Filesystem do
     end))
   end
 
+  # creates sound objects in tuple format
   # defp process_ls_result({:ok, files}, path, sounds) do
   #   sounds_list = List.flatten(Enum.map(files, fn(entry) ->
   #     sounds = sounds ++ if String.contains?(entry, ".") do #is a file
