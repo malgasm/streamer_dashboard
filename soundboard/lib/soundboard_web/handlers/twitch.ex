@@ -5,7 +5,7 @@ defmodule SoundboardWeb.TwitchHandler do
   defmodule Config do
     defstruct server:  "irc.twitch.tv",
               port:    6667,
-              pass:    Application.get_env(:soundboard, :twitch_oauth_key),
+              pass:    Application.get_env(:soundboard, :twitch_oauth_key_chat),
               nick:    Application.get_env(:soundboard, :twitch_username),
               user:    Application.get_env(:soundboard, :twitch_username),
               name:    Application.get_env(:soundboard, :twitch_username),

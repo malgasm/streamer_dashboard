@@ -1,7 +1,10 @@
 p audio controller
 ul.soundControllerSoundsList
+  each groupedSoundsForDisplay as |sound|
+    li.soundControllerAudioItem.groupedSound click="'playGroupedSound' sound"
+      span = sound
   each allSounds as |sound|
-    li.soundControllerAudioItem click="'playSound' sound"
+    li.soundControllerAudioItem.singleSound click="'playSound' sound"
       span = sound.key
 
 span.btn.btn-danger click='(action "clearAllSounds")' Clear all sounds
