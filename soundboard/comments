@@ -1,8 +1,17 @@
 [*] today's goals
-  [*] overlay
-  [x] randomly play a sound given a set of similar sounds
 
 * TODO *
+[*] custom commands
+  [*] database
+    [*] Yaml
+[*] separate the chat read and chat edit
+  [*] an oauth token / handler for malgasm
+    [*] read only
+  [*] an oauth token / handler for malshypeman
+    [*] write only
+
+[*] command to explain my mate beverage
+[*] make a brb screen with the overlay
 [*] make an overlay
 [*] replace muxy
   [*] alerts

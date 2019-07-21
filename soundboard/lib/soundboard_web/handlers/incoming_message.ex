@@ -44,9 +44,11 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   end
 
   defp process_message_for_user("malgasm", message) do
-    IO.puts "received a message from malgasm :o"
     case message do
-      _ -> process_message_for_user("bruh", message)
+      "sherad" ->
+        SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("awaken")
+        send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
+      _ -> process_message_for_user("@malgasm", message)
     end
   end
 
@@ -56,9 +58,6 @@ defmodule SoundboardWeb.IncomingMessageHandler do
 
     case sanitized_message do
       "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
-      "sherad" ->
-        SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("awaken")
-        send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
       "medic" -> send_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
       "hondo" -> send_message("Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo")
       "sooner" ->
@@ -70,6 +69,7 @@ defmodule SoundboardWeb.IncomingMessageHandler do
       "dude" -> send_message("sup?")
       "bruh" -> send_message("cmonBruh")
       "huzzah" -> play_sound("applause")
+      "420" -> play_sound("bonghit")
       "!so shroud" -> send_message("NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO")
       "!shoutout shroud" -> send_message("NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO")
       "gimme the codes" -> send_message(SoundboardWeb.NukaCrypt.get_nukacrypt_code_text)

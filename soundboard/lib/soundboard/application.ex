@@ -14,7 +14,8 @@ defmodule Soundboard.Application do
       SoundboardWeb.Endpoint,
       # Starts a worker by calling: Soundboard.Worker.start_link(arg)
       # {Soundboard.Worker, arg},
-      SoundboardWeb.TwitchHandler,
+      SoundboardWeb.TwitchIncomingChatHandler,
+      SoundboardWeb.TwitchOutgoingChatHandler,
       SoundboardWeb.IncomingMessageHandler
     ]
 

@@ -1,14 +1,14 @@
-defmodule SoundboardWeb.TwitchHandler do
+defmodule SoundboardWeb.TwitchOutgoingChatHandler do
   use GenServer
   require Logger
 
   defmodule Config do
     defstruct server:  "irc.twitch.tv",
               port:    6667,
-              pass:    Application.get_env(:soundboard, :twitch_oauth_key_chat),
-              nick:    Application.get_env(:soundboard, :twitch_username),
-              user:    Application.get_env(:soundboard, :twitch_username),
-              name:    Application.get_env(:soundboard, :twitch_username),
+              pass:    Application.get_env(:soundboard, :twitch_oauth_key_chat_outgoing),
+              nick:    Application.get_env(:soundboard, :twitch_username_incoming),
+              user:    Application.get_env(:soundboard, :twitch_username_incoming),
+              name:    Application.get_env(:soundboard, :twitch_username_incoming),
               channel: Application.get_env(:soundboard, :twitch_channel),
               client:  nil
 
@@ -57,9 +57,11 @@ defmodule SoundboardWeb.TwitchHandler do
     {:noreply, config}
   end
   def handle_info(:logged_in, config) do
-    Logger.debug "Logged in to #{config.server}:#{config.port}"
-    Logger.debug "Joining #{config.channel}.."
-    Client.join config.client, config.channel
+    Logger.debug "Logged in to #{config.server}:#{config.port}!!!!!!!!!!!!!!!!!!!!!!!!"
+    Logger.debug "Joining #{config.channel}.................................................."
+    request_twitch_capabilities(config.client)
+		|> join(config.channel)
+    # Client.join config.client, config.channel
     {:noreply, config}
   end
   def handle_info({:login_failed, :nick_in_use}, config) do
@@ -73,7 +75,7 @@ defmodule SoundboardWeb.TwitchHandler do
   end
   def handle_info({:joined, channel}, config) do
     Logger.debug "Joined #{channel}"
-    SoundboardWeb.MessagingHelper.send_twitch_chat_message("cmonBruh")
+    # SoundboardWeb.MessagingHelper.send_twitch_chat_message("cmonBruh")
     {:noreply, config}
   end
   def handle_info({:names_list, channel, names_list}, config) do
@@ -111,6 +113,39 @@ defmodule SoundboardWeb.TwitchHandler do
   def handle_info(_msg, config) do
     {:noreply, config}
   end
+
+  def cap_request(client, cap) do
+    request = Client.cmd(client, ['CAP ', 'REQ ', cap])
+    IO.puts "CAP REQUEST\n\n\n\n\n\n\n"
+    IO.inspect request
+    IO.inspect client
+  end
+
+  def request_twitch_capabilities(client) do
+    # Request capabilities before joining the channel
+    [
+      # ':twitch.tv/membership',
+      ':twitch.tv/commands'
+      # ':twitch.tv/tags'
+    ]
+      |> Enum.each(fn (cap) -> cap_request(client, cap) end)
+
+    client
+  end
+
+  def join(client, channels) when is_list(channels) do
+    channels
+      |> Enum.map(&join(client, &1))
+
+    client
+  end
+
+  def join(client, channel) do
+    Client.join(client, channel)
+
+    Logger.debug "Joined channel: #{channel}"
+  end
+
 
   def terminate(_, state) do
     # Quit the channel and close the underlying client connection when the process is terminating

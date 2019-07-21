@@ -3,7 +3,7 @@ defmodule SoundboardWeb.MessagingHelper do
 
   def send_twitch_chat_message(message) do
     Logger.debug "sent message #{message}"
-    SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.TwitchHandler, {:send_message, message})
+    SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.TwitchOutgoingChatHandler, {:send_message, message})
   end
 
   def broadcast_new_twitch_message(channel, user, message) do
