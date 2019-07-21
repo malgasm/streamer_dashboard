@@ -1,18 +1,23 @@
 [*] today's goals
+  [*] make a brb screen with the overlay
+  [*] play a random nani when someone says "what" in the chat
+  [*] custom commands
+    [*] database
+      [*] Yaml
 
 * TODO *
-[*] custom commands
-  [*] database
-    [*] Yaml
-[*] separate the chat read and chat edit
-  [*] an oauth token / handler for malgasm
-    [*] read only
-  [*] an oauth token / handler for malshypeman
-    [*] write only
+[*] command for command suggestions, or other suggestions
+[*] host all of the assets on a server somewhere
+  [*] could write a manifest to source the assets from a local server for now and then later move them to s3 or whatevs
+[*] use a phast db like redis to cache commands
+[x] separate the chat read and chat edit
+  [x] an oauth token / handler for malgasm
+    [x] read only
+  [x] an oauth token / handler for malshypeman
+    [x] write only
 
 [*] command to explain my mate beverage
-[*] make a brb screen with the overlay
-[*] make an overlay
+[x] make an overlay
 [*] replace muxy
   [*] alerts
 [*] random sounds

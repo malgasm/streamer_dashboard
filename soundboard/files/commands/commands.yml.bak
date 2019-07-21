@@ -1,0 +1,11 @@
+commands:
+  - added_by: "tarrasque"
+    matching_text: "!lurk"
+    command:
+      - message: "enjoy your lurk, $username!"
+    type: "start"
+  - added_by: "stokin"
+    matching_text: "!hug"
+    command:
+      - message: "yo $username, get hugged by $sender!"
+    type: "start"

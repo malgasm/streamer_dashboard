@@ -1,7 +1,6 @@
 
 * TODO *
-[*] make a component for grouped/individual sounds
 [*] sound volume
 [*] commands yaml
-[*] connect to multiple servers
+[*] connect to multiple irc servers
 [*] allow multiple users - don't broadcast messages to all clients, only broadcast messaages for a session id to clients of that session id

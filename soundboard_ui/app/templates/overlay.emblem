@@ -1,2 +1,9 @@
 .overlayContainer
-  h1 overlay dawg?
+
+  .todaysGoalsContainer
+    h3 today's goals:
+    ul.todaysGoalsList
+      li custom commands - yaml read/write - done
+      li user-added commands
+      li make a brb screen with the overlay
+      li play a random nani when someone says "what" in the chat

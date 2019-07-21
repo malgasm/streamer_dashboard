@@ -2,23 +2,6 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   use GenServer
   require Logger
 
-  #todo: yaml-ize the commands here
-  # important points of data:
-  # - user with access to commands
-  # - name of command
-  # - command message
-  # - matching (beginning, end, any)
-  #
-  # commands.yaml
-  #
-  # commands:
-  #   - command: '!hug'
-  #     message: 'barf'
-  #     matching: 'beginning'
-  #   - command: '!lurk'
-  #     message: 'you are lurking $username'
-  #     matching: ''
-
   def start_link(_) do
     GenServer.start_link(__MODULE__, [%{}])
   end
@@ -55,6 +38,8 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   defp process_message_for_user(user, message) do
     IO.puts "received a message from #{user}"
     sanitized_message = String.downcase(message)
+
+    SoundboardWeb.CustomCommandsHelper.match_and_process_commands(user, message)
 
     case sanitized_message do
       "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")

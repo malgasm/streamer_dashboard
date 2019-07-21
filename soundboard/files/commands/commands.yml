@@ -1,0 +1,14 @@
+--- 
+"commands":
+- "added_by": "malgasm"
+  "command":
+  - "sound": "poop1,poop2,poop3"
+  - "message": "hello, $sender, you typed $arg"
+  "matching_text": "blah"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "nani1,nani2,nani3,nani4,nani5,nani6,nani7,nani8,nani9"
+  "matching_text": "what"
+  "type": "anywhere"
+...

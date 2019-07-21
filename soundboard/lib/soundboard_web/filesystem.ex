@@ -3,7 +3,7 @@ defmodule SoundboardWeb.Filesystem do
     process_file_read(File.read(Path.expand("./files/" <> path)))
   end
 
-  def write_file(path, content) do
+  def write_file(content, path) do
     {:ok, file} = File.open(Path.expand("./files/" <> path), [:write])
     IO.binwrite(file, content)
   end
