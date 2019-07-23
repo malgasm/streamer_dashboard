@@ -31,7 +31,7 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   defp process_commands("start", commands, user, message) do
     Enum.each commands, fn(command) ->
       if String.starts_with?(sanitize_message(message), command["matching_text"]) do
-        process_command_actions(command["command"])
+        process_command_actions(Map.merge(command, %{"user" =>  user, "original_message" => message}))
       end
     end
   end
@@ -40,7 +40,7 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   defp process_commands("end", commands, user, message) do
     Enum.each commands, fn(command) ->
       if String.ends_with?(sanitize_message(message), command["matching_text"]) do
-        process_command_actions(command["command"])
+        process_command_actions(Map.merge(command, %{"user" =>  user, "original_message" => message}))
       end
     end
   end
@@ -48,25 +48,24 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   defp process_commands("anywhere", commands, user, message) do
     Enum.each commands, fn(command) ->
       if String.contains?(sanitize_message(message), command["matching_text"]) do
-        process_command_actions(command["command"])
+        process_command_actions(Map.merge(command, %{"user" =>  user, "original_message" => message}))
       end
     end
   end
 
-  defp process_command_actions(commands) when is_list(commands) do
-    Enum.each commands, fn(command) ->
-      IO.puts "PCA #{command["message"]}"
-      process_command_action(command)
+  defp process_command_actions(command) do
+    Enum.each command["command"], fn(cmd) ->
+      process_command_action(cmd, command)
     end
   end
 
   defp sanitize_message(message), do: String.downcase(message)
 
-  defp process_command_action(%{"message" => message}) do
-    SoundboardWeb.MessagingHelper.send_twitch_chat_message(substitute_variables(message))
+  defp process_command_action(%{"message" => message}, command) do
+    SoundboardWeb.MessagingHelper.send_twitch_chat_message(substitute_variables(message, command["user"], command["original_message"], command["matching_text"]))
   end
 
-  defp process_command_action(%{"sound" => sound}) do
+  defp process_command_action(%{"sound" => sound}, command) do
     if String.contains?(sound, ",") do
       SoundboardWeb.Sounds.get_random_sound(String.split(sound, ","))
       |> SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event
@@ -75,11 +74,12 @@ defmodule SoundboardWeb.CustomCommandsHelper do
     end
   end
 
-  defp process_command_action(%{"random_sound" => sound}) do
+  defp process_command_action(%{"random_sound" => sound}, command) do
     IO.puts "process_command_action for random sound #{sound}"
   end
 
-  defp substitute_variables(message) do
-    "hah"
+  defp substitute_variables(message, user, original_message, matching_text) do
+    String.replace(message, "$sender", user)
+    |> String.replace("$arg", String.replace(original_message, matching_text, ""))
   end
 end
