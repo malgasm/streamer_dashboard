@@ -1,9 +1,10 @@
-p ok strimmer, we're waiting for you to send events here.
 // chat
 // audio player
+//tabbed navigation
 // activity list?
   //top chatters
   //subs
   //new follows
   //raids & hosts
 audio-player
+streamer-chat-view

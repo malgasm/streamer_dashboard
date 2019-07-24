@@ -16,7 +16,7 @@ export default Ember.Service.extend
 
   triggerSound: (key) -> @get('websocket').sendMessage('play-sound', key)
 
-  triggerClearSounds: -> @get('websocket').sendMessage('clear-all-sounds', {})
+  triggerClearSounds: -> @get('websocket').sendMessage('clear-all-sounds', (new Date).toLocaleString())
 
   playSound: (file) ->
     @get('messageBus').publish('play-sound', @getSoundFilePath(file))

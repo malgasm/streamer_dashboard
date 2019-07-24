@@ -1,3 +1,2 @@
-p audio player
 each currentAudios as |sound|
   audio-element sound=sound ended=(action 'audioDidFinish')

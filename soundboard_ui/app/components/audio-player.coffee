@@ -4,11 +4,14 @@ export default Ember.Component.extend
   messageBus: Em.inject.service()
   sounds: Em.inject.service()
   utility: Em.inject.service()
+  websocket: Em.inject.service()
 
   currentAudios: []
 
   actions:
-    audioDidFinish: (soundId) -> @removeSound(soundId)
+    audioDidFinish: (soundId) ->
+      @removeSound(soundId)
+      @get('websocket').sendMessage('sound-ended', soundId)
 
   didInsertElement: ->
     #sounds from chat

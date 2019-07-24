@@ -1,10 +1,8 @@
 .row.chooseRoleContainer
   if hasCurrentRole
     .col-10
-      h1
-        | you haz a role,&nbsp;
-        = session.currentRole
-        |.
+      h4
+        em = session.currentRole
     .col-2
       a.btn.btn-danger click="clearRole" change your role
   else

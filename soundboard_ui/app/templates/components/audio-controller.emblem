@@ -1,10 +1,12 @@
-p audio controller
+if isPlayingSound
+  .col-md-12.btn-danger.clearAllSoundsButton touchStart='(action "clearAllSounds")'
+    p STAHP
+
 ul.soundControllerSoundsList
   each groupedSoundsForDisplay as |sound|
-    li.soundControllerAudioItem.groupedSound click="'playGroupedSound' sound"
+    li.soundControllerAudioItem.groupedSound touchStart="(action 'playGroupedSound' sound)"
       span = sound
   each allSounds as |sound|
-    li.soundControllerAudioItem.singleSound click="'playSound' sound"
+    li.soundControllerAudioItem.singleSound touchStart="(action 'playSound' sound)"
       span = sound.key
 
-span.btn.btn-danger click='(action "clearAllSounds")' Clear all sounds
