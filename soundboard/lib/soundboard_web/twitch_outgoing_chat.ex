@@ -94,7 +94,7 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     Logger.warn "#{nick} mentioned you in #{channel}"
     case String.contains?(msg, "hi") do
       true ->
-        reply = "Hi #{nick}!"
+        reply = "#{nick} malgasLove malgasLove malgasLove malgasLove malgasLove"
         Client.msg config.client, :privmsg, config.channel, reply
         Logger.info "Sent #{reply} to #{config.channel}"
       false ->

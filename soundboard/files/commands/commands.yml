@@ -12,12 +12,47 @@
   "type": "anywhere"
 - "added_by": "malgasm"
   "command":
-  - "message": "$arg has been banned."
+  - "message": "$arg has been permanently banned from this channel."
   "matching_text": "!ban"
   "type": "start"
 - "added_by": "malgasm"
   "command":
-  - "message": "malgasm likes to drink a home-brewed yerba mate beverage with ice, stevia, irish cream and milk. try your own at home! malgasLove"
+  - "message": "$sender, malgasm likes to drink a home-brewed yerba mate beverage with ice, stevia, irish cream and milk. try your own at home! malgasLove"
   "matching_text": "!drank"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "$sender runs over to $arg and gives them a giant hug! malgasLove malgasLove malgasLove"
+  "matching_text": "hug"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "ohlawd1,ohlawd2,ohlawd3,ohlawd4"
+  "matching_text": "lawd"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "ohlawd1,ohlawd2,ohlawd3,ohlawd4"
+  "matching_text": "jesus"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "woosah1,woosah2"
+  "matching_text": "woosah"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "woosah1,woosah2"
+  "matching_text": "whew"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "wow1,wow2,wow3,wow4,wow5"
+  "matching_text": "wow"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+    - "message": "mal's DPS build: http://malgasm.com/fallout/build"
+  "matching_text": "build"
   "type": "start"
 ...

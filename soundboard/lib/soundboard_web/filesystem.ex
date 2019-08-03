@@ -46,5 +46,6 @@ defmodule SoundboardWeb.Filesystem do
   end
 
   defp process_ls_result({:error, error}, path, sounds), do: error
-  defp get_filename_without_extension(file), do: Enum.at(String.split(file, "."), 0)
+
+  defp get_filename_without_extension(file), do: Enum.join(Enum.slice(String.split(file, "."), 0, Kernel.length(String.split(file, ".")) - 1), ".")
 end
