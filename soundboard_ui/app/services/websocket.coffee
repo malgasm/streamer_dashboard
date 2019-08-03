@@ -4,6 +4,7 @@ import ENV from "soundboard-ui/config/environment"
 
 export default Ember.Service.extend
   messageBus: Em.inject.service()
+
   channel: null
   joined_channel: null
   connect: (key) ->

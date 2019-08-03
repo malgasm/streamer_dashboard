@@ -1,8 +1,6 @@
 import Ember from 'ember'
 
 export default Ember.Component.extend
-  messageBus: Em.inject.service()
-  utility: Em.inject.service()
   events: []
 
   didInsertElement: ->
@@ -10,4 +8,5 @@ export default Ember.Component.extend
 
   didReceiveStreamAction: (payload) ->
     console.log 'dRSA', payload
-    @get('events').unshiftObject(Em.Object.create(payload))
+    if payload.type && payload.type == 'message'
+      @get('events').unshiftObject(Em.Object.create(payload))

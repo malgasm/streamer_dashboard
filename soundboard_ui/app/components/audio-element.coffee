@@ -9,3 +9,9 @@ export default Ember.Component.extend
     @$('audio').on('ended', =>
       @ended(@get('sound.id'))
     )
+
+    if @get('sound.path').indexOf('.loop') != -1
+      @$('audio').on('ended', ->
+        @currentTime=0
+        @play()
+      )

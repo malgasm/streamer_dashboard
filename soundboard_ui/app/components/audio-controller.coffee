@@ -2,25 +2,24 @@ import Ember from 'ember'
 
 export default Ember.Component.extend
   sounds: Em.inject.service()
-  utility: Em.inject.service()
-  messageBus: Em.inject.service()
   allSounds: []
   groupedSounds: {}
   classNames: ['audioControllerComponent']
   numPlayingSounds: 0
 
-  didInsertElement: ->
-    @get('sounds').getSounds().then((sounds) =>@loadSounds(sounds))
-
-    @get('messageBus').subscribe('stream_action', @, (payload) =>
-      if payload && payload.type && payload.type == 'sound-ended'
-        @decrementNumSounds()
-    )
-
   actions:
+    onContextMenuOpen: (evt) ->
+      return unless evt
+      evt.preventDefault()
+      evt.stopPropagation()
+
     clearAllSounds: ->
       @get('sounds').triggerClearSounds()
       @set('numPlayingSounds', 0)
+
+    finishPlayingSound: (sound) ->
+      console.log 'fps', sound
+      @get('sounds').triggerSoundFinish(sound)
 
     playSound: (sound) ->
       console.log 'playing sound', sound
@@ -32,6 +31,14 @@ export default Ember.Component.extend
         @get('utility').randomItem(@get('groupedSounds')[sound])
       )
       @incrementNumSounds()
+
+  didInsertElement: ->
+    @get('sounds').getSounds().then((sounds) =>@loadSounds(sounds))
+
+    @get('messageBus').subscribe('stream_action', @, (payload) =>
+      if payload && payload.type && payload.type == 'sound-ended'
+        @decrementNumSounds()
+    )
 
   isPlayingSound: Em.computed('numPlayingSounds', -> @get('numPlayingSounds') > 0)
   incrementNumSounds: -> @set('numPlayingSounds', @get('numPlayingSounds') + 1)

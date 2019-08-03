@@ -1,2 +1,2 @@
 each currentAudios as |sound|
-  audio-element sound=sound ended=(action 'audioDidFinish')
+  audio-element id=sound.id sound=sound ended=(action 'audioDidFinish' sound) loop=sound.loops

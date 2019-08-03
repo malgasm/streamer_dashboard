@@ -1,12 +1,12 @@
-if isPlayingSound
-  .col-md-12.btn-danger.clearAllSoundsButton touchStart='(action "clearAllSounds")'
-    p STAHP
+.row
+  ul.soundControllerSoundsList.col-10
+    each groupedSoundsForDisplay as |sound|
+      li.soundControllerAudioItem.groupedSound touchStart="(action 'playGroupedSound' sound)" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')"
+        span = sound
+    each allSounds as |sound|
+      li.soundControllerAudioItem.singleSound touchStart="(action 'playSound' sound)" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')"
+        span = sound.key
 
-ul.soundControllerSoundsList
-  each groupedSoundsForDisplay as |sound|
-    li.soundControllerAudioItem.groupedSound touchStart="(action 'playGroupedSound' sound)"
-      span = sound
-  each allSounds as |sound|
-    li.soundControllerAudioItem.singleSound touchStart="(action 'playSound' sound)"
-      span = sound.key
+  .col-2.btn-danger.clearAllSoundsButton touchStart="(action 'clearAllSounds')" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')"
+    p STAHP
 

@@ -1,8 +1,8 @@
 import Ember from 'ember'
 
 export default Ember.Service.extend
-  messageBus: Em.inject.service()
   websocket: Em.inject.service()
+  messageBus: Em.inject.service()
   store: Em.inject.service()
 
   getSounds: ->
@@ -15,6 +15,8 @@ export default Ember.Service.extend
   allSounds: -> @get('store').peekAll('sound')
 
   triggerSound: (key) -> @get('websocket').sendMessage('play-sound', key)
+
+  triggerSoundFinish: (key) -> @get('websocket').sendMessage('finish-sound', key)
 
   triggerClearSounds: -> @get('websocket').sendMessage('clear-all-sounds', (new Date).toLocaleString())
 

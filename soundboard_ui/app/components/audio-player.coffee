@@ -1,23 +1,25 @@
 import Ember from 'ember'
 
 export default Ember.Component.extend
-  messageBus: Em.inject.service()
   sounds: Em.inject.service()
-  utility: Em.inject.service()
   websocket: Em.inject.service()
 
   currentAudios: []
 
   actions:
-    audioDidFinish: (soundId) ->
-      @removeSound(soundId)
-      @get('websocket').sendMessage('sound-ended', soundId)
+    audioDidFinish: (sound) ->
+      @removeSound(sound)
+      @get('websocket').sendMessage('sound-ended', sound.id)
 
   didInsertElement: ->
     #sounds from chat
     @get('messageBus').subscribe('stream_action', @, (payload) ->
       if payload && payload.type && payload.type == 'play-sound'
         @playSound(@get('sounds').getSoundFilePath(payload.value))
+      else if payload && payload.type && payload.type == 'finish-sound'
+        @get('currentAudios').removeObjects(
+          @get('currentAudios').filter((sound) -> console.log(JSON.stringify(sound)); sound.get('path').indexOf('loop.') != -1 )
+        )
       else if payload && payload.type && payload.type == 'clear-all-sounds'
         @set('currentAudios', [])
     )
@@ -27,9 +29,9 @@ export default Ember.Component.extend
       @playSound(payload)
     )
 
-  removeSound: (soundId) ->
-    @get('currentAudios').forEach((sound) =>
-      if sound.id == soundId
+  removeSound: (sound) ->
+    @get('currentAudios').forEach((currentSound) =>
+      if currentSound.id == sound.id
         @get('currentAudios').removeObject(sound)
     )
 

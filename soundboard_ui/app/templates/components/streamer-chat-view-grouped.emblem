@@ -1,0 +1,12 @@
+each groupedMessagesSortedByLastMessage as |groupedMessage|
+  h3
+    | from&nbsp;
+    = groupedMessage.username
+  p
+    |first message sent at&nbsp;
+    = groupedMessage.firstMessageSentAt
+  p
+    |last message sent at&nbsp;
+    = groupedMessage.lastMessageSentAt
+  each groupedMessage.messages as |message|
+    h1 = message.text
