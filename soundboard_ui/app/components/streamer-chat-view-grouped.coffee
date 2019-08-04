@@ -6,6 +6,8 @@ export default Ember.Component.extend
   messages: []
   groupedMessages: []
   groupedMessage: Em.inject.service()
+  classNames: ['streamerChatViewGroupedContainer']
+  IGNORED_USERS: ['nightbot','streamelements','streamlabs'] #todo: service this, eventually, pull from yaml
 
   didInsertElement: ->
     @get('messageBus').subscribe('stream_action', @, @didReceiveStreamAction)
@@ -54,6 +56,7 @@ export default Ember.Component.extend
 
   newMessage: (payload) ->
     console.log 'newMessage', payload
+    return if @IGNORED_USERS.indexOf(payload.user) != -1
     #{channel, type, user, value}
     # @get('messages').addObject(Em.Object.create(user: payload.user, messageText: payload.value))
     # console.log 'message', Em.Object.create(user: payload.user, messageText: payload.value)

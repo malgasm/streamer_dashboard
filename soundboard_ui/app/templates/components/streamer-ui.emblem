@@ -2,7 +2,5 @@ if hasSessionAndRole
   component componentForRole
   = yield
 
-event-log
-
 enter-session-id hasInputSessionId=(action 'hasInputSessionId') hasCurrentSession=session.hasCurrentSession clearSession=(action 'clearSession')
 choose-role hasCurrentRole=session.hasCurrentRole chooseRole=(action 'setRole') clearRole=(action 'setRole')

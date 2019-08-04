@@ -1,12 +1,17 @@
 each groupedMessagesSortedByLastMessage as |groupedMessage|
-  h3
-    | from&nbsp;
-    = groupedMessage.username
-  p
-    |first message sent at&nbsp;
-    = groupedMessage.firstMessageSentAt
-  p
-    |last message sent at&nbsp;
-    = groupedMessage.lastMessageSentAt
-  each groupedMessage.messages as |message|
-    h1 = message.text
+  .row.groupedMessageContainer
+    p.col-2.groupedMessageUsernameContainer
+      em
+        | &nbsp;
+        = groupedMessage.username
+    p.col-2.groupedMessageTimestampContainer
+      span
+        = groupedMessage.firstMessageTimestamp
+        |&nbsp;-&nbsp;
+        = groupedMessage.lastMessageTimestamp
+  .row.groupedMessageMessagesContainer
+    ul.col-12
+      each groupedMessage.messages as |message|
+        li.groupedMessageTextContainer
+          span.groupedMessageTimestamp = message.timestamp
+          span.groupedMessageText = message.text

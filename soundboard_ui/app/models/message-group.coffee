@@ -5,3 +5,10 @@ export default DS.Model.extend
   username:            DS.attr('string')
   firstMessageSentAt:  DS.attr('date')
   lastMessageSentAt:  DS.attr('date')
+
+  firstMessageTimestamp: Em.computed('firstMessageSentAt', ->
+    @get('firstMessageSentAt').format('H:mma').toString()
+  )
+  lastMessageTimestamp: Em.computed('lastMessageSentAt', ->
+    @get('lastMessageSentAt').format('H:mma').toString()
+  )
