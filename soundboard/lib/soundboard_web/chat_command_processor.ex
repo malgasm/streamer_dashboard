@@ -1,28 +1,70 @@
 defmodule SoundboardWeb.ChatCommandProcessor do
-  def process_message_for_user("malgasm", message) do
+  def process_message_for_user(%{username: "malgasm", isMod: isMod, isSub: isSub}, message) do
+    IO.puts "PMFU MALGASM"
     user = "malgasm"
     case message do
-      "sherad" ->
-        SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("awaken")
-        send_message("YO! Go check the MOST AMAZING lady Fallout 76 streamer! Do it now!! https://twitch.tv/stokintheneighbors malgasLove malgasLove malgasLove")
-      #commands may not start with a slash
-      _ -> process_message_for_user("@malgasm", message)
+      _ -> process_message_for_user(%{username: "@malgasm", isMod: isMod, isSub: isSub}, message)
     end
 
-    if String.starts_with?(message, "addcmd") do
-      process_add_command(user, message)
-    end
+  end
 
-    if String.starts_with?(message, "delcmd") do
-      process_remove_command(user, message)
+  #subs only
+  def process_message_for_user(%{username: username, isMod: false, isSub: true}, message) do
+    if !process_sub_commands(username, message) do
+      process_message_for_user(%{username: username, isMod: false, isSub: false}, message)
     end
   end
 
-  def process_message_for_user(user, message) do
-    IO.puts "received a message from #{user.username}"
-    sanitized_message = String.downcase(message)
+  #mods only
+  def process_message_for_user(%{username: username, isMod: true, isSub: false}, message) do
+    if !process_mod_commands(username, message) do
+      process_message_for_user(%{username: username, isMod: false, isSub: false}, message)
+    end
+  end
 
-    SoundboardWeb.CustomCommandsHelper.match_and_process_commands(user, message)
+  #subs and mods
+  def process_message_for_user(%{username: username, isMod: true, isSub: true}, message) do
+    if !process_mod_commands(username, message) && !process_sub_commands(username, message) do
+      process_message_for_user(%{username: username, isMod: false, isSub: false}, message)
+    end
+  end
+
+  defp process_sub_commands(username, message) do
+    case sanitize_message(message) do
+      # "status" ->
+      #   send_message("cmonBruh")
+      #   true
+      # _ -> false
+    end
+  end
+
+  defp process_mod_commands(username, message) do
+    #addcmd blah sound:awaken message:shtup
+    if String.starts_with?(message, "addcmd") do
+      # if result = SoundboardWeb.CustomCommandsHelper.add_command(message, username) do
+      #   send_message result
+      # end
+    end
+
+    if String.starts_with?(message, "delcmd") do
+      # SoundboardWeb.CustomCommandsHelper.remove_command(message, username)
+    end
+    case sanitize_message(message) do
+      # "status" ->
+      #   send_message("@#{username}, you're a mod and a sub.")
+      #   true
+      _ -> false
+    end
+  end
+
+  defp sanitize_message(msg), do: String.downcase(msg)
+
+  def process_message_for_user(%{username: username, isMod: isMod, isSub: isSub}, message) do
+    IO.puts "PMFU #{username}"
+    IO.puts "received a message from #{username}"
+    sanitized_message = sanitize_message(message)
+
+    SoundboardWeb.CustomCommandsHelper.match_and_process_commands(username, message)
 
     case sanitized_message do
       "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
@@ -53,7 +95,7 @@ defmodule SoundboardWeb.ChatCommandProcessor do
     end
 
     if String.starts_with?(sanitized_message, "hi") do
-      send_message("hi #{user}!")
+      send_message("hi #{username}!")
     end
   end
 
@@ -61,6 +103,7 @@ defmodule SoundboardWeb.ChatCommandProcessor do
   defp play_sound(sound), do: SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event(sound)
 
   defp process_add_command(user, message) do
+    send_message("trying to add a command, #{user}? #{message}")
   end
 
   defp process_remove_command(user, message) do

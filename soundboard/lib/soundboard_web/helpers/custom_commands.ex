@@ -13,8 +13,83 @@ defmodule SoundboardWeb.CustomCommandsHelper do
     |> SoundboardWeb.Filesystem.write_file("commands/commands.yml")
   end
 
+  def add_command(command, username) do
+    result = parse_command_string(command)
+    if result do
+      process_comamnd_add(result, username)
+      "ok"
+    else
+      "#{username} addcmd format: addcmd command message:hello sound:wow1"
+    end
+    #parse the string to get the command
+    #add it to yaml
+    #save
+  end
+
+  defp process_comamnd_add(%{type: command_type, matching_text: matching_text, actions: command_actions}, username) do
+    IO.puts "adding command #{matching_text} of type #{command_type} with #{Kernel.length(command_actions)} actions"
+    actions = Enum.map(command_actions, fn(action) ->
+      type = String.split(action, ":") |> Enum.at(0)
+      value = String.split(action, ":") |> Enum.at(1)
+      %{"#{type}": value}
+    end)
+    new_command = %{
+      matching_text: matching_text,
+      type: command_type,
+      added_by: username,
+      command: actions
+    }
+    commands = load_commands["commands"] ++ [new_command]
+    save_commands %{"commands": commands}
+  end
+
+  def remove_command(command, username) do
+    parse_command_string(command)
+    #parse the string to get the command
+    #remove it from the yaml
+    #save
+  end
+
+  def list_commands do
+    load_commands["commands"]
+    |> Enum.map(fn (cmd) -> cmd["matching_text"] end)
+  end
+
+  defp parse_command_string(command_string) do
+    command_args = String.split(command_string, " ")
+    IO.puts "COMMAND ARG LENGTH #{Kernel.length(command_args)}"
+    IO.inspect command_args
+
+    if Kernel.length(command_args) < 3 do
+      nil
+    else
+      new_command = command_name_from_command_text(Enum.at(command_args, 1)) |> String.trim()
+      command_type = command_type_from_command_text(Enum.at(command_args, 1)) |> String.trim()
+
+      command_actions = Enum.slice(command_args, 2, 100)
+      IO.puts "command_actions"
+      IO.inspect command_actions
+      IO.puts "new_command"
+      IO.puts new_command
+      %{type: command_type, matching_text: new_command, actions: command_actions}
+    end
+  end
+
+  defp command_type_from_command_text(command_name) do
+    type = String.split(command_name, ":") |> Enum.at(1)
+    if type == nil do
+      "start"
+    else
+      type
+    end
+  end
+
+  defp command_name_from_command_text(command_name) do
+    String.split(command_name, ":") |> Enum.at(0)
+  end
+
   def match_and_process_commands(user, message) do
-    IO.puts "match_and_process_commands message #{message} from #{user.username}"
+    IO.puts "match_and_process_commands message #{message} from #{user}"
     #loop through each type of command (start, anywhere, end)
     #end if any command has been executed
     commands = load_commands

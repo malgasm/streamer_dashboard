@@ -6,9 +6,9 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     defstruct server:  "irc.twitch.tv",
               port:    6667,
               pass:    Application.get_env(:soundboard, :twitch_oauth_key_chat_incoming),
-              nick:    Application.get_env(:soundboard, :twitch_username_outgoing),
-              user:    Application.get_env(:soundboard, :twitch_username_outgoing),
-              name:    Application.get_env(:soundboard, :twitch_username_outgoing),
+              nick:    Application.get_env(:soundboard, :twitch_username_incoming),
+              user:    Application.get_env(:soundboard, :twitch_username_incoming),
+              name:    Application.get_env(:soundboard, :twitch_username_incoming),
               channel: Application.get_env(:soundboard, :twitch_channel),
               client:  nil
 
