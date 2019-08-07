@@ -34,7 +34,7 @@ defmodule SoundboardWeb.ChatCommandProcessor do
       # "status" ->
       #   send_message("cmonBruh")
       #   true
-      # _ -> false
+      _ -> false
     end
   end
 
