@@ -19,7 +19,7 @@ defmodule SoundboardWeb.ChatCommandProcessor do
   end
 
   def process_message_for_user(user, message) do
-    IO.puts "received a message from #{user}"
+    IO.puts "received a message from #{user.username}"
     sanitized_message = String.downcase(message)
 
     SoundboardWeb.CustomCommandsHelper.match_and_process_commands(user, message)

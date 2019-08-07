@@ -2,4 +2,6 @@ import Ember from 'ember'
 
 export default Ember.Service.extend
   latestMessageGroupByUser: (username, groupedMessages) ->
-    groupedMessages.filterBy('username', username).sortBy('firstMessageSentAt').get('firstObject')
+    groupedMessages.filter((groupedMessage) ->
+      groupedMessage.get('user.username').toLowerCase() == username.toLowerCase()
+    ).sortBy('firstMessageSentAt').get('firstObject')

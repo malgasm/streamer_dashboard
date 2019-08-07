@@ -1,4 +1,5 @@
 import moment from 'npm:moment'
+import jQuery from 'jquery'
 
 export default Ember.Component.extend
   CHAT_SPLIT_THRESHOLD_SECONDS: 120 #seconds
@@ -18,17 +19,19 @@ export default Ember.Component.extend
       @newMessage(payload)
 
   messageFromPayload: (payload) ->
+    console.log 'user', payload.user
+    #todo: create predictibleNumber function based upon textToHex
+    #use find_or_create user here instead of always creating a user
     @get('store').createRecord('message',
-        id: @get('utility').randNum(),
-        text: payload.value,
-        username: payload.user,
-        sentAt: moment()
-      )
-
+      id: @get('utility').randNum(),
+      text: payload.value,
+      user: @get('store').createRecord('user', jQuery.extend(payload.user, {id: @get('utility').randNum()}))
+      sentAt: moment()
+    )
 
   messageGroupFromPayload: (payload, message = null) ->
     @get('store').createRecord('messageGroup',
-      username: payload.user,
+      user: @get('store').createRecord('user', jQuery.extend(payload.user, {id: @get('utility').randNum()})),
       firstMessageSentAt: moment(),
       lastMessageSentAt: moment(),
       id: @get('utility').randNum(),
@@ -37,7 +40,6 @@ export default Ember.Component.extend
   addMessageToGroup: (group, message) ->
     group.set('lastMessageSentAt', moment())
     group.get('messages').addObject(message)
-
 
   groupedMessagesSortedByLastMessage: Em.computed.sort('groupedMessages.@each.lastMessageSentAt', (a, b) ->
     if moment(a.get('lastMessageSentAt')) > moment(b.get('lastMessageSentAt'))
@@ -56,11 +58,8 @@ export default Ember.Component.extend
 
   newMessage: (payload) ->
     console.log 'newMessage', payload
-    return if @IGNORED_USERS.indexOf(payload.user) != -1
-    #{channel, type, user, value}
-    # @get('messages').addObject(Em.Object.create(user: payload.user, messageText: payload.value))
-    # console.log 'message', Em.Object.create(user: payload.user, messageText: payload.value)
-    latestMessageGroup = @get('groupedMessage').latestMessageGroupByUser(payload.user, @get('groupedMessages'))
+    return if @IGNORED_USERS.indexOf(payload.user.username) != -1
+    latestMessageGroup = @get('groupedMessage').latestMessageGroupByUser(payload.user.username, @get('groupedMessages'))
     console.log 'latestMessageGroup', JSON.stringify(latestMessageGroup)
     if latestMessageGroup && latestMessageGroup.get('firstMessageSentAt')
       if moment().diff(latestMessageGroup.get('firstMessageSentAt'), 'seconds') > @CHAT_SPLIT_THRESHOLD_SECONDS

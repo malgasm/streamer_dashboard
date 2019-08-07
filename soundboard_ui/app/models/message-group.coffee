@@ -1,10 +1,10 @@
 import DS from 'ember-data'
 
 export default DS.Model.extend
-  messages:             DS.hasMany('message')
-  username:            DS.attr('string')
+  messages:            DS.hasMany('message')
+  user:                DS.belongsTo('user')
   firstMessageSentAt:  DS.attr('date')
-  lastMessageSentAt:  DS.attr('date')
+  lastMessageSentAt:   DS.attr('date')
 
   firstMessageTimestamp: Em.computed('firstMessageSentAt', ->
     @get('firstMessageSentAt').format('H:mma').toString()

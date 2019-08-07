@@ -85,8 +85,7 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     {:noreply, config}
   end
   def handle_info({:received, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.info "#{nick} from #{channel}: #{msg}"
-    SoundboardWeb.ProcessHelper.send_process(SoundboardWeb.IncomingMessageHandler, {:message_sent, channel, nick, msg})
+    Logger.info "#{nick} from #{channel}: #{msg} (outgoing)"
     {:noreply, config}
   end
 

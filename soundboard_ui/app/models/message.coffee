@@ -6,6 +6,7 @@ export default DS.Model.extend
   username:      DS.attr('string')
   sentAt:        DS.attr('date')
   messageGroup:  DS.belongsTo('message-group')
+  user:          DS.belongsTo('user')
 
   timestamp: Em.computed('sentAt', ->
     moment(@get('sentAt')).format('H:mma')

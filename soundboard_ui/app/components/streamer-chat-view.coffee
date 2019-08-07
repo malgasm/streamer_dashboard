@@ -14,14 +14,12 @@ export default Ember.Component.extend
       console.log 'message', Em.Object.create(user: payload.user, messageText: payload.value)
 
   uniqueUsersWithMessageCounts: Em.computed('messages.length', ->
-    @get('messages').uniqBy('user').map (message) =>
-      console.log 'user', message.user
-      window.b = @get('messages')
-      console.log @get('messages').filterBy('user', message.user).get('length')
-
+    @get('messages').uniqBy('user.username').map (message) =>
       Em.Object.create(
-        username: message.user,
-        messageCount: @get('messages').filterBy('user', message.user).get('length')
+        username: message.get('user.username'),
+        messageCount: @get('messages').filter((msg) ->
+          message.get('user.username') == msg.get('user.username')
+        ).get('length')
       )
   )
 

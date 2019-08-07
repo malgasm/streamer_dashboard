@@ -74,7 +74,11 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     {:stop, :normal, config}
   end
   def handle_info({:joined, channel}, config) do
-    Logger.debug "Joined #{channel} (incoming handler)"
+    Logger.info "user joined #{channel} (incoming handler)"
+    {:noreply, config}
+  end
+  def handle_info({:parted, channel}, config) do
+    Logger.info "user parted #{channel} (incoming handler)"
     {:noreply, config}
   end
   def handle_info({:names_list, channel, names_list}, config) do
@@ -85,7 +89,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   end
   def handle_info({:received, msg, %SenderInfo{:nick => nick}, channel}, config) do
     Logger.info "#{nick} from #{channel}: #{msg} (incoming handler)"
-    SoundboardWeb.ProcessHelper.send_process(SoundboardWeb.IncomingMessageHandler, {:message_sent, channel, nick, msg})
     {:noreply, config}
   end
 
@@ -101,6 +104,43 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     end
     {:noreply, config}
   end
+
+  def handle_info({:unrecognized, msg, %ExIRC.Message{:args => args, :cmd => cmd}}, config) do
+    arg = Enum.at(args, 0)
+    Logger.warn "UNRECOGNIZED HANDLER!!!"
+    IO.puts "cmd"
+    IO.inspect cmd
+    IO.puts "arg"
+    IO.inspect arg
+    handle_tagged_message(message_type_from_tagged_arg(arg), cmd, arg)
+    {:noreply, config}
+  end
+
+  defp handle_tagged_message("CLEARCHAT", cmd, arg) do
+    IO.puts "CLEARCHAT request received"
+    #todo: issue request to suppress chat from user on client
+  end
+
+  defp handle_tagged_message("PRIVMSG", cmd, arg) do
+    IO.puts "PRIVMSG GOGOGOG #{message_from_tagged_arg(arg)}"
+    args = {
+      :message_sent,
+      channel_from_tagged_arg(arg),
+      %{
+        username: username_from_tagged_cmd(cmd),
+        isMod: get_mod_status_from_cmd(cmd),
+        isSub: get_sub_status_from_cmd(cmd)
+      },
+      message_from_tagged_arg(arg)
+    }
+    SoundboardWeb.ProcessHelper.send_process(SoundboardWeb.IncomingMessageHandler, args)
+  end
+
+  defp handle_tagged_message(_, cmd, arg) do
+    IO.puts "unhandled tagged message"
+    IO.inspect cmd
+  end
+
   def handle_info({:received, msg, %SenderInfo{:nick => nick}}, config) do
     Logger.warn "#{nick}: #{msg}"
     reply = "Hi!"
@@ -109,7 +149,9 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     {:noreply, config}
   end
   # Catch-all for messages you don't care about
-  def handle_info(_msg, config) do
+  def handle_info(msg, config) do
+    IO.inspect msg
+    Logger.warn "CATCH-ALL !!!!!!! \n\n\n\n\n\n"
     {:noreply, config}
   end
 
@@ -135,16 +177,47 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   def join(client, channels) when is_list(channels) do
     channels
       |> Enum.map(&join(client, &1))
-
     client
   end
 
   def join(client, channel) do
     Client.join(client, channel)
-
     Logger.debug "Joined channel: #{channel}"
   end
 
+  defp message_from_tagged_arg_regex, do: ~r/PRIVMSG #\w+\s:(.*)$/
+
+  defp channel_from_tagged_arg_regex, do: ~r/PRIVMSG #(\w+)\s:/
+
+  defp username_from_tagged_cmd_regex, do: ~r/display-name=(\w+)[;$]/
+
+  defp username_from_tagged_cmd(cmd), do: Regex.run(username_from_tagged_cmd_regex, cmd) |> parse_message_regex
+
+  defp channel_from_tagged_arg(arg), do: Regex.run(channel_from_tagged_arg_regex, arg) |> parse_message_regex
+
+  defp message_from_tagged_arg(arg), do: Regex.run(message_from_tagged_arg_regex, arg) |> parse_message_regex
+
+  defp parse_message_regex(nil), do: nil
+  defp parse_message_regex(result), do: Enum.at(result, 1)
+
+  defp message_type_regex, do: ~r/tmi.twitch.tv\s(\w+?)\s/
+
+  defp mod_status_check_1_from_cmd_regex, do: ~r/user-type=mod/
+
+  defp mod_status_check_2_from_cmd_regex, do: ~r/mod=1;/
+
+  defp sub_status_check_from_cmd_regex, do: ~r/subscriber=1;/
+
+  defp display_name_from_cmd_regex, do: ~r/subscriber=1;/
+
+  defp get_mod_status_from_cmd(cmd) do
+    Regex.run(mod_status_check_1_from_cmd_regex, cmd) != nil &&
+      Regex.run(mod_status_check_2_from_cmd_regex, cmd) != nil
+  end
+
+  defp get_sub_status_from_cmd(cmd), do: Regex.run(sub_status_check_from_cmd_regex, cmd) != nil
+
+  defp message_type_from_tagged_arg(arg), do: Regex.run(message_type_regex, arg) |> parse_message_regex
 
   def terminate(_, state) do
     # Quit the channel and close the underlying client connection when the process is terminating

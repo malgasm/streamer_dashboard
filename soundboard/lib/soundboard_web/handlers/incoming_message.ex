@@ -16,8 +16,6 @@ defmodule SoundboardWeb.IncomingMessageHandler do
   end
 
   def process_message(channel, user, message) do
-    Logger.debug "message received on channel #{channel} from #{user}: #{message}"
-
     #send message to web clients
     SoundboardWeb.MessagingHelper.broadcast_new_twitch_message(channel, user, message)
 

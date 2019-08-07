@@ -14,7 +14,7 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   end
 
   def match_and_process_commands(user, message) do
-    IO.puts "match_and_process_commands message #{message} from #{user}"
+    IO.puts "match_and_process_commands message #{message} from #{user.username}"
     #loop through each type of command (start, anywhere, end)
     #end if any command has been executed
     commands = load_commands

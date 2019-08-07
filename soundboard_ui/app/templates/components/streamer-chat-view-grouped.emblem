@@ -1,9 +1,13 @@
 each groupedMessagesSortedByLastMessage as |groupedMessage|
   .row.groupedMessageContainer
-    p.col-2.groupedMessageUsernameContainer
+    p.col-2
       em
         | &nbsp;
-        = groupedMessage.username
+        =colored-text groupedMessage.user.username
+        if groupedMessage.user.isMod
+           | (m)
+        if groupedMessage.user.isSub
+           | (s)
     p.col-2.groupedMessageTimestampContainer
       span
         = groupedMessage.firstMessageTimestamp
@@ -14,4 +18,5 @@ each groupedMessagesSortedByLastMessage as |groupedMessage|
       each groupedMessage.messages as |message|
         li.groupedMessageTextContainer
           span.groupedMessageTimestamp = message.timestamp
-          span.groupedMessageText = message.text
+          span.groupedMessageText
+            = message.text
