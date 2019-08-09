@@ -5,4 +5,4 @@ export default Ember.Helper.extend
 
   compute: (params) ->
     text = params[0]
-    Em.String.htmlSafe "<span style=\"color: #{@get('textToHex').textToHex(text)};\">#{params[0]}</span>"
+    Em.String.htmlSafe "<span style=\"color: ##{@get('textToHex').textToHex(text)};\">#{params[0]}</span>"
