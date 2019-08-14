@@ -21,6 +21,7 @@ defmodule SoundboardWeb.IncomingMessageHandler do
 
     sanitized_message = String.downcase(message)
 
+    SoundboardWeb.BitsProcessor.process_message_for_user(user, message)
     SoundboardWeb.ChatCommandProcessor.process_message_for_user(user, message)
   end
 end

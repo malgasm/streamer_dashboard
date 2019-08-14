@@ -77,6 +77,14 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     Logger.info "user joined #{channel} (incoming handler)"
     {:noreply, config}
   end
+  def handle_info({:joined, channel, user_info}, config) do
+    Logger.info "user #{user_info.nick} joined #{channel} (incoming handler /3)"
+    {:noreply, config}
+  end
+  def handle_info({:parted, channel, user_info}, config) do
+    Logger.info "user #{user_info.nick} left #{channel} (incoming handler /3)"
+    {:noreply, config}
+  end
   def handle_info({:parted, channel}, config) do
     Logger.info "user parted #{channel} (incoming handler)"
     {:noreply, config}
@@ -129,7 +137,8 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
       %{
         username: username_from_tagged_cmd(cmd),
         isMod: get_mod_status_from_cmd(cmd),
-        isSub: get_sub_status_from_cmd(cmd)
+        isSub: get_sub_status_from_cmd(cmd),
+        bits: get_bits_from_cmd(cmd)
       },
       message_from_tagged_arg(arg)
     }
@@ -208,12 +217,16 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
 
   defp sub_status_check_from_cmd_regex, do: ~r/subscriber=1;/
 
+  defp bits_check_from_cmd_regex, do: ~r/bits=(\d+);/
+
   defp display_name_from_cmd_regex, do: ~r/subscriber=1;/
 
   defp get_mod_status_from_cmd(cmd) do
     Regex.run(mod_status_check_1_from_cmd_regex, cmd) != nil &&
       Regex.run(mod_status_check_2_from_cmd_regex, cmd) != nil
   end
+
+  defp get_bits_from_cmd(cmd), do: Regex.run(bits_check_from_cmd_regex, cmd) |> parse_message_regex
 
   defp get_sub_status_from_cmd(cmd), do: Regex.run(sub_status_check_from_cmd_regex, cmd) != nil
 
