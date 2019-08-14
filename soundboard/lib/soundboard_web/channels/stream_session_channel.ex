@@ -9,4 +9,9 @@ defmodule SoundboardWeb.StreamSessionChannel do
     broadcast!(socket, "stream_action", %{type: type, value: value})
     {:noreply, socket}
   end
+
+  def handle_in("stream_action", %{"type" => type}, socket) do
+    broadcast!(socket, "stream_action", %{type: type, value: ""})
+    {:noreply, socket}
+  end
 end

@@ -5,4 +5,5 @@
 //maybe a bot, too. probably a bot.
 
 audio-controller
+on-off-button value=brb onClick=(action 'didToggleBrb')
 event-log

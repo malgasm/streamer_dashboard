@@ -15,11 +15,11 @@ export default Ember.Service.extend
     window.localStorage.setItem('stream_session_role', role)
 
   getCurrentSession: ->
-    sessionId = window.localStorage.getItem('stream_session_id')
+    sessionId = window.localStorage.getItem('stream_session_id') || 123
     @set('sessionId', sessionId)
 
   getCurrentRole: ->
-    currentRole = window.localStorage.getItem('stream_session_role')
+    currentRole = window.localStorage.getItem('stream_session_role') || 'streamer'
     @set('currentRole', currentRole)
 
   hasCurrentSession: Em.computed('sessionId', ->

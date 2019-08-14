@@ -12,7 +12,7 @@
   "type": "anywhere"
 - "added_by": "malgasm"
   "command":
-  - "message": "$arg has been permanently banned from this channel."
+  - "message": "$msg has been permanently banned from this channel."
   "matching_text": "!ban"
   "type": "start"
 - "added_by": "malgasm"
@@ -22,8 +22,8 @@
   "type": "start"
 - "added_by": "malgasm"
   "command":
-  - "message": "$sender runs over to $arg and gives them a giant hug! malgasLove malgasLove malgasLove"
-  "matching_text": "hug"
+  - "message": "$sender runs over to $msg and gives them a giant hug! malgasLove malgasLove malgasLove"
+  "matching_text": "!hug"
   "type": "start"
 - "added_by": "malgasm"
   "command":
@@ -52,7 +52,78 @@
   "type": "anywhere"
 - "added_by": "malgasm"
   "command":
-    - "message": "mal's DPS build: http://malgasm.com/fallout/build"
-  "matching_text": "build"
+  - "message": "mal's DPS build: http://malgasm.com/fallout/build"
+  "matching_text": "!build"
+  "type": "start"
+- "added_by": "flyingtarrasque"
+  "command":
+  - "message": "Join malgasm's Chatgasm at https://discord.gg/hkP56Et malgasLove"
+  "matching_text": "!discord"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "rules"
+  "matching_text": "jango"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "guy"
+  "matching_text": "psi"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "sup?"
+  "matching_text": "dude"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "cmonBruh"
+  "matching_text": "bruh"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "everyonesgay"
+  "matching_text": "gay"
+  "type": "anywhere"
+- "added_by": "malshypeman"
+  "command":
+  - "message": "hi $sender!"
+  "matching_text": "hi"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "applause"
+  "matching_text": "huzzah"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "bonghit"
+  "matching_text": "420"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "sooner"
+  - "message": "Go check out SoonerChemical - Twitch's most awesome variety streamer! https://twitch.tv/soonerchemical"
+  "matching_text": "!sooner"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo"
+  "matching_text": "hondo"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556"
+  "matching_text": "medic"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove"
+  "matching_text": "<3"
+  "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "message": "malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove"
+  "matching_text": "!tarrasque"
   "type": "start"
 ...

@@ -1,5 +1,7 @@
 defmodule SoundboardWeb.CustomCommandsHelper do
   require Logger
+  defp valid_command_types, do: ["start", "anywhere", "exact"]
+  defp valid_command_actions, do: ["message", "sound"]
 
   def load_commands do
     {:ok, commands} = SoundboardWeb.Filesystem.read_file("commands/commands.yml")
@@ -14,40 +16,82 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   end
 
   def add_command(command, username) do
-    result = parse_command_string(command)
-    if result do
-      process_comamnd_add(result, username)
-      "ok"
+    parsed_command = parse_command_string(command)
+    if parsed_command && process_command_add(parsed_command, username) do
+      if user_has_permission_to_modify_command(parsed_command.matching_text, username) do
+        "#{username} command #{parsed_command.matching_text} added with #{Kernel.length(parsed_command.actions)} actions."
+      else
+        "#{username}, only #{find_existing_command(%{matching_text: parsed_command.matching_text})["added_by"]} has permission to modify that command."
+      end
     else
-      "#{username} addcmd format: addcmd command message:hello sound:wow1"
+      "#{username} to add a command: !addcmd command message:hello;sound:wow1"
     end
-    #parse the string to get the command
-    #add it to yaml
-    #save
   end
 
-  defp process_comamnd_add(%{type: command_type, matching_text: matching_text, actions: command_actions}, username) do
-    IO.puts "adding command #{matching_text} of type #{command_type} with #{Kernel.length(command_actions)} actions"
-    actions = Enum.map(command_actions, fn(action) ->
-      type = String.split(action, ":") |> Enum.at(0)
-      value = String.split(action, ":") |> Enum.at(1)
-      %{"#{type}": value}
-    end)
-    new_command = %{
-      matching_text: matching_text,
-      type: command_type,
-      added_by: username,
-      command: actions
-    }
-    commands = load_commands["commands"] ++ [new_command]
-    save_commands %{"commands": commands}
+  defp process_command_add(%{type: command_type, matching_text: matching_text, actions: command_actions}, username) do
+    if user_has_permission_to_modify_command(matching_text, username) &&
+      command_is_valid(matching_text, command_type, command_actions) do
+      actions = Enum.map(command_actions, fn(action) ->
+        type = String.split(action, ":") |> Enum.at(0)
+        value = String.split(action, ":") |> Enum.at(1)
+        %{"#{type}": value}
+      end)
+      new_command = %{
+        matching_text: matching_text,
+        type: command_type,
+        added_by: username |> String.downcase |> String.replace("@", ""),
+        command: actions
+      }
+      commands = add_or_replace_command(new_command)
+      save_commands %{"commands": commands}
+    else
+      false
+    end
+  end
+
+  defp user_has_permission_to_modify_command(matching_text, username) do
+    IO.puts "checking to see if #{username} has permission to modify #{matching_text}..."
+    existing_command = find_existing_command(%{matching_text: matching_text})
+    !existing_command || username == 'malgasm' ||
+      (String.downcase(existing_command["added_by"]) |> String.replace("@", "")) == (String.downcase(username) |> String.replace("@", ""))
+  end
+
+  defp command_is_valid(matching_text, command_type, actions) do
+    String.starts_with?(matching_text, "!") &&
+      Enum.find_index(valid_command_types, fn(type) -> type == command_type end) != nil &&
+      !Enum.any?(actions, fn(action) ->
+        !String.starts_with?(action, "message:") && !String.starts_with?(action, "sound:")
+      end)
+  end
+
+  defp find_existing_command(%{matching_text: matching_text}) do
+    command = load_commands["commands"]
+      |> Enum.filter(fn(cmd) -> cmd["matching_text"] == matching_text end)
+    if command do
+      Enum.at(command, 0)
+    else
+      nil
+    end
+  end
+
+  defp add_or_replace_command(replacement_command) do
+    commands = load_commands["commands"]
+      |> Enum.filter(fn(cmd) -> cmd["matching_text"] != replacement_command.matching_text end)
+
+    commands ++ [replacement_command]
   end
 
   def remove_command(command, username) do
-    parse_command_string(command)
-    #parse the string to get the command
-    #remove it from the yaml
-    #save
+    matching_text = String.split(command, " ") |> Enum.at(1)
+
+    if String.starts_with?(matching_text, "!") && user_has_permission_to_modify_command(matching_text, username) do
+      commands = load_commands["commands"]
+        |> Enum.filter(fn(cmd) -> cmd["matching_text"] != matching_text end)
+      save_commands %{"commands": commands}
+      "command #{matching_text} was removed, #{username}."
+    else
+      "something went wrong while trying to remove that command. does it exist? do you have access to remove it?"
+    end
   end
 
   def list_commands do
@@ -66,7 +110,9 @@ defmodule SoundboardWeb.CustomCommandsHelper do
       new_command = command_name_from_command_text(Enum.at(command_args, 1)) |> String.trim()
       command_type = command_type_from_command_text(Enum.at(command_args, 1)) |> String.trim()
 
-      command_actions = Enum.slice(command_args, 2, 100)
+      command_actions = Enum.slice(command_args, 2, 10000)
+        |> Enum.join(" ")
+        |> String.split(";")
       IO.puts "command_actions"
       IO.inspect command_actions
       IO.puts "new_command"
@@ -106,6 +152,8 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   defp process_commands("start", commands, user, message) do
     Enum.each commands, fn(command) ->
       if String.starts_with?(sanitize_message(message), command["matching_text"]) do
+        IO.puts "PCA #{command["matching_text"]}"
+        IO.inspect command
         process_command_actions(Map.merge(command, %{"user" =>  user, "original_message" => message}))
       end
     end
@@ -130,6 +178,8 @@ defmodule SoundboardWeb.CustomCommandsHelper do
 
   defp process_command_actions(command) do
     Enum.each command["command"], fn(cmd) ->
+      IO.puts "PCA II cmd"
+      IO.inspect cmd
       process_command_action(cmd, command)
     end
   end
@@ -155,6 +205,6 @@ defmodule SoundboardWeb.CustomCommandsHelper do
 
   defp substitute_variables(message, user, original_message, matching_text) do
     String.replace(message, "$sender", user)
-    |> String.replace("$arg", String.replace(original_message, matching_text, ""))
+    |> String.replace("$msg", String.replace(original_message, matching_text, ""))
   end
 end

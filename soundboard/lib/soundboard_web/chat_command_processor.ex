@@ -1,9 +1,11 @@
 defmodule SoundboardWeb.ChatCommandProcessor do
+  def process_message_for_user(%{username: "malshypeman", isMod: isMod, isSub: isSub}, message), do: nil
+  def process_message_for_user(%{username: "MalsHypeMan", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "malgasm", isMod: isMod, isSub: isSub}, message) do
     IO.puts "PMFU MALGASM"
     user = "malgasm"
     case message do
-      _ -> process_message_for_user(%{username: "@malgasm", isMod: isMod, isSub: isSub}, message)
+      _ -> process_message_for_user(%{username: "@malgasm", isMod: true, isSub: true}, message)
     end
 
   end
@@ -40,15 +42,20 @@ defmodule SoundboardWeb.ChatCommandProcessor do
 
   defp process_mod_commands(username, message) do
     #addcmd blah sound:awaken message:shtup
-    if String.starts_with?(message, "addcmd") do
-      # if result = SoundboardWeb.CustomCommandsHelper.add_command(message, username) do
-      #   send_message result
-      # end
+    if String.starts_with?(message, "!addcmd") do
+      if result = SoundboardWeb.CustomCommandsHelper.add_command(message, username) do
+        send_message result
+      end
     end
 
-    if String.starts_with?(message, "delcmd") do
-      # SoundboardWeb.CustomCommandsHelper.remove_command(message, username)
+    if String.starts_with?(message, "!sounds") do
+      send_message("#{username} sounds: " <> Enum.join(SoundboardWeb.Sounds.get_sound_names, ","))
     end
+
+    if String.starts_with?(message, "!delcmd") do
+      send_message SoundboardWeb.CustomCommandsHelper.remove_command(message, username)
+    end
+
     case sanitize_message(message) do
       # "status" ->
       #   send_message("@#{username}, you're a mod and a sub.")
@@ -67,35 +74,12 @@ defmodule SoundboardWeb.ChatCommandProcessor do
     SoundboardWeb.CustomCommandsHelper.match_and_process_commands(username, message)
 
     case sanitized_message do
-      "<3" -> send_message("malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove")
-      "medic" -> send_message("Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556")
-      "hondo" -> send_message("Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo")
-      "sooner" ->
-        play_sound("sooner")
-        send_message("Go check out SoonerChemical - Twitch's most awesome variety streamer! https://twitch.tv/soonerchemical")
-      "discord" -> send_message("Join malgasm's Chatgasm at https://discord.gg/hkP56Et malgasLove")
-      "jango" -> send_message("rules")
-      "psi" -> send_message("guy")
-      "dude" -> send_message("sup?")
-      "bruh" -> send_message("cmonBruh")
-      "huzzah" -> play_sound("applause")
-      "420" -> play_sound("bonghit")
       "!so shroud" -> send_message("NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO")
       "!shoutout shroud" -> send_message("NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO")
+      "!commands" -> send_message("commands: " <> commands_for_chat_list <> ", mods only: #{mod_commands}")
+      "!variables" -> send_message("variables for commands: $sender (whoever runs the command) | $msg (the supplied message)")
       "gimme the codes" -> send_message(SoundboardWeb.NukaCrypt.get_nukacrypt_code_text)
       _ -> nil
-    end
-
-    if String.starts_with?(sanitized_message, "!hug") do
-      send_message("barf")
-    end
-
-    if String.contains?(sanitized_message, "gay") do
-      SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("everyonesgay")
-    end
-
-    if String.starts_with?(sanitized_message, "hi") do
-      send_message("hi #{username}!")
     end
   end
 
@@ -107,5 +91,17 @@ defmodule SoundboardWeb.ChatCommandProcessor do
   end
 
   defp process_remove_command(user, message) do
+  end
+
+  defp commands_for_chat_list do
+    SoundboardWeb.CustomCommandsHelper.list_commands
+    |> Enum.filter(fn(cmd) ->
+      String.starts_with?(cmd, "!")
+    end)
+    |> Enum.join(", ")
+  end
+
+  defp mod_commands do
+    "!addcmd, !delcmd, !sounds, !variables"
   end
 end

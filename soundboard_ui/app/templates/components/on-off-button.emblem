@@ -1,0 +1,4 @@
+=input class="onoffbutton-checkbox" type="checkbox" name="onoffbutton" checked=value
+label.onoffbutton-label
+  span.onoffbutton-inner
+  span.onoffbutton-button

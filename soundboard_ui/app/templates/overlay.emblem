@@ -1,6 +1,11 @@
 .overlayContainer
+  if brb
+    span.brb.txt.anim-text-flow
+      span b
+      span r
+      span b
 
-  .todaysGoalsContainer
+//  .todaysGoalsContainer
     h3 today's goals:
     ul.todaysGoalsList
       li custom commands - yaml read/write - done
