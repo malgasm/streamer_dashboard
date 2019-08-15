@@ -13,6 +13,9 @@ use Mix.Config
 config :soundboard, SoundboardWeb.Endpoint,
   http: [port: 4002],
   server: false
+  debug_errors: true
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+import_config "test.secret.exs"
