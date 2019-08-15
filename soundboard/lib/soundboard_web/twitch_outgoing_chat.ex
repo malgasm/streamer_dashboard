@@ -25,9 +25,9 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
   alias ExIRC.Client
   alias ExIRC.SenderInfo
 
-  def start_link(_) do
+  def start_link() do
     config = %Config{}
-    GenServer.start_link(__MODULE__, [config], name: String.to_atom(config.user))
+    GenServer.start_link(__MODULE__, [config])
   end
 
   def init([config]) do

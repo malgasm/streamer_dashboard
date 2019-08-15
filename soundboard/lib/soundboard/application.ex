@@ -4,6 +4,7 @@ defmodule Soundboard.Application do
   @moduledoc false
 
   use Application
+  import Supervisor.Spec
 
   def start(_type, _args) do
     # List all child processes to be supervised
@@ -14,8 +15,8 @@ defmodule Soundboard.Application do
       SoundboardWeb.Endpoint,
       # Starts a worker by calling: Soundboard.Worker.start_link(arg)
       # {Soundboard.Worker, arg},
-      SoundboardWeb.TwitchIncomingChatHandler,
-      SoundboardWeb.TwitchOutgoingChatHandler,
+      worker(SoundboardWeb.TwitchIncomingChatHandler, []),
+      worker(SoundboardWeb.TwitchOutgoingChatHandler, []),
       SoundboardWeb.IncomingMessageHandler
     ]
 
