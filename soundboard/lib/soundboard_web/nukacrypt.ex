@@ -25,7 +25,7 @@ defmodule SoundboardWeb.NukaCrypt do
   defp extract_codes(parsed_source) do
     html_body = Floki.parse(parsed_source)
     codes = Floki
-      .find(html_body, "#nuclearcodes tr:last-child td")
-      |> Enum.map(fn({"td", [], [code]}) -> code end)
+      .find(html_body, "#nuclearcodess tr:nth-of-type(4) td")
+      |> Enum.map(fn({"td", _, [code]}) -> code end)
   end
 end
