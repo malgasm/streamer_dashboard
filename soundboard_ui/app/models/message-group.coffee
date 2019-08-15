@@ -7,8 +7,8 @@ export default DS.Model.extend
   lastMessageSentAt:   DS.attr('date')
 
   firstMessageTimestamp: Em.computed('firstMessageSentAt', ->
-    @get('firstMessageSentAt').format('H:mma').toString()
+    @get('firstMessageSentAt').format('h:mma').toString()
   )
   lastMessageTimestamp: Em.computed('lastMessageSentAt', ->
-    @get('lastMessageSentAt').format('H:mma').toString()
+    @get('lastMessageSentAt').format('h:mma').toString()
   )
