@@ -130,8 +130,14 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   end
 
   defp handle_tagged_message("PRIVMSG", cmd, arg) do
-    IO.puts "PRIVMSG GOGOGOG #{message_from_tagged_arg(arg)}"
-    args = {
+    SoundboardWeb.ProcessHelper.send_process(
+      SoundboardWeb.IncomingMessageHandler,
+      prepare_message_args(arg, cmd)
+    )
+  end
+
+  defp prepare_message_args(arg, cmd) do
+    {
       :message_sent,
       channel_from_tagged_arg(arg),
       %{
@@ -142,11 +148,33 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
       },
       message_from_tagged_arg(arg)
     }
-    SoundboardWeb.ProcessHelper.send_process(SoundboardWeb.IncomingMessageHandler, args)
+  end
+
+  defp prepare_special_event_args(arg, cmd) do
+    {
+      String.to_atom(get_msg_id_from_cmd(cmd)),
+      %{
+        username: username_from_tagged_cmd(cmd),
+        bits: get_bits_from_cmd(cmd),
+        sub_streak: get_sub_streak_from_cmd(cmd),
+        gift_sub_recipient: get_gift_sub_recipient_from_cmd(cmd),
+        sub_months: get_sub_months_from_cmd(cmd),
+        sub_tier: get_sub_tier_from_cmd(cmd)
+      }
+      # message_from_tagged_arg(arg)
+    }
   end
 
   defp handle_tagged_message(_, cmd, arg) do
     IO.puts "unhandled tagged message"
+
+    if get_msg_id_from_cmd(cmd) do
+      SoundboardWeb.ProcessHelper.send_process(
+        SoundboardWeb.SpecialEventHandler,
+        prepare_special_event_args(arg, cmd)
+      )
+    end
+
     IO.inspect cmd
   end
 
@@ -220,6 +248,33 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp bits_check_from_cmd_regex, do: ~r/bits=(\d+);/
 
   defp display_name_from_cmd_regex, do: ~r/subscriber=1;/
+
+  defp gift_sub_recipient_from_cmd_regex, do: ~r/msg-param-recipient-display-name=(\w+);/
+
+  defp sub_tier_from_cmd_regex, do: ~r/msg-param-sub-plan=([P\d]).*?;/
+
+  defp sub_number_of_months_from_cmd_regex, do: ~r/msg-param-cumulative-months=(\d+);/
+
+  defp gift_sub_number_of_months_from_cmd_regex, do: ~r/msg-param-months=(\d+);/
+
+  defp sub_streak_from_cmd_regex, do: ~r/msg-param-streak-months=(\d+);/
+
+  defp msg_id_from_cmd_regex, do: ~r/msg-id=(\w+);/
+
+  def get_sub_tier_from_cmd(cmd), do: Regex.run(sub_tier_from_cmd_regex, cmd) |> parse_message_regex
+
+  def get_gift_sub_recipient_from_cmd(cmd), do: Regex.run(gift_sub_recipient_from_cmd_regex, cmd) |> parse_message_regex
+
+  def get_sub_months_from_cmd(cmd) do
+    (Regex.run(sub_number_of_months_from_cmd_regex, cmd) |> parse_message_regex) ||
+      (Regex.run(gift_sub_number_of_months_from_cmd_regex, cmd) |> parse_message_regex)
+  end
+
+  def get_sub_streak_from_cmd(cmd) do
+    Regex.run(sub_streak_from_cmd_regex, cmd) |> parse_message_regex
+  end
+
+  defp get_msg_id_from_cmd(cmd), do: Regex.run(msg_id_from_cmd_regex, cmd) |> parse_message_regex
 
   defp get_mod_status_from_cmd(cmd) do
     Regex.run(mod_status_check_1_from_cmd_regex, cmd) != nil &&
