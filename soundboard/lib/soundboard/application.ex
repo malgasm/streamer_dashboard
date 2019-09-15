@@ -17,7 +17,8 @@ defmodule Soundboard.Application do
       # {Soundboard.Worker, arg},
       worker(SoundboardWeb.TwitchIncomingChatHandler, []),
       worker(SoundboardWeb.TwitchOutgoingChatHandler, []),
-      SoundboardWeb.IncomingMessageHandler
+      SoundboardWeb.IncomingMessageHandler,
+      SoundboardWeb.SpecialEventHandler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

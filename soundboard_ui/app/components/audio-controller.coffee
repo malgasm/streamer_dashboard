@@ -1,4 +1,5 @@
 import Ember from 'ember'
+import { debounce } from '@ember/runloop'
 
 export default Ember.Component.extend
   sounds: Em.inject.service()
@@ -21,16 +22,28 @@ export default Ember.Component.extend
       console.log 'fps', sound
       @get('sounds').triggerSoundFinish(sound)
 
-    playSound: (sound) ->
+    didUpdateVolume: (sound) ->
+      volume = @$(".#{sound.get('keyForCss')} .form-control-range").val()
+      console.log "setting volume for #{sound.get('key')} to #{volume}"
+      sound.set('volume', volume)
+
+      Em.run.debounce sound, @saveVolume, 600
+
+    playSoundAction: (sound) ->
       console.log 'playing sound', sound
-      @get('sounds').triggerSound(sound.path)
+      @get('sounds').triggerSound(sound.path, sound.volume)
       @incrementNumSounds()
 
-    playGroupedSound: (sound) ->
+    playGroupedSoundAction: (sound) ->
       @get('sounds').triggerSound(
-        @get('utility').randomItem(@get('groupedSounds')[sound])
+        @get('utility').randomItem(@get('groupedSounds')[sound]),
+        2
       )
       @incrementNumSounds()
+
+  saveVolume: (sound) ->
+    console.log "saving volume for #{@get('key')} to #{@get('volume')}"
+    window.localStorage.setItem("#{@get('key')}.volume", @get('volume'))
 
   didInsertElement: ->
     @get('sounds').getSounds().then((sounds) =>@loadSounds(sounds))

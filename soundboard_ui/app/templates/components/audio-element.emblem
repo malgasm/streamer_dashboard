@@ -1,3 +1,3 @@
 p = sound.path
-audio onloadstart="this.volume=0.5" onloadeddata="this.play();" autoplay="autoplay"
+audio id=inputId onloadstart="this.volume=0.5" onloadeddata="this.play();" autoplay="autoplay" crossorigin="anonymous"
   source src=sound.path

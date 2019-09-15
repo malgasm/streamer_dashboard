@@ -8,6 +8,7 @@ export default Ember.Service.extend
   channel: null
   joined_channel: null
   connect: (key) ->
+    window.b = Socket
     socket = new Socket(ENV.websocketURL)
 
     socket.connect()

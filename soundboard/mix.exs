@@ -19,7 +19,7 @@ defmodule Soundboard.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc],
+      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex],
       mod: {Soundboard.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
@@ -44,9 +44,11 @@ defmodule Soundboard.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:plug_cowboy, "~> 2.0"},
+      {:poison, "~> 3.1"},
       {:tesla, "~> 1.2.1"},
       {:yaml_elixir, "~> 2.4.0"},
-      {:yamlix, git: "https://github.com/malgasm/yamlix.git"}
+      {:yamlix, git: "https://github.com/malgasm/yamlix.git"},
+      {:websockex, "~> 0.4.0"}
     ]
   end
 

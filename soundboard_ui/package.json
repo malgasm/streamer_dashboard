@@ -62,5 +62,7 @@
   "engines": {
     "node": "8.* || >= 10.*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "gulp": "^4.0.2"
+  }
 }

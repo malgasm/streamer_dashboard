@@ -1,7 +1,7 @@
 defmodule SoundboardWeb.TwitchApi do
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, "https://api.twitch.tv/kraken"
+  plug Tesla.Middleware.BaseUrl, "https://api.twitch.tv/helix"
   plug Tesla.Middleware.Headers, [{"Client-ID:", Application.get_env(:soundboard, :twitch_client_id)}]
   plug Tesla.Middleware.JSON
 

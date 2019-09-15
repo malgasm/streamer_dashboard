@@ -14,7 +14,7 @@ export default Ember.Service.extend
 
   allSounds: -> @get('store').peekAll('sound')
 
-  triggerSound: (key) -> @get('websocket').sendMessage('play-sound', key)
+  triggerSound: (key, volume) -> @get('websocket').sendMessage('play-sound', {sound: key, volume: volume})
 
   triggerSoundFinish: (key) -> @get('websocket').sendMessage('finish-sound', key)
 

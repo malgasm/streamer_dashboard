@@ -199,10 +199,6 @@ defmodule SoundboardWeb.CustomCommandsHelper do
     end
   end
 
-  defp process_command_action(%{"random_sound" => sound}, command) do
-    IO.puts "process_command_action for random sound #{sound}"
-  end
-
   defp substitute_variables(message, user, original_message, matching_text) do
     String.replace(message, "$sender", user)
     |> String.replace("$msg", String.replace(original_message, matching_text, ""))

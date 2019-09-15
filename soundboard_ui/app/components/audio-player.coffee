@@ -15,7 +15,8 @@ export default Ember.Component.extend
     #sounds from chat
     @get('messageBus').subscribe('stream_action', @, (payload) ->
       if payload && payload.type && payload.type == 'play-sound'
-        @playSound(@get('sounds').getSoundFilePath(payload.value))
+        console.log 'playing sound from payload', payload
+        @playSound(@get('sounds').getSoundFilePath(payload.value.sound), payload.value.volume)
       else if payload && payload.type && payload.type == 'finish-sound'
         @get('currentAudios').removeObjects(
           @get('currentAudios').filter((sound) -> console.log(JSON.stringify(sound)); sound.get('path').indexOf('loop.') != -1 )
@@ -25,8 +26,8 @@ export default Ember.Component.extend
     )
 
     #internal sounds (for testing?)
-    @get('messageBus').subscribe('play-sound', @, (payload) ->
-      @playSound(payload)
+    @get('messageBus').subscribe('play-sound', @, (path, volume) ->
+      @playSound(path, volume)
     )
 
   removeSound: (sound) ->
@@ -39,6 +40,26 @@ export default Ember.Component.extend
     #clear sounds array
     #programmatically stop currently playing sounds through HTML5 audio api - is removing the elements enough?
 
-  playSound: (sound) ->
-    console.log 'playSound!', sound
-    @get('currentAudios').addObject(Em.Object.create(id: @get('utility').randNum(), path: sound))
+  playSound: (sound, volume = 1) ->
+    console.log 'playSound!', sound, volume
+    id = @get('utility').randNum()
+    volume = parseFloat(volume)
+    @get('currentAudios').addObject(Em.Object.create(id: id, path: sound, volume: volume))
+
+    Em.run.next =>
+      audioElement = document.getElementById(id)
+
+      context = new (window.AudioContext || window.webkitAudioContext)
+      result = {
+        context: context,
+        source: context.createMediaElementSource(audioElement),
+        gain: context.createGain(),
+        media: audioElement,
+        amplify: (=> result.gain.gain.value = volume ),
+        getAmpLevel: (=> result.gain.gain.value )
+      }
+
+      result.source.connect(result.gain)
+      result.gain.connect(context.destination)
+      result.amplify(volume)
+      result

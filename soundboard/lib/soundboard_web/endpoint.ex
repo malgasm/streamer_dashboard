@@ -13,7 +13,8 @@ defmodule SoundboardWeb.Endpoint do
     at: "/",
     from: :soundboard,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt sounds)
+    only: ~w(css fonts images js favicon.ico robots.txt sounds),
+    headers: %{"Access-Control-Allow-Origin" => "*"}
 
 
   # Code reloading can be explicitly enabled under the

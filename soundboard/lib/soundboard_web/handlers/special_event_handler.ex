@@ -11,11 +11,13 @@ defmodule SoundboardWeb.SpecialEventHandler do
   end
 
   def handle_info({:raid, params}, config) do
+    broadcast_new_special_event(:raid, params)
     {:noreply, config}
   end
   def handle_info({:resub, params}, config) do
     IO.puts "YOOO WE GOT A RESUB!!!!!!! "
 
+    broadcast_new_special_event(:resub, params)
 #   gift_sub_recipient: nil,
 #   sub_months: "6",
 #   sub_streak: "6",
@@ -28,6 +30,7 @@ defmodule SoundboardWeb.SpecialEventHandler do
 
   def handle_info({:anonsubgift, params}, config) do
     IO.puts "YOOO WE GOT AN ANON GIFT SUB!!!!!!! "
+    broadcast_new_special_event(:anonsubgift, params)
 
     handle_gift_sub(params)
     {:noreply, config}
@@ -35,6 +38,7 @@ defmodule SoundboardWeb.SpecialEventHandler do
 
   def handle_info({:subgift, params}, config) do
     IO.puts "YOOO WE GOT A GIFT SUB!!!!!!! "
+    broadcast_new_special_event(:subgift, params)
 
     handle_gift_sub(params)
     {:noreply, config}
@@ -42,12 +46,14 @@ defmodule SoundboardWeb.SpecialEventHandler do
 
   def handle_info({:sub, params}, config) do
     IO.puts "YOOO WE GOT A SUB!!!!!!! "
+    broadcast_new_special_event(:sub, params)
     handle_sub(params)
     {:noreply, config}
   end
 
   def handle_info({message_id, params}, config) do
     IO.puts "UNHANDLED SPECIAL EVENT MESSAGE TYPE: #{message_id}"
+    broadcast_new_special_event(:unknown, params)
     {:noreply, config}
   end
 
@@ -70,6 +76,9 @@ defmodule SoundboardWeb.SpecialEventHandler do
     send_message "Thank you #{params.username} for continuing your sub for #{params.sub_months} friggin months!!! Look at you go with that #{params.sub_streak} month streak malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
   end
 
+  defp broadcast_new_special_event(type, params) do
+    SoundboardWeb.MessagingHelper.broadcast_new_special_event(type, params)
+  end
   defp send_message(msg) do
     SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.TwitchOutgoingChatHandler, {:send_message, msg})
   end
