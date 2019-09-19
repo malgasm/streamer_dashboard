@@ -1,0 +1,26 @@
+li.groupedMessageTextContainer
+  span.groupedMessageText
+    if evt.isGiftSub
+      span
+        = evt.username
+        | &nbsp;gifted a sub to&nbsp;
+        = evt.gift_sub_recipient
+    if evt.isMultipleGiftSub
+      span
+        = evt.username
+        | &nbsp;gifted&nbsp;
+        = evt.gift_sub_quantity
+        | &nbsp;subs!
+    if evt.isSub
+      span
+        = evt.username
+        | &nbsp;just subscribed!!!
+        // todo: distinguish between prime and non-prime subs
+    if evt.isResub
+      span
+        = evt.username
+        | &nbsp;just resubscribed for&nbsp;
+        = evt.sub_months
+        | &nbsp;and is on a&nbsp;
+        = evt.sub_streak
+        | &nbsp;-month streak!

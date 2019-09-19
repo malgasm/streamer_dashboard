@@ -17,14 +17,14 @@ export default Ember.Component.extend
     clearAllSounds: ->
       @get('sounds').triggerClearSounds()
       @set('numPlayingSounds', 0)
+      @$('audio').remove()
 
     finishPlayingSound: (sound) ->
-      console.log 'fps', sound
       @get('sounds').triggerSoundFinish(sound)
 
     didUpdateVolume: (sound) ->
       volume = @$(".#{sound.get('keyForCss')} .form-control-range").val()
-      console.log "setting volume for #{sound.get('key')} to #{volume}"
+      # console.log "setting volume for #{sound.get('key')} to #{volume}"
       sound.set('volume', volume)
 
       Em.run.debounce sound, @saveVolume, 600

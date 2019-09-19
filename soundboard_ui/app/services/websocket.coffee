@@ -16,7 +16,7 @@ export default Ember.Service.extend
     chan = socket.chan("stream_session:lobby", {seession_id: key})
 
     chan.on('stream_action', (payload) =>
-      console.log 'stream_action occurred', payload
+      # console.log 'stream_action occurred', payload
       @get('messageBus').publish('stream_action', payload)
     )
 
@@ -28,5 +28,5 @@ export default Ember.Service.extend
     @set('channel', chan)
 
   sendMessage: (type, value) ->
-    console.log 'sendMessage', type, value
+    # console.log 'sendMessage', type, value
     @get('channel').push('stream_action', {type: type, value: value})

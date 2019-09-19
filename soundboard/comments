@@ -22,6 +22,7 @@
     [*] requires sub, host/raid, chat, follow data to accomplish.
 
 * TODO *
+[*] track event where user converts gift sub to paid
 [*] implement audio file tags, e.g. vol0_5.labelLol.originalfilename.mp3
   [*] use a default volume from tags to play sounds from commands
   [*] an alternative to this is to use a volume on a per-command basis instead of a per-sound basis

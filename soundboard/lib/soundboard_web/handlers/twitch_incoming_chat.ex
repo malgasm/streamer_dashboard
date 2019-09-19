@@ -136,37 +136,49 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     )
 
     message = message_from_tagged_arg(arg)
-    #
-    # if message == "simulatesub" do
-    #   IO.puts "SIMULATESUB\n\n\n\n"
-    #   cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=SoonerChemical;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=soonerchemical;mod=1;msg-id=sub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=SoonerChemical\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
-    #   IO.inspect prepare_special_event_args("", cmdz)
-    #
-    #   SoundboardWeb.ProcessHelper.send_process(
-    #     SoundboardWeb.SpecialEventHandler,
-    #     prepare_special_event_args("", cmdz)
-    #   )
-    # end
-    # if message == "simulateresub" do
-    #   IO.puts "SIMULATERESUB\n\n\n\n"
-    #   cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=SoonerChemical;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=soonerchemical;mod=1;msg-id=resub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=SoonerChemical\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
-    #   IO.inspect prepare_special_event_args("", cmdz)
-    #
-    #   SoundboardWeb.ProcessHelper.send_process(
-    #     SoundboardWeb.SpecialEventHandler,
-    #     prepare_special_event_args("", cmdz)
-    #   )
-    # end
-    # if message == "simulategiftsub" do
-    #   IO.puts "SIMULATEGIFTSUB\n\n\n\n"
-    #   cmdz = "@badge-info=subscriber/12;badges=broadcaster/1,subscriber/12,sub-gifter/1;color=#22DD13;display-name=malgasm;emotes=;flags=;id=281ce9a4-e4eb-4a63-a58e-8503b33a1b69;login=malgasm;mod=0;msg-id=subgift;msg-param-months=1;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=phnxdwn_n;msg-param-recipient-id=81307341;msg-param-recipient-user-name=phnxdwn_n;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=malgasm\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sphnxdwn_n!;tmi-sent-ts=1568084845220;user-id=158826258;user-type="
-    #   IO.inspect prepare_special_event_args("", cmdz)
-    #
-    #   SoundboardWeb.ProcessHelper.send_process(
-    #     SoundboardWeb.SpecialEventHandler,
-    #     prepare_special_event_args("", cmdz)
-    #   )
-    # end
+    IO.puts "HTM #{username_from_tagged_cmd(cmd)}\n\n\n\n\n"
+
+    if message == "simulatesub" && username_from_tagged_cmd(cmd) == "malgasm"  do
+      IO.puts "SIMULATESUB\n\n\n\n"
+      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=sub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
+      IO.inspect prepare_special_event_args("", cmdz)
+
+      SoundboardWeb.ProcessHelper.send_process(
+        SoundboardWeb.SpecialEventHandler,
+        prepare_special_event_args("", cmdz)
+      )
+    end
+    if message == "simulateresub" && username_from_tagged_cmd(cmd) == "malgasm"  do
+      IO.puts "SIMULATERESUB\n\n\n\n"
+      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=resub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
+      IO.inspect prepare_special_event_args("", cmdz)
+
+      SoundboardWeb.ProcessHelper.send_process(
+        SoundboardWeb.SpecialEventHandler,
+        prepare_special_event_args("", cmdz)
+      )
+    end
+
+    if message == "simulatemultiplegiftsubs" && username_from_tagged_cmd(cmd) == "malgasm"  do
+      IO.puts "SIMULATE MULTIPLE GIFT SUBS\n\n\n\n\n\n"
+      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=75cf0038-ab1e-4842-82ce-b35f214f8eca;login=Shroud;mod=1;msg-id=submysterygift;msg-param-mass-gift-count=5;msg-param-origin-id=69\s46\s38\sfc\s9b\see\s7f\sb5\s3d\s1b\s81\s8d\s58\s91\s02\s21\s59\s86\s1b\s5d;msg-param-sender-count=45;msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\sis\sgifting\s5\sTier\s1\sSubs\sto\smalgasm's\scommunity!\sThey've\sgifted\sa\stotal\sof\s45\sin\sthe\schannel!;tmi-sent-ts=1568090502470;user-id=129228929;user-type=mod"
+
+      SoundboardWeb.ProcessHelper.send_process(
+        SoundboardWeb.SpecialEventHandler,
+        prepare_special_event_args("", cmdz)
+      )
+    end
+
+    if message == "simulategiftsub" && username_from_tagged_cmd(cmd) == "malgasm" do
+      IO.puts "SIMULATEGIFTSUB\n\n\n\n"
+      cmdz = "@badge-info=subscriber/12;badges=broadcaster/1,subscriber/12,sub-gifter/1;color=#22DD13;display-name=malgasm;emotes=;flags=;id=281ce9a4-e4eb-4a63-a58e-8503b33a1b69;login=malgasm;mod=0;msg-id=subgift;msg-param-months=1;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=phnxdwn_n;msg-param-recipient-id=81307341;msg-param-recipient-user-name=phnxdwn_n;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=malgasm\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sphnxdwn_n!;tmi-sent-ts=1568084845220;user-id=158826258;user-type="
+      IO.inspect prepare_special_event_args("", cmdz)
+
+      SoundboardWeb.ProcessHelper.send_process(
+        SoundboardWeb.SpecialEventHandler,
+        prepare_special_event_args("", cmdz)
+      )
+    end
   end
 
   defp prepare_message_args(arg, cmd) do
@@ -192,7 +204,8 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
         sub_streak: get_sub_streak_from_cmd(cmd),
         gift_sub_recipient: get_gift_sub_recipient_from_cmd(cmd),
         sub_months: get_sub_months_from_cmd(cmd),
-        sub_tier: get_sub_tier_from_cmd(cmd)
+        sub_tier: get_sub_tier_from_cmd(cmd),
+        gift_sub_quantity: get_gift_sub_quantity_from_cmd(cmd)
       }
       # message_from_tagged_arg(arg)
     }
@@ -269,7 +282,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp message_from_tagged_arg(arg), do: Regex.run(message_from_tagged_arg_regex, arg) |> parse_message_regex
 
   defp parse_message_regex(nil), do: nil
-  defp parse_message_regex(result), do: Enum.at(result, 1)
+  defp parse_message_regex(result), do: Enum.at(result, 1) |> String.trim()
 
   defp message_type_regex, do: ~r/tmi.twitch.tv\s(\w+?)\s/
 
@@ -293,9 +306,13 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
 
   defp sub_streak_from_cmd_regex, do: ~r/msg-param-streak-months=(\d+);/
 
+  defp gift_sub_quantity_from_cmd_regex, do: ~r/msg-param-mass-gift-count=(\d+);/
+
   defp msg_id_from_cmd_regex, do: ~r/msg-id=(\w+);/
 
   def get_sub_tier_from_cmd(cmd), do: Regex.run(sub_tier_from_cmd_regex, cmd) |> parse_message_regex
+
+  def get_gift_sub_quantity_from_cmd(cmd), do: Regex.run(gift_sub_quantity_from_cmd_regex, cmd) |> parse_message_regex
 
   def get_gift_sub_recipient_from_cmd(cmd), do: Regex.run(gift_sub_recipient_from_cmd_regex, cmd) |> parse_message_regex
 

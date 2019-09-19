@@ -30,8 +30,10 @@ defmodule SoundboardWeb.MessagingHelper do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
       %{
         type: "play-sound",
-        value: SoundboardWeb.Sounds.get_sound_relative_path_for_web(sound),
-        volume: 1 #todo: default volume per sound
+        value: %{
+          sound: SoundboardWeb.Sounds.get_sound_relative_path_for_web(sound),
+          volume: 1 #todo: default volume per sound
+        }
       }
     )
   end
@@ -40,8 +42,10 @@ defmodule SoundboardWeb.MessagingHelper do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
       %{
         type: "play-sound",
-        value: SoundboardWeb.Sounds.get_sound_relative_path_for_web(sound),
-        volume: volume
+        value: %{
+          sound: SoundboardWeb.Sounds.get_sound_relative_path_for_web(sound),
+          volume: volume
+        }
       }
     )
   end

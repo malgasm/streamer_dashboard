@@ -30,7 +30,7 @@ defmodule SoundboardWeb.SpecialEventHandler do
 
   def handle_info({:anonsubgift, params}, config) do
     IO.puts "YOOO WE GOT AN ANON GIFT SUB!!!!!!! "
-    broadcast_new_special_event(:anonsubgift, params)
+    broadcast_new_special_event(:subgift, params)
 
     handle_gift_sub(params)
     {:noreply, config}
@@ -39,8 +39,8 @@ defmodule SoundboardWeb.SpecialEventHandler do
   def handle_info({:subgift, params}, config) do
     IO.puts "YOOO WE GOT A GIFT SUB!!!!!!! "
     broadcast_new_special_event(:subgift, params)
-
     handle_gift_sub(params)
+
     {:noreply, config}
   end
 
@@ -48,6 +48,15 @@ defmodule SoundboardWeb.SpecialEventHandler do
     IO.puts "YOOO WE GOT A SUB!!!!!!! "
     broadcast_new_special_event(:sub, params)
     handle_sub(params)
+
+    {:noreply, config}
+  end
+
+  def handle_info({:submysterygift, params}, config) do
+    IO.puts "YOOO WE GOT MULTIPLE GIFT SUBS!!!!!!! "
+    broadcast_new_special_event(:multiple_gift_subs, params)
+    handle_multiple_gift_subs(params)
+
     {:noreply, config}
   end
 
@@ -57,11 +66,25 @@ defmodule SoundboardWeb.SpecialEventHandler do
     {:noreply, config}
   end
 
-  def handle_sub(params) do
+  defp handle_sub(params) do
     send_message "YOOO #{params.username}!! Welcome to the MalPals!!!! malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
   end
 
-  def handle_gift_sub(params) do
+  defp handle_multiple_gift_subs(params) do
+    send_message "HOLY SH*T!! #{params.username} just gifted #{params.gift_sub_quantity} subs!!! malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove Thank you #{params.username}!!!"
+    play_airhorn(String.to_integer(params.gift_sub_quantity))
+  end
+
+  defp play_airhorn(quantity = 1) do
+    IO.puts "playing airhorn #{quantity}"
+    if quantity > 0 do
+      SoundboardWeb.MessagingHelper.broadcast_new_play_sound_event("airhorn")
+      :timer.sleep(125)
+      play_airhorn(quantity - 1)
+    end
+  end
+
+  defp handle_gift_sub(params) do
     message = if params.username do
       "Thank you #{params.username} for gifting a sub to #{params.gift_sub_recipient}!!! malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
     else
@@ -72,13 +95,14 @@ defmodule SoundboardWeb.SpecialEventHandler do
     #todo: sounds
   end
 
-  def handle_resub(params) do
+  defp handle_resub(params) do
     send_message "Thank you #{params.username} for continuing your sub for #{params.sub_months} friggin months!!! Look at you go with that #{params.sub_streak} month streak malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
   end
 
   defp broadcast_new_special_event(type, params) do
     SoundboardWeb.MessagingHelper.broadcast_new_special_event(type, params)
   end
+
   defp send_message(msg) do
     SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.TwitchOutgoingChatHandler, {:send_message, msg})
   end

@@ -22,7 +22,7 @@
   "type": "start"
 - "added_by": "malgasm"
   "command":
-  - "message": "$sender runs over to $msg and gives them a giant hug! malgasLove malgasLove malgasLove"
+  - "message": "$sender runs over to $msg and gives them a giant hug! malgasLove malgasWoot malgasLove malgasWoot malgasLove"
   "matching_text": "!hug"
   "type": "start"
 - "added_by": "malgasm"
@@ -43,7 +43,7 @@
 - "added_by": "malgasm"
   "command":
   - "sound": "woosah1,woosah2"
-  "matching_text": "whew"
+  "matching_text": "woosah"
   "type": "start"
 - "added_by": "malgasm"
   "command":
@@ -97,7 +97,7 @@
   "type": "start"
 - "added_by": "malgasm"
   "command":
-  - "sound": "bonghit"
+  - "sound": "smokeweedeveryday"
   "matching_text": "420"
   "type": "start"
 - "added_by": "malgasm"
@@ -115,6 +115,11 @@
   "command":
   - "message": "Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556"
   "matching_text": "medic"
+  "type": "exact"
+- "added_by": "malgasm"
+  "command":
+  - "message": "malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot"
+  "matching_text": "!hype"
   "type": "start"
 - "added_by": "malgasm"
   "command":

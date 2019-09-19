@@ -3,19 +3,22 @@ import jQuery from 'jquery'
 
 export default Ember.Component.extend
   CHAT_SPLIT_THRESHOLD_SECONDS: 120 #seconds
+  SUB_ALERT_MESSAGE_TYPES: ['sub', 'subgift', 'multiple_gift_subs', 'resub']
+  IGNORED_USERS: ['nightbot','streamelements','streamlabs'] #todo: service this, eventually, pull from yaml
   groupedMessagesSorting: ['lastMessageSentAt:desc']
   messages: []
   groupedMessages: []
   groupedMessage: Em.inject.service()
   classNames: ['streamerChatViewGroupedContainer']
-  IGNORED_USERS: ['nightbot','streamelements','streamlabs'] #todo: service this, eventually, pull from yaml
 
   didInsertElement: ->
     @get('messageBus').subscribe('stream_action', @, @didReceiveStreamAction)
 
   didReceiveStreamAction: (payload) ->
-    console.log 'apyload', payload
-    if payload && payload.type == 'message'
+    console.log 'apyload scvg', payload
+    if @SUB_ALERT_MESSAGE_TYPES.indexOf(payload.type) != -1
+      @newChatEvent(payload)
+    else if payload && payload.type == 'message'
       @newMessage(payload)
 
   messageFromPayload: (payload) ->
@@ -56,9 +59,27 @@ export default Ember.Component.extend
     @addMessageToGroup(messageGroup, message)
     @get('groupedMessages').unshiftObject(messageGroup)
 
+  addNewEventGroupFromPayload: (payload, event) ->
+    @get('store').createRecord('messageGroup',
+      user: payload.params.username
+      firstMessageSentAt: moment(),
+      lastMessageSentAt: moment(),
+      id: @get('utility').randNum(),
+      chatEvents: [event]
+    )
+
+  newChatEvent: (payload) ->
+    newEvent = @get('store').createRecord('chatEvent', jQuery.extend(payload.params, {eventType: payload.type}))
+
+    console.log "NCE event: #{JSON.stringify(newEvent)}"
+
+    #todo: group multiple gift subs and the subsequent sub notifications
+    eventGroup = @addNewEventGroupFromPayload(payload, newEvent)
+    @get('groupedMessages').unshiftObject(eventGroup)
+
   newMessage: (payload) ->
     console.log 'newMessage', payload
-    return if @IGNORED_USERS.indexOf(payload.user.username) != -1
+    return if @IGNORED_USERS.indexOf(payload.user.username.toLowerCase()) != -1
     latestMessageGroup = @get('groupedMessage').latestMessageGroupByUser(payload.user.username, @get('groupedMessages'))
     console.log 'latestMessageGroup', JSON.stringify(latestMessageGroup)
     if latestMessageGroup && latestMessageGroup.get('firstMessageSentAt')

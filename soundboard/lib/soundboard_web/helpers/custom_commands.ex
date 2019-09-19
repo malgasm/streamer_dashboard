@@ -142,7 +142,7 @@ defmodule SoundboardWeb.CustomCommandsHelper do
 
     process_commands("start", commands_by_type(commands, "start"), user, message)
     process_commands("anywhere", commands_by_type(commands, "anywhere"), user, message)
-    process_commands("end", commands_by_type(commands, "end"), user, message)
+    process_commands("exact", commands_by_type(commands, "exact"), user, message)
   end
 
   defp commands_by_type(commands, type) do
@@ -160,9 +160,9 @@ defmodule SoundboardWeb.CustomCommandsHelper do
   end
 
 
-  defp process_commands("end", commands, user, message) do
+  defp process_commands("exact", commands, user, message) do
     Enum.each commands, fn(command) ->
-      if String.ends_with?(sanitize_message(message), command["matching_text"]) do
+      if message == command["matching_text"] do
         process_command_actions(Map.merge(command, %{"user" =>  user, "original_message" => message}))
       end
     end

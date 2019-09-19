@@ -9,7 +9,7 @@ export default Ember.Component.extend
 
   didReceiveStreamAction: (payload) ->
     console.log 'apyload', payload
-    if payload && payload.type == 'message'
+    if payload.type == 'message'
       @get('messages').addObject(Em.Object.create(user: payload.user, messageText: payload.value))
       console.log 'message', Em.Object.create(user: payload.user, messageText: payload.value)
 
@@ -17,7 +17,7 @@ export default Ember.Component.extend
     @get('messages').uniqBy('user.username').map (message) =>
       Em.Object.create(
         username: message.get('user.username'),
-        messageCount: @get('messages').filter((msg) ->
+        messageCount: @get('messages').filter((msg) =>
           message.get('user.username') == msg.get('user.username')
         ).get('length')
       )

@@ -1,13 +1,14 @@
 each groupedMessagesSortedByLastMessage as |groupedMessage|
   .row.groupedMessageContainer
-    p.col-2
-      em
-        | &nbsp;
-        =colored-text groupedMessage.user.username
-        if groupedMessage.user.isMod
-           | (m)
-        if groupedMessage.user.isSub
-           | (s)
+    unless groupedMessage.hasEvents
+      p.col-2
+        em
+          | &nbsp;
+          =colored-text groupedMessage.user.username
+          if groupedMessage.user.isMod
+             | (m)
+          if groupedMessage.user.isSub
+             | (s)
     p.col-2.groupedMessageTimestampContainer
       span
         = groupedMessage.firstMessageTimestamp
@@ -15,8 +16,12 @@ each groupedMessagesSortedByLastMessage as |groupedMessage|
         = groupedMessage.lastMessageTimestamp
   .row.groupedMessageMessagesContainer
     ul.col-12
-      each groupedMessage.messages as |message|
-        li.groupedMessageTextContainer
-          span.groupedMessageTimestamp = message.timestamp
-          span.groupedMessageText
-            = message.text
+      if groupedMessage.hasEvents
+        each groupedMessage.chatEvents as |evt|
+          show-chat-event evt=evt
+      else
+        each groupedMessage.messages as |message|
+          li.groupedMessageTextContainer
+            span.groupedMessageTimestamp = message.timestamp
+            span.groupedMessageText
+              = message.text
