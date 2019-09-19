@@ -1,0 +1,34 @@
+bits_actions:
+  - quantity: 1
+    actions:
+      - sound: poop1
+  - quantity: 2
+    actions:
+      - sound: poop2
+  - quantity: 3
+    actions:
+      - sound: poop3
+  - quantity: 4
+    actions:
+      - sound: poop4
+  - quantity: 5
+    actions:
+      - sound: itsinthewaythatyouuseit
+  - quantity: 6
+    actions:
+      - sound: nani1
+  - quantity: 7
+    actions:
+      - sound: nani2
+  - quantity: 8
+    actions:
+      - sound: nani3
+  - quantity: 9
+    actions:
+      - sound: nani4
+  - quantity: 10
+    actions:
+      - sound: nononono
+  - quantity: 50
+    actions:
+      - sound: whysoseriouspapa
