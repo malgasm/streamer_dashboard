@@ -48,7 +48,7 @@ defmodule SoundboardWeb.Endpoint do
                           "User-Agent", "DNT","Cache-Control", "X-Mx-ReqToken",
                           "Keep-Alive", "X-Requested-With", "If-Modified-Since",
                           "X-CSRF-Token"],
-                 origin: ["http://10.0.0.45:4200"]
+                 origin: ["https://peanut:4200"]
 
 
   plug SoundboardWeb.Router

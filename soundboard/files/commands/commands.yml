@@ -87,6 +87,21 @@
   "type": "anywhere"
 - "added_by": "malshypeman"
   "command":
+  - "message": "wattup $sender!"
+  "matching_text": "yo"
+  "type": "start"
+- "added_by": "malshypeman"
+  "command":
+  - "message": "oh hey there, $sender! :)"
+  "matching_text": "hey "
+  "type": "start"
+- "added_by": "malshypeman"
+  "command":
+  - "message": "malgasGrin"
+  "matching_text": "malgasGrin"
+  "type": "anywhere"
+- "added_by": "malshypeman"
+  "command":
   - "message": "hi $sender!"
   "matching_text": "hi"
   "type": "start"

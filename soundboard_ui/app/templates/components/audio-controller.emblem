@@ -2,16 +2,15 @@
   ul.soundControllerSoundsList.col-10
     each groupedSoundsForDisplay as |sound|
       div class="soundControllerItemContainer {{sound.keyForCss}}"
-        li.soundControllerAudioItem.groupedSound touchStart="(action 'playGroupedSoundAction' sound)" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')"
+        li.soundControllerAudioItem.groupedSound touchStart="(action 'playGroupedSoundAction' sound)" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')" click="(action 'playGroupedSoundAction' sound)"
           span = sound
     each allSounds as |sound|
       div class="soundControllerItemContainer {{sound.keyForCss}}"
-        li.soundControllerAudioItem.singleSound touchStart="(action 'playSoundAction' sound)" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')"
+        li.soundControllerAudioItem.singleSound touchStart="(action 'playSoundAction' sound)" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')" click="(action 'playSoundAction' sound)"
           span = sound.key
           h1 = sound.volume
         form.form-group
           input.form-control-range input="(action 'didUpdateVolume' sound)" type='range' min="0.1" max="5" step="0.1" value="{{sound.volume}}"
 
-  .col-2.btn-danger.clearAllSoundsButton touchStart="(action 'clearAllSounds')" touchEnd="(action 'finishPlayingSound' sound)" contextMenu="(action 'onContextMenuOpen')"
+  .col-2.btn-danger.clearAllSoundsButton touchStart="(action 'clearAllSounds')" contextMenu="(action 'onContextMenuOpen')" click="(action 'clearAllSounds' sound)"
     p STAHP
-

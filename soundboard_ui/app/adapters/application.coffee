@@ -3,4 +3,4 @@ import config from '../config/environment'
 
 export default DS.RESTAdapter.extend
   namespace: 'api'
-  host: 'http://10.0.0.45:4000'
+  host: 'https://peanut:4001'

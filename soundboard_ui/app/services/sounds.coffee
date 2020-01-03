@@ -10,7 +10,7 @@ export default Ember.Service.extend
       @get('store').findAll('sound').then (sounds) =>
         resolve(sounds)
 
-  getSoundFilePath: (path) -> "http://10.0.0.45:4000/#{path}"
+  getSoundFilePath: (path) -> "http://peanut:4000/#{path}"
 
   allSounds: -> @get('store').peekAll('sound')
 

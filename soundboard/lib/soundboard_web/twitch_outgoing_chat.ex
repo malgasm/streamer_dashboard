@@ -1,6 +1,7 @@
 defmodule SoundboardWeb.TwitchOutgoingChatHandler do
   use GenServer
   require Logger
+  import SoundboardWeb.TwitchConnectionHandler
 
   defmodule Config do
     defstruct server:  "irc.twitch.tv",
@@ -113,13 +114,6 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     {:noreply, config}
   end
 
-  def cap_request(client, cap) do
-    request = Client.cmd(client, ['CAP ', 'REQ ', cap])
-    IO.puts "CAP REQUEST\n\n\n\n\n\n\n"
-    IO.inspect request
-    IO.inspect client
-  end
-
   def request_twitch_capabilities(client) do
     # Request capabilities before joining the channel
     [
@@ -132,24 +126,4 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     client
   end
 
-  def join(client, channels) when is_list(channels) do
-    channels
-      |> Enum.map(&join(client, &1))
-
-    client
-  end
-
-  def join(client, channel) do
-    Client.join(client, channel)
-
-    Logger.debug "Joined channel: #{channel}"
-  end
-
-
-  def terminate(_, state) do
-    # Quit the channel and close the underlying client connection when the process is terminating
-    Client.quit state.client, "Goodbye, cruel world."
-    Client.stop! state.client
-    :ok
-  end
 end
