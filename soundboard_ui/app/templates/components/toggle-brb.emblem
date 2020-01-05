@@ -1,0 +1,2 @@
+span toggle brb
+= on-off-button value=brb onClick=(action 'didToggleBrb')

@@ -190,6 +190,10 @@ defmodule SoundboardWeb.CustomCommandsHelper do
     SoundboardWeb.MessagingHelper.send_twitch_chat_message(substitute_variables(message, command["user"], command["original_message"], command["matching_text"]))
   end
 
+  defp process_command_action(%{"brb-direction" => direction}, command) do
+    SoundboardWeb.MessagingHelper.broadcast_brb_direction_change(direction)
+  end
+
   defp process_command_action(%{"sound" => sound}, command) do
     if String.contains?(sound, ",") do
       SoundboardWeb.Sounds.get_random_sound(String.split(sound, ","))

@@ -146,4 +146,24 @@
   - "message": "malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove malgasLove"
   "matching_text": "!tarrasque"
   "type": "start"
+- "added_by": "malgasm"
+  "command":
+  - "brb-direction": "left"
+  "matching_text": "left"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "brb-direction": "right"
+  "matching_text": "right"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "brb-direction": "down"
+  "matching_text": "down"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "brb-direction": "up"
+  "matching_text": "up"
+  "type": "anywhere"
 ...

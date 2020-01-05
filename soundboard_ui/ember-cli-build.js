@@ -36,6 +36,7 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
+  app.import('vendor/javascripts/bounce.js');
   var phoenixAmdFiles = new ES6Modules(phoenixTree, {
       format: 'amd',
       esperantoOptions: {

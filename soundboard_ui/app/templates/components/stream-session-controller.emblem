@@ -4,7 +4,9 @@
 //ability to shout out
 //maybe a bot, too. probably a bot.
 
-unless brb
-  audio-controller
-on-off-button value=brb onClick=(action 'didToggleBrb')
-event-log
+if brb
+  p.brbWarning Brb's up, friend.
+else
+  = audio-controller
+= toggle-brb didToggleBrb=(action 'didToggleBrb') brb=brb
+= event-log

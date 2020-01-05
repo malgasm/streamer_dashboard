@@ -26,6 +26,15 @@ defmodule SoundboardWeb.MessagingHelper do
     )
   end
 
+  def broadcast_brb_direction_change(direction) do
+    SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
+      %{
+        type: "change-brb-direction",
+        value: direction
+      }
+    )
+  end
+
   def broadcast_new_play_sound_event(sound) do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
       %{
