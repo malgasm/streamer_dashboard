@@ -1,4 +1,4 @@
-= animations/bounce speed=3 maxSpeed=6 xDir=xDir yDir=yDir
+= animations/bounce speed=12 maxSpeed=20 xDir=xDir yDir=yDir imageUrl=imageUrl
 span.brb.txt.anim-text-flow
   span b
   span r

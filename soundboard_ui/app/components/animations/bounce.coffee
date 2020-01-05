@@ -27,6 +27,10 @@ export default Ember.Component.extend
 
   removeBounce: (bounce) -> @get('bounce').destroy()
 
+  imageObserver: observer('imageUrl', ->
+    @get('bounce').changeImage(@get('imageUrl'))
+  )
+
   dirObserver: observer('xDir','yDir', ->
     console.log 'dirObserver', @get('xDir'), @get('yDir')
     @changeDirection(@get('xDir'), @get('yDir'))

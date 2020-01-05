@@ -1,6 +1,6 @@
 .overlayContainer
   if brb
-    = brb xDir=xDir yDir=yDir
+    = brb xDir=xDir yDir=yDir imageUrl=brbImage
 
   component animation animationDidFinish=(action 'animationDidFinish')
 

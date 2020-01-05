@@ -51,6 +51,9 @@
     destroy: function() {
       view.destroy();
     },
+    changeImage: function(newImage) {
+      view.changeImage(newImage);
+    },
     changeDirection: function(xDir, yDir) {
       view.changeDirection(xDir, yDir);
     },
@@ -66,6 +69,8 @@
         logoFilename, currentImage = view.$logo.style.backgroundImage,
         currentImageUrl = currentImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, ''),
           currentImageFilename = currentImageUrl.substring(currentImageUrl.lastIndexOf('/') + 1);
+          console.log('currentImageUrl', currentImageUrl);
+
           if (selection === 'random') {
             logo = utils.getRandomString(model.logos);
             logoFilename = logo.substring(logo.lastIndexOf('/') + 1);
@@ -81,8 +86,8 @@
   view = {
     init: function() {
       var self = this;
-      document.body.style.height = '100%';
-      document.body.style.width = '100%';
+      // document.body.style.height = '100%';
+      // document.body.style.width = '100%';
       self.$container = document.createElement('div');
       self.$container.style.position = 'relative';
       self.$container.style.backgroundColor = '#000';
@@ -94,9 +99,12 @@
       self.$logo = document.createElement('div');
       self.$logo.id = 'bounce-' + utils.generateId().toString();
       self.$logo.style.position = 'absolute';
-      self.$logo.style.backgroundSize = 'cover';
-      self.$logo.style.width = klass.parameters.logoWidth + 'px';
-      self.$logo.style.height = klass.parameters.logoHeight + 'px';
+      self.$logo.style.backgroundSize = '100%';
+      self.$logo.style.backgroundRepeat = 'no-repeat';
+      self.imageUrl = klass.parameters.imageUrl;
+      self.$logo.style.backgroundImage = 'url(' + self.imageUrl + ')'
+      self.$logo.style.width = '20vh';
+      self.$logo.style.height = '20vh';
       self.$container.appendChild(self.$logo);
       self.speed = klass.parameters.speed;
       self.maxSpeed = klass.parameters.maxSpeed;
@@ -107,8 +115,13 @@
       document.body.removeChild(this.$container);
       this.stop = true;
     },
-    refreshImage: function() {
-      this.$logo.style.backgroundImage = 'url(' + klass.getImage('random') + ')'
+    changeImage: function(newImage) {
+      this.imageUrl = newImage;
+      this.refreshImage();
+    },
+    refreshImage: function(imageUrl) {
+      //todo: corner/edge detection
+      this.$logo.style.backgroundImage = 'url(' + this.imageUrl + ')'
     },
     changeDirection: function(xDir, yDir) {
       var safeXDir = xDir == null || ['left','right'].indexOf(xDir) == -1 ? this.xDir : xDir;
@@ -200,6 +213,9 @@
   };
   bounceEffect.prototype.destroy = function() {
     klass.destroy();
+  };
+  bounceEffect.prototype.changeImage = function(newImage) {
+    klass.changeImage(newImage);
   };
   bounceEffect.prototype.changeDirection = function(xDir, yDir) {
     klass.changeDirection(xDir, yDir);

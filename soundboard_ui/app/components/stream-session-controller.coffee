@@ -6,3 +6,6 @@ export default Ember.Component.extend
   actions:
     didToggleBrb: (brb) ->
       @get('websocket').sendMessage('brb-toggle', brb)
+
+    didChangeBrbEmote: (emote) ->
+      @get('websocket').sendMessage('set-brb-image', emote )

@@ -8,5 +8,5 @@ if brb
   p.brbWarning Brb's up, friend.
 else
   = audio-controller
-= toggle-brb didToggleBrb=(action 'didToggleBrb') brb=brb
+= toggle-brb didToggleBrb=(action 'didToggleBrb') didChangeBrbEmote=(action 'didChangeBrbEmote') brb=brb
 = event-log

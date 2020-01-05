@@ -1,0 +1,3 @@
+select onchange={action 'valueDidChange' this}
+  each options as |opt|
+    option value=opt.value label=opt.label = opt.label
