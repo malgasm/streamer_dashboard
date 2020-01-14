@@ -13,6 +13,7 @@ defmodule Soundboard.Application do
       # Soundboard.Repo,
       # Start the endpoint when the application starts
       SoundboardWeb.Endpoint,
+      KV.Bucket,
       # Starts a worker by calling: Soundboard.Worker.start_link(arg)
       # {Soundboard.Worker, arg},
       worker(SoundboardWeb.TwitchIncomingChatHandler, []),
