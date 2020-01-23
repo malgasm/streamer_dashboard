@@ -1,7 +1,7 @@
 defmodule SoundboardWeb.CustomCommandsHelper do
   require Logger
   defp valid_command_types, do: ["start", "anywhere", "exact"]
-  defp valid_command_actions, do: ["message", "sound"]
+  defp valid_command_actions, do: ["message", "sound", "animation"]
 
   def load_commands do
     {:ok, commands} = SoundboardWeb.Filesystem.read_file("commands/commands.yml")
@@ -188,6 +188,10 @@ defmodule SoundboardWeb.CustomCommandsHelper do
 
   defp process_command_action(%{"message" => message}, command) do
     SoundboardWeb.MessagingHelper.send_twitch_chat_message(substitute_variables(message, command["user"], command["original_message"], command["matching_text"]))
+  end
+
+  defp process_command_action(%{"single-animation" => emote}, command) do
+    SoundboardWeb.MessagingHelper.broadcast_new_animation_event(emote, 1)
   end
 
   defp process_command_action(%{"brb-direction" => direction}, command) do

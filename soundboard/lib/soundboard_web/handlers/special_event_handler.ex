@@ -60,6 +60,12 @@ defmodule SoundboardWeb.SpecialEventHandler do
     {:noreply, config}
   end
 
+  def handle_info({:channel_points_redemption, params}, config) do
+    IO.puts "SEH: #{params.username} redeemed #{params.redemption}"
+    SoundboardWeb.ChannelPointsRedemptions.handle_redemption(params.username, params.redemption, params.entered_text)
+    {:noreply, config}
+  end
+
   def handle_info({message_id, params}, config) do
     IO.puts "UNHANDLED SPECIAL EVENT MESSAGE TYPE: #{message_id}"
     broadcast_new_special_event(:unknown, params)

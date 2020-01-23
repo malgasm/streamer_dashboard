@@ -2,6 +2,8 @@ import Ember from 'ember'
 
 export default Ember.Component.extend
   streamSession: Em.inject.service('stream-session-websocket')
+  classNames: ['overlayContainer']
+  elementId: 'overlayContainer'
   animation: null
   brbImage: null
 
@@ -11,6 +13,7 @@ export default Ember.Component.extend
 
   didInsertElement: ->
     @get('streamSession').listenForStreamSessionEvents(@didReceiveStreamAction.bind(@))
+    @set('particleAnimation', new ParticleAnimation(document.getElementById('overlayContainer')))
     window.b = @
 
   didReceiveStreamAction: (payload) ->
@@ -19,6 +22,21 @@ export default Ember.Component.extend
       @toggleBrb(payload.value)
     else if payload.type && payload.type == 'set-brb-image'
       @setBrbImage(payload.value)
+    else if payload.type && payload.type == 'animate-overlay'
+      @animateOverlay(payload.value)
+
+  animateOverlay: (params) ->
+    emote = new Emote()[params.emote]
+    console.log 'emote', emote
+    console.log 'count', params.count
+
+    #todo: split simple count-based animations
+    #and the buildup animation. this will allow
+    #for more animation types to be specified.
+    if params.count < 30
+      @get('particleAnimation').animateCount(emote, params.count)
+    else
+      @get('particleAnimation').buildupAnimation([emote], params.count)
 
   toggleBrb: (brb) -> @set('brb', brb)
 

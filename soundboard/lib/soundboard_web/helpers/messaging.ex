@@ -35,6 +35,19 @@ defmodule SoundboardWeb.MessagingHelper do
     )
   end
 
+  def broadcast_new_animation_event(emote, count) do
+    IO.puts "BNAE #{emote} #{count}"
+    SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
+      %{
+        type: "animate-overlay",
+        value: %{
+          emote: emote,
+          count: count
+        }
+      }
+    )
+  end
+
   def broadcast_new_play_sound_event(sound) do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
       %{

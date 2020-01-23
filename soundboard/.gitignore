@@ -35,3 +35,4 @@ npm-debug.log
 
 /config/dev.secret.exs
 /priv/cert/
+*.mp3

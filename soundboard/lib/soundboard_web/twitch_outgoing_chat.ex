@@ -102,6 +102,7 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     end
     {:noreply, config}
   end
+
   def handle_info({:received, msg, %SenderInfo{:nick => nick}}, config) do
     Logger.warn "#{nick}: #{msg}"
     reply = "Hi!"
@@ -109,6 +110,19 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     Logger.info "Sent #{reply} to #{nick}"
     {:noreply, config}
   end
+
+  def handle_info(:enable_emoteonly, config) do
+    Logger.info("Twitch Outgoing Chat Handler: Enabling emote-only mode")
+    Client.msg config.client, :privmsg, config.channel, "/emoteonly"
+    {:noreply, config}
+  end
+
+  def handle_info(:disable_emoteonly, config) do
+    Logger.info("Twitch Outgoing Chat Handler: turning emote-only mode off.")
+    Client.msg config.client, :privmsg, config.channel, "/emoteonlyoff"
+    {:noreply, config}
+  end
+
   # Catch-all for messages you don't care about
   def handle_info(_msg, config) do
     {:noreply, config}

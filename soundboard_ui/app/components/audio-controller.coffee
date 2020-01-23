@@ -6,6 +6,7 @@ export default Ember.Component.extend
   allSounds: []
   groupedSounds: {}
   classNames: ['audioControllerComponent']
+  playingSounds: []
   numPlayingSounds: 0
 
   actions:
@@ -31,8 +32,12 @@ export default Ember.Component.extend
 
     playSoundAction: (sound) ->
       console.log 'playing sound', sound
-      @get('sounds').triggerSound(sound.path, sound.volume)
-      @incrementNumSounds()
+      if sound.get('loops') && @isPlayingSound(sound)
+        console.log 'not playing already playing loop sound'
+      else
+        @get('sounds').triggerSound(sound.path, sound.volume)
+        @get('playingSounds').push(sound)
+        @incrementNumSounds()
 
     playGroupedSoundAction: (sound) ->
       @get('sounds').triggerSound(
@@ -40,6 +45,8 @@ export default Ember.Component.extend
         2
       )
       @incrementNumSounds()
+
+  isPlayingSound: (sound) -> @get('playingSounds').indexOf(sound) != -1
 
   saveVolume: (sound) ->
     console.log "saving volume for #{@get('key')} to #{@get('volume')}"
@@ -53,7 +60,6 @@ export default Ember.Component.extend
         @decrementNumSounds()
     )
 
-  isPlayingSound: Em.computed('numPlayingSounds', -> @get('numPlayingSounds') > 0)
   incrementNumSounds: -> @set('numPlayingSounds', @get('numPlayingSounds') + 1)
   decrementNumSounds: -> @set('numPlayingSounds', @get('numPlayingSounds') - 1)
 

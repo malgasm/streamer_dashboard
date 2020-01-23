@@ -1,12 +1,11 @@
-.overlayContainer
-  if brb
-    = brb xDir=xDir yDir=yDir imageUrl=brbImage
+if brb
+  = brb xDir=xDir yDir=yDir imageUrl=brbImage
 
-  component animation animationDidFinish=(action 'animationDidFinish')
+component animation animationDidFinish=(action 'animationDidFinish')
 
 //  .todaysGoalsContainer
-    h3 today's goals:
-    ul.todaysGoalsList
-      li user-added commands - in progress
-      li make a brb screen with the overlay
-      li play a random nani when someone says "what" in the chat - done
+  h3 today's goals:
+  ul.todaysGoalsList
+    li user-added commands - in progress
+    li make a brb screen with the overlay
+    li play a random nani when someone says "what" in the chat - done
