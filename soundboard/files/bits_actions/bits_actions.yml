@@ -25,10 +25,13 @@ bits_actions:
       - sound: nani3
   - quantity: 9
     actions:
-      - sound: nani4
+      - sound: wow3
   - quantity: 10
     actions:
-      - sound: nononono
-  - quantity: 50
+      - sound: wow2
+  - quantity: 100
     actions:
-      - sound: whysoseriouspapa
+      - sound: ohlawd2
+  - quantity: 420
+    actions:
+      - sound: bonghit

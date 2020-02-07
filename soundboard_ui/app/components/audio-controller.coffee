@@ -21,6 +21,8 @@ export default Ember.Component.extend
       @$('audio').remove()
 
     finishPlayingSound: (sound) ->
+      console.log 'finishing sound', sound
+      @get('playingSounds').removeObject(sound)
       @get('sounds').triggerSoundFinish(sound)
 
     didUpdateVolume: (sound) ->
@@ -36,7 +38,7 @@ export default Ember.Component.extend
         console.log 'not playing already playing loop sound'
       else
         @get('sounds').triggerSound(sound.path, sound.volume)
-        @get('playingSounds').push(sound)
+        @get('playingSounds').addObject(sound)
         @incrementNumSounds()
 
     playGroupedSoundAction: (sound) ->

@@ -1,5 +1,10 @@
+script src="https://www.youtube.com/iframe_api"
+
 if brb
   = brb xDir=xDir yDir=yDir imageUrl=brbImage
+
+each videos as |video|
+  = video-player videoUrl=video.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
 
 component animation animationDidFinish=(action 'animationDidFinish')
 
