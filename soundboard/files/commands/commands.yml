@@ -158,6 +158,11 @@
   "type": "anywhere"
 - "added_by": "malgasm"
   "command":
+  - "sound": "whosaidthat"
+  "matching_text": "who said that?"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
   - "brb-direction": "up"
   "matching_text": "up"
   "type": "anywhere"

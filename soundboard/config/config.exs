@@ -7,8 +7,8 @@
 # General application configuration
 use Mix.Config
 
-# config :soundboard,
-#   ecto_repos: [Soundboard.Repo]
+config :soundboard,
+  ecto_repos: [Soundboard.Repo]
 
 # Configures the endpoint
 config :soundboard, SoundboardWeb.Endpoint,

@@ -10,7 +10,7 @@ defmodule Soundboard.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      # Soundboard.Repo,
+      Soundboard.Repo,
       # Start the endpoint when the application starts
       SoundboardWeb.Endpoint,
       KV.Bucket,
