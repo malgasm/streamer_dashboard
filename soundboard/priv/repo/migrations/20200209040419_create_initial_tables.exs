@@ -8,7 +8,6 @@ defmodule Soundboard.Repo.Migrations.CreateInitialTables do
 
     create table(:stream_users) do
       add :username, :string
-      add :stream_session_id, references(:stream_sessions)
 
       timestamps([type: :utc_datetime_usec])
     end
@@ -21,14 +20,15 @@ defmodule Soundboard.Repo.Migrations.CreateInitialTables do
       timestamps([type: :utc_datetime_usec])
     end
 
-    create table(:messages) do
+    create table(:stream_messages) do
+      add :message_text, :string
       add :stream_session_id, references(:stream_sessions)
       add :stream_user_id, references(:stream_users)
 
       timestamps([type: :utc_datetime_usec])
     end
 
-    create table(:emotes) do
+    create table(:stream_emotes) do
       add :channel, :string
       add :matching_text, :string
       add :urls, :map
