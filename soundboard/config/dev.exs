@@ -3,9 +3,8 @@ use Mix.Config
 # Configure your database
 config :soundboard, Soundboard.Repo,
   username: "postgres",
-  password: "postgres",
   database: "soundboard_dev",
-  hostname: "localhost",
+  hostname: "127.0.0.1",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -34,6 +33,14 @@ config :soundboard, SoundboardWeb.Endpoint,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
+  ],
+  live_reload: [
+    patterns: [
+      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/gettext/.*(po)$",
+      ~r"lib/soundboard_web/{live,views}/.*(ex)$",
+      ~r"lib/soundboard_web/templates/.*(eex)$"
+    ]
   ]
 
 # ## SSL Support
@@ -61,15 +68,6 @@ config :soundboard, SoundboardWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :soundboard, SoundboardWeb.Endpoint,
-  live_reload: [
-    patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/soundboard_web/{live,views}/.*(ex)$",
-      ~r"lib/soundboard_web/templates/.*(eex)$"
-    ]
-  ]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

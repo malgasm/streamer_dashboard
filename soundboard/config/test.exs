@@ -12,7 +12,7 @@ config :soundboard, Soundboard.Repo,
 # you can enable the server option below.
 config :soundboard, SoundboardWeb.Endpoint,
   http: [port: 4002],
-  server: false
+  server: false,
   debug_errors: true
 
 # Print only warnings and errors during test

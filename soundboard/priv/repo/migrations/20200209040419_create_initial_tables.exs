@@ -11,6 +11,7 @@ defmodule Soundboard.Repo.Migrations.CreateInitialTables do
 
       timestamps([type: :utc_datetime_usec])
     end
+    create unique_index(:stream_users, [:username])
 
     create table(:stream_events) do
       add :event_type, :string
@@ -36,5 +37,6 @@ defmodule Soundboard.Repo.Migrations.CreateInitialTables do
 
       timestamps([type: :utc_datetime_usec])
     end
+    create unique_index(:stream_emotes, [:matching_text])
   end
 end

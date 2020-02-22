@@ -10,6 +10,9 @@ use Mix.Config
 config :soundboard,
   ecto_repos: [Soundboard.Repo]
 
+config :phoenix_live_reload,
+  backend: :fs_poll
+
 # Configures the endpoint
 config :soundboard, SoundboardWeb.Endpoint,
   url: [host: "localhost"],

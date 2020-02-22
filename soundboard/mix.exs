@@ -21,7 +21,7 @@ defmodule Soundboard.MixProject do
     [
       applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex],
       mod: {Soundboard.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ecto, :postgrex]
     ]
   end
 

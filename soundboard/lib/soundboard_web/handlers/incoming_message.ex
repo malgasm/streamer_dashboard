@@ -19,9 +19,9 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     #send message to web clients
     SoundboardWeb.MessagingHelper.broadcast_new_twitch_message(channel, user, message)
 
-    sanitized_message = String.downcase(message)
-
     SoundboardWeb.BitsProcessor.process_message_for_user(user, message)
     SoundboardWeb.ChatCommandProcessor.process_message_for_user(user, message)
+
+    Soundboard.SoundboardWeb.StreamMessages.create_message(user.username, message) #todo: GenServer this
   end
 end
