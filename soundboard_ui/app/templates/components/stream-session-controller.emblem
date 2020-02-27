@@ -9,4 +9,5 @@ if brb
 else
   = audio-controller
 = toggle-brb didToggleBrb=(action 'didToggleBrb') didChangeBrbEmote=(action 'didChangeBrbEmote') brb=brb
+= video-controls skipVideo=(action 'skipVideo')
 = event-log

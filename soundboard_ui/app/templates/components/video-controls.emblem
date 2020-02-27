@@ -1,0 +1,1 @@
+button click={action 'skipVideo'} Skip it

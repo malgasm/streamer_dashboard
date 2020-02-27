@@ -8,4 +8,7 @@ export default Ember.Component.extend
       @get('websocket').sendMessage('brb-toggle', brb)
 
     didChangeBrbEmote: (emote) ->
-      @get('websocket').sendMessage('set-brb-image', emote )
+      @get('websocket').sendMessage('set-brb-image', emote)
+
+    skipVideo: ->
+      @get('websocket').sendMessage('skip-video', {})

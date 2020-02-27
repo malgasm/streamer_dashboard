@@ -137,6 +137,13 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
 
     message = message_from_tagged_arg(arg)
 
+    if message == "testvideo" && username_from_cmd(cmd) == "malgasm"  do
+
+      IO.puts "TESTVIDEO\n\n\n\n"
+
+      SoundboardWeb.MessagingHelper.broadcast_new_play_video_event("8TGUnriw9k4")
+    end
+
     if message == "simulatesub" && username_from_cmd(cmd) == "malgasm"  do
       IO.puts "SIMULATESUB\n\n\n\n"
       cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=sub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"

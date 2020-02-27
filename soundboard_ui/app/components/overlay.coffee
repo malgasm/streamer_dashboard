@@ -2,8 +2,11 @@ import Ember from 'ember'
 
 export default Ember.Component.extend
   streamSession: Em.inject.service('stream-session-websocket')
+  youtube: Em.inject.service()
+  utility: Em.inject.service()
   classNames: ['overlayContainer']
   elementId: 'overlayContainer'
+  currentVideo: null
   animation: null
   brbImage: null
   videos: []
@@ -12,12 +15,14 @@ export default Ember.Component.extend
     animationDidFinish: ->
       console.log 'animation complete.'
 
-    didFinishPlayingVideo: (video) -> @removeVideo(video)
+    didFinishPlayingVideo: (video) ->
+      @removeVideo()
+      Em.run.next => @playNextVideo()
 
   didInsertElement: ->
+    window.b = @
     @get('streamSession').listenForStreamSessionEvents(@didReceiveStreamAction.bind(@))
     @set('particleAnimation', new ParticleAnimation(document.getElementById('overlayContainer')))
-    window.b = @
 
   didReceiveStreamAction: (payload) ->
     console.log 'didReceiveStreamAction overlay', payload
@@ -27,23 +32,30 @@ export default Ember.Component.extend
       @setBrbImage(payload.value)
     else if payload.type && payload.type == 'animate-overlay'
       @animateOverlay(payload.value)
+    else if payload.type && payload.type == 'skip-video'
+      @removeVideo()
+      Em.run.next => @playNextVideo()
     else if payload.type && payload.type == 'play-video'
       console.log 'play-video', payload
-      @playVideo(payload.value)
+      @addVideoToQueue(payload.value)
 
-  removeVideo: (video) ->
-    console.log 'remove video', video, @get('videos').mapBy('url')
-    @get('videos').filterBy('url', video).map (video) =>
-      console.log 'video', video
-      @get('videos').removeObject(video)
+  removeVideo: -> @set('currentVideo', null)
 
-  playVideo: (video) ->
+  addVideoToQueue: (video) ->
+    console.log 'adding', video, 'to queue'
     newVideo = Em.Object.extend(Ember.Evented).create(
-      url: video.video
+      url: @get('utility').extractYoutubeId(video.video)
     )
-
     @get('videos').addObject(newVideo)
-    console.log 'playing video', video.video
+    @playNextVideo()
+
+  playNextVideo: ->
+    return if Em.isPresent(@get('currentVideo'))
+
+    nextVideo = @get('videos').popObject()
+    if nextVideo
+      console.log 'playing video', nextVideo.video
+      @set('currentVideo', nextVideo)
 
   animateOverlay: (params) ->
     emote = new Emote()[params.emote]

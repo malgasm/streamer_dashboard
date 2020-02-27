@@ -3,14 +3,24 @@ script src="https://www.youtube.com/iframe_api"
 if brb
   = brb xDir=xDir yDir=yDir imageUrl=brbImage
 
-each videos as |video|
-  = video-player videoUrl=video.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
+if currentVideo
+  = video-player videoUrl=currentVideo.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
 
 component animation animationDidFinish=(action 'animationDidFinish')
 
-//  .todaysGoalsContainer
+// .todaysGoalsContainer
   h3 today's goals:
   ul.todaysGoalsList
-    li user-added commands - in progress
-    li make a brb screen with the overlay
-    li play a random nani when someone says "what" in the chat - done
+    li play youtube videos with channel points
+    li
+      ul
+        li
+          | send the correct parameter to createVideo
+        li
+          | video positioning
+        li
+          | video pausing/resuming
+        li
+          strike set volume
+        li
+          strike queuing
