@@ -17,11 +17,6 @@
   "type": "start"
 - "added_by": "malgasm"
   "command":
-  - "message": "$sender, malgasm likes to drink a home-brewed yerba mate beverage with ice, stevia, irish cream and milk. try your own at home! malgasLove"
-  "matching_text": "!drank"
-  "type": "start"
-- "added_by": "malgasm"
-  "command":
   - "message": "$sender runs over to $msg and gives them a giant hug! malgasLove malgasWoot malgasLove malgasWoot malgasLove"
   "matching_text": "!hug"
   "type": "start"
@@ -59,16 +54,6 @@
   "command":
   - "message": "Join malgasm's Chatgasm at https://discord.gg/hkP56Et malgasLove"
   "matching_text": "!discord"
-  "type": "start"
-- "added_by": "malgasm"
-  "command":
-  - "message": "rules"
-  "matching_text": "jango"
-  "type": "start"
-- "added_by": "malgasm"
-  "command":
-  - "message": "guy"
-  "matching_text": "psi"
   "type": "start"
 - "added_by": "malgasm"
   "command":
@@ -118,16 +103,6 @@
   "type": "start"
 - "added_by": "malgasm"
   "command":
-  - "message": "Fantastic Fallout 76 and fun times - go check out BossHondo! https://twitch.tv/bosshondo"
-  "matching_text": "hondo"
-  "type": "start"
-- "added_by": "malgasm"
-  "command":
-  - "message": "Launching nukes couldn't be more chill. Go check out Medic! He's great! https://twitch.tv/medic1556"
-  "matching_text": "medic"
-  "type": "exact"
-- "added_by": "malgasm"
-  "command":
   - "message": "malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot"
   "matching_text": "!hype"
   "type": "start"
@@ -165,5 +140,15 @@
   "command":
   - "brb-direction": "up"
   "matching_text": "up"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "message": "malgasWoot"
+  "matching_text": "pogchamp"
+  "type": "anywhere"
+- "added_by": "malgasm"
+  "command":
+  - "sound": "papaoh"
+  "matching_text": "twitch.tv/papaghosty"
   "type": "anywhere"
 ...

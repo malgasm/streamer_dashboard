@@ -13,6 +13,7 @@ defmodule SoundboardWeb.Router do
     pipe_through :browser
 
     resources "/sounds", SoundsController
+    resources "/youtube_videos", YoutubeVideosController
   end
 
   pipeline :api do

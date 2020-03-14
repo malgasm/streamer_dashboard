@@ -2,6 +2,7 @@ import Ember from 'ember'
 
 export default Ember.Component.extend
   youtube: Em.inject.service()
+  store: Em.inject.service()
   video: null
   classNames: ['videoPlayerComponent']
 

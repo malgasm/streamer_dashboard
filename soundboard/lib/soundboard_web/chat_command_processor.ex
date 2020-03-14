@@ -71,8 +71,6 @@ defmodule SoundboardWeb.ChatCommandProcessor do
     IO.puts "received a message from #{username}"
     sanitized_message = sanitize_message(message)
 
-    SoundboardWeb.AnimationCommandsHelper.process_chat_text(username, message)
-
     SoundboardWeb.CustomCommandsHelper.match_and_process_commands(username, message)
 
     case sanitized_message do

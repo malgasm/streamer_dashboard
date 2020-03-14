@@ -4,6 +4,8 @@ export default Ember.Service.extend
   randNum: (num = 10) -> parseInt(Math.random() * Math.pow(10, num))
   randomItem: (array) -> array[Math.floor(Math.random()*array.length)]
 
+  isAnInt: (input) -> parseInt(input) != NaN
+
   extractYoutubeId: (videoUrl) ->
     urlObject = @getURLObject(videoUrl)
 

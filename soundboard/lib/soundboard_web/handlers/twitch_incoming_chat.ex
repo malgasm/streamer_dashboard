@@ -136,6 +136,12 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     )
 
     message = message_from_tagged_arg(arg)
+    IO.puts "EMOTES\n\n\n\n\n\n"
+
+    IO.inspect emotes_from_cmd(cmd)
+    IO.inspect parse_tags(cmd)["emotes"]
+
+    SoundboardWeb.AnimationCommandsHelper.animate_emotes(emotes_from_cmd(cmd))
 
     if message == "testvideo" && username_from_cmd(cmd) == "malgasm"  do
 
@@ -255,6 +261,20 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     client
   end
 
+  defp get_emote_data(""), do: nil
+  defp get_emote_data(%{}), do: nil
+  defp get_emote_data(emotes) do
+    IO.puts "GET: #{inspect emotes}"
+    String.split(emotes, "\/")
+    |> Enum.map(fn emote_string ->
+      [id, occurrences] = String.split(emote_string, ":")
+      %{
+        id: id,
+        count: String.split(occurrences, ",") |> Kernel.length
+      }
+    end)
+  end
+
   #methods for parsing arg
 
   defp message_from_tagged_arg_regex, do: ~r/PRIVMSG #\w+\s:(.*)$/
@@ -278,6 +298,8 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp display_name_from_cmd(cmd), do: parse_tags(cmd)["display-name"]
 
   defp username_from_cmd(cmd), do: display_name_from_cmd(cmd)
+
+  defp emotes_from_cmd(cmd), do: parse_tags(cmd)["emotes"] |> get_emote_data
 
   defp mod_status_from_cmd(cmd), do: parse_tags(cmd)["mod"] == "1"
 

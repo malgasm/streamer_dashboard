@@ -1,0 +1,9 @@
+p.marquee
+  span
+    | current video:&nbsp;
+    = currentVideo.title
+  if nextVideo
+    span
+      | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Up next:&nbsp;
+      = nextVideo.title
+

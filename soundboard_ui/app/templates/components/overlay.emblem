@@ -4,23 +4,20 @@ if brb
   = brb xDir=xDir yDir=yDir imageUrl=brbImage
 
 if currentVideo
-  = video-player videoUrl=currentVideo.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
+  .overlayVideoPlayerContainer
+    = video-player-title currentVideo=currentVideo nextVideo=nextVideo
+    = video-player videoUrl=currentVideo.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
 
 component animation animationDidFinish=(action 'animationDidFinish')
 
-// .todaysGoalsContainer
+/ .todaysGoalsContainer
   h3 today's goals:
   ul.todaysGoalsList
-    li play youtube videos with channel points
+    li show emotes when people type them in chat
     li
       ul
         li
-          | send the correct parameter to createVideo
+          strike recognize when an emote is typed and do something with that information
         li
-          | video positioning
-        li
-          | video pausing/resuming
-        li
-          strike set volume
-        li
-          strike queuing
+          strike ask twitch for URLs of emotes we get
+        li show the emotes on the overlay

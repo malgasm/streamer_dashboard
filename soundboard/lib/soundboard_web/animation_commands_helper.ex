@@ -1,4 +1,10 @@
 defmodule SoundboardWeb.AnimationCommandsHelper do
+  #DEPRECATED
+  #
+  #
+  #
+  #
+  #
   @valid_emotes [
     "malgasGrin",
     "malgasLove",
@@ -26,4 +32,15 @@ defmodule SoundboardWeb.AnimationCommandsHelper do
 
   defp prepare_emote_text(emote), do: String.replace(emote, "malgas", "") |> String.downcase
   defp emotes_count(text, emote), do: Kernel.length(String.split(text, emote)) - 1
+  #
+  #
+  #END DEPRECATED
+  def animate_emotes(nil), do: nil
+  def animate_emotes(emotes) do
+    Enum.map(emotes, fn emote ->
+      SoundboardWeb.MessagingHelper.broadcast_new_animation_event(get_emote_url(emote.id, 3), emote.count)
+    end)
+  end
+
+  defp get_emote_url(emote_id, size \\ 2), do: "https://static-cdn.jtvnw.net/emoticons/v1/#{emote_id}/#{size}.0"
 end

@@ -4,6 +4,7 @@ export default Ember.Component.extend
   streamSession: Em.inject.service('stream-session-websocket')
   youtube: Em.inject.service()
   utility: Em.inject.service()
+  messageBus: Em.inject.service()
   classNames: ['overlayContainer']
   elementId: 'overlayContainer'
   currentVideo: null
@@ -20,7 +21,6 @@ export default Ember.Component.extend
       Em.run.next => @playNextVideo()
 
   didInsertElement: ->
-    window.b = @
     @get('streamSession').listenForStreamSessionEvents(@didReceiveStreamAction.bind(@))
     @set('particleAnimation', new ParticleAnimation(document.getElementById('overlayContainer')))
 
@@ -46,6 +46,9 @@ export default Ember.Component.extend
     newVideo = Em.Object.extend(Ember.Evented).create(
       url: @get('utility').extractYoutubeId(video.video)
     )
+    @get('store').query('youtubeVideo', video_id: video.video).then((videos)=>
+      newVideo.set('title', videos.get('firstObject.title'))
+    )
     @get('videos').addObject(newVideo)
     @playNextVideo()
 
@@ -58,13 +61,20 @@ export default Ember.Component.extend
       @set('currentVideo', nextVideo)
 
   animateOverlay: (params) ->
-    emote = new Emote()[params.emote]
+    console.log 'emote params', params
+    emote = if params.emote.indexOf('http') != -1
+      params.emote
+    else
+      new Emote()[params.emote]
+
     console.log 'emote', emote
     console.log 'count', params.count
 
     #todo: split simple count-based animations
     #and the buildup animation. this will allow
     #for more animation types to be specified.
+    #
+    @get('messageBus').publish('emote-animation', params.emote)
     if params.count < 30
       @get('particleAnimation').animateCount(emote, params.count)
     else
@@ -75,3 +85,5 @@ export default Ember.Component.extend
   setBrbImage: (image) ->
     @set('brbImage', image)
     console.log 'successfully set brb image to ', @get('brbImage')
+
+  nextVideo: Em.computed('videos.length', -> @get('videos').objectAt(0) )
