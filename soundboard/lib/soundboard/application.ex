@@ -20,6 +20,7 @@ defmodule Soundboard.Application do
       worker(SoundboardWeb.TwitchIncomingChatHandler, []),
       worker(SoundboardWeb.TwitchOutgoingChatHandler, []),
       SoundboardWeb.IncomingMessageHandler,
+      SoundboardWeb.Hue,
       SoundboardWeb.SpecialEventHandler
     ]
 

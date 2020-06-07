@@ -7,7 +7,6 @@ export default Ember.Component.extend
 
   actions:
     hasInputSessionId: (sessionId) ->
-      console.log 'sid', sessionId
       @get('session').setCurrentSession(sessionId)
 
     clearSession: ->

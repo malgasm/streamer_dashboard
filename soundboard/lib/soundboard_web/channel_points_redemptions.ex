@@ -23,6 +23,8 @@ defmodule SoundboardWeb.ChannelPointsRedemptions do
         Process.send_after(outgoing_chat_service(), :disable_emoteonly, @emote_only_five_minute_delay)
       "Play a Youtube Video" ->
         SoundboardWeb.MessagingHelper.broadcast_new_play_video_event(entered_text)
+      "AcrizeLights™" ->
+        SoundboardWeb.ProcessHelper.send_process(SoundboardWeb.Hue, {:set_color, entered_text})
       _ ->
         Logger.debug "Unhandled redemption #{inspect redemption} from user #{user}"
     end

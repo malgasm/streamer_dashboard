@@ -7,6 +7,7 @@ export default DS.Model.extend
   sentAt:        DS.attr('date')
   messageGroup:  DS.belongsTo('message-group')
   user:          DS.belongsTo('user')
+  emotes:        DS.attr('string')
 
   timestamp: Em.computed('sentAt', ->
     moment(@get('sentAt')).format('H:mma')

@@ -138,10 +138,10 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     message = message_from_tagged_arg(arg)
     IO.puts "EMOTES\n\n\n\n\n\n"
 
-    IO.inspect emotes_from_cmd(cmd)
+    IO.inspect emote_ids_from_cmd(cmd)
     IO.inspect parse_tags(cmd)["emotes"]
 
-    SoundboardWeb.AnimationCommandsHelper.animate_emotes(emotes_from_cmd(cmd))
+    SoundboardWeb.AnimationCommandsHelper.animate_emotes(emote_ids_from_cmd(cmd))
 
     if message == "testvideo" && username_from_cmd(cmd) == "malgasm"  do
 
@@ -201,7 +201,8 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
         username: username_from_cmd(cmd),
         isMod: mod_status_from_cmd(cmd),
         isSub: sub_status_from_cmd(cmd),
-        bits: bits_from_cmd(cmd)
+        bits: bits_from_cmd(cmd),
+        emotes: emotes_from_cmd(cmd)
       },
       message_from_tagged_arg(arg)
     }
@@ -261,9 +262,9 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     client
   end
 
-  defp get_emote_data(""), do: nil
-  defp get_emote_data(%{}), do: nil
-  defp get_emote_data(emotes) do
+  defp emote_ids(""), do: nil
+  defp emote_ids(%{}), do: nil
+  defp emote_ids(emotes) do
     IO.puts "GET: #{inspect emotes}"
     String.split(emotes, "\/")
     |> Enum.map(fn emote_string ->
@@ -299,7 +300,9 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
 
   defp username_from_cmd(cmd), do: display_name_from_cmd(cmd)
 
-  defp emotes_from_cmd(cmd), do: parse_tags(cmd)["emotes"] |> get_emote_data
+  defp emotes_from_cmd(cmd), do: parse_tags(cmd)["emotes"]
+
+  defp emote_ids_from_cmd(cmd), do: parse_tags(cmd)["emotes"] |> emote_ids
 
   defp mod_status_from_cmd(cmd), do: parse_tags(cmd)["mod"] == "1"
 
@@ -308,8 +311,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp msg_id_from_cmd(cmd), do: parse_tags(cmd)["msg-id"]
 
   defp username_from_cmd(cmd), do: parse_tags(cmd)["display-name"] |> String.downcase
-
-  defp msg_id_from_cmd(cmd), do: parse_tags(cmd)["msg-id"]
 
   defp bits_from_cmd(cmd), do: parse_tags(cmd)["bits"]
 

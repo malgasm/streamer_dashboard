@@ -21,7 +21,7 @@ defmodule Soundboard.MixProject do
     [
       applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex],
       mod: {Soundboard.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ecto, :postgrex]
+      extra_applications: [:logger, :runtime_tools, :ecto, :postgrex, :httpoison]
     ]
   end
 
@@ -39,6 +39,7 @@ defmodule Soundboard.MixProject do
       {:floki, "~> 0.21.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
+      {:huex, git: "https://github.com/brousalis/huex.git"},
       {:phoenix, "~> 1.4.7"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},

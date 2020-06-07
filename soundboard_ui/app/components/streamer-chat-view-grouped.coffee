@@ -1,3 +1,4 @@
+import Ember from 'ember'
 import moment from 'npm:moment'
 import jQuery from 'jquery'
 
@@ -28,6 +29,7 @@ export default Ember.Component.extend
     @get('store').createRecord('message',
       id: @get('utility').randNum(),
       text: payload.value,
+      emotes: payload.user.emotes,
       user: @get('store').createRecord('user', jQuery.extend(payload.user, {id: @get('utility').randNum()}))
       sentAt: moment()
     )

@@ -10,14 +10,16 @@ if currentVideo
 
 component animation animationDidFinish=(action 'animationDidFinish')
 
-/ .todaysGoalsContainer
+/.todaysGoalsContainer
   h3 today's goals:
   ul.todaysGoalsList
-    li show emotes when people type them in chat
+    li AcrizeLights&trade;
     li
       ul
         li
-          strike recognize when an emote is typed and do something with that information
+          strike set color
         li
-          strike ask twitch for URLs of emotes we get
-        li show the emotes on the overlay
+          strike convert hex to hsv
+        li hook up to channel point rewards
+        li ensure hex
+        li set brightness?
