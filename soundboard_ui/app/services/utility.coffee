@@ -5,6 +5,7 @@ export default Ember.Service.extend
   randomItem: (array) -> array[Math.floor(Math.random()*array.length)]
 
   isAnInt: (input) -> parseInt(input) != NaN
+  escapeForRegex: (input) -> input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
   extractYoutubeId: (videoUrl) ->
     urlObject = @getURLObject(videoUrl)

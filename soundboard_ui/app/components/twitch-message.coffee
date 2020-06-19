@@ -4,11 +4,11 @@ export default Ember.Component.extend
   tagName: 'li'
   classNames: ['groupedMessageTextContainer']
 
-  messageText: Em.computed('text', 'emotes', ->
+  messageText: Em.computed('message.text', 'message.emotes', ->
     if @get('message.emotes')
       @applyEmotes(@get('message.text'), @get('message.emotes'))
     else
-      @get('text')
+      @get('message.text')
   )
 
   applyEmotes: (message, emotesText) ->
@@ -22,7 +22,8 @@ export default Ember.Component.extend
       emote.text = message.substring(start, end + 1).split(' ')[0]
 
     emotes.map (emote) =>
-      message = message.replace(new RegExp(emote.text, 'ig'), @emoteImageTag(emote.id))
+      text = @get('utility').escapeForRegex(emote.text)
+      message = message.replace(new RegExp(text, 'ig'), @emoteImageTag(emote.id))
 
     message
 
