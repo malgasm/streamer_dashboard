@@ -7,7 +7,7 @@ defmodule SoundboardWeb.Hue do
   end
 
   def init([config]) do
-    {:ok, Huex.connect("192.168.1.2", Application.get_env(:soundboard, :philips_hue_username))}
+    {:ok, Huex.connect("192.168.1.4", Application.get_env(:soundboard, :philips_hue_username))}
   end
 
   def handle_info({:set_color, color}, bridge) do

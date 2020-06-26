@@ -74,26 +74,24 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     Logger.debug "Disconnected from #{config.server}:#{config.port}"
     {:stop, :normal, config}
   end
-  def handle_info({:joined, channel}, config) do
-    Logger.info "user joined #{channel} (incoming handler)"
-    {:noreply, config}
-  end
   def handle_info({:joined, channel, user_info}, config) do
-    Logger.info "user #{user_info.nick} joined #{channel} (incoming handler /3)"
+    Soundboard.SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_JOINED", %{})
     {:noreply, config}
   end
   def handle_info({:parted, channel, user_info}, config) do
-    Logger.info "user #{user_info.nick} left #{channel} (incoming handler /3)"
+    Soundboard.SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_LEFT", %{})
     {:noreply, config}
   end
   def handle_info({:parted, channel}, config) do
-    Logger.info "user parted #{channel} (incoming handler)"
+    Logger.error "user parted #{channel} (incoming handler /2)"
     {:noreply, config}
   end
   def handle_info({:names_list, channel, names_list}, config) do
     names = String.split(names_list, " ", trim: true)
-            |> Enum.map(fn name -> " #{name}\n" end)
-    Logger.info "Users logged in to #{channel}:\n#{names} (incoming handler)"
+            |> Enum.map(fn name ->
+              Soundboard.SoundboardWeb.StreamEvents.create_event(name, "USER_JOINED", %{})
+              " #{name}\n"
+            end)
     {:noreply, config}
   end
   def handle_info({:received, msg, %SenderInfo{:nick => nick}, channel}, config) do
@@ -102,7 +100,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   end
 
   def handle_info({:mentioned, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.warn "#{nick} mentioned you in #{channel}"
+    Logger.error "#{nick} mentioned you in #{channel}"
     case String.contains?(msg, "hi") do
       true ->
         reply = "Hi #{nick}!"
@@ -136,10 +134,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     )
 
     message = message_from_tagged_arg(arg)
-    IO.puts "EMOTES\n\n\n\n\n\n"
-
-    IO.inspect emote_ids_from_cmd(cmd)
-    IO.inspect parse_tags(cmd)["emotes"]
+    # IO.puts "EMOTES\n\n\n\n\n\n"
 
     SoundboardWeb.AnimationCommandsHelper.animate_emotes(emote_ids_from_cmd(cmd))
 
@@ -153,7 +148,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     if message == "simulatesub" && username_from_cmd(cmd) == "malgasm"  do
       IO.puts "SIMULATESUB\n\n\n\n"
       cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=sub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
-      IO.inspect prepare_special_event_args("", cmdz)
+      # IO.inspect prepare_special_event_args("", cmdz)
 
       SoundboardWeb.ProcessHelper.send_process(
         SoundboardWeb.SpecialEventHandler,
@@ -163,6 +158,17 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     if message == "simulateresub" && username_from_cmd(cmd) == "malgasm"  do
       IO.puts "SIMULATERESUB\n\n\n\n"
       cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=resub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
+      IO.inspect prepare_special_event_args("", cmdz)
+
+      SoundboardWeb.ProcessHelper.send_process(
+        SoundboardWeb.SpecialEventHandler,
+        prepare_special_event_args("", cmdz)
+      )
+    end
+
+    if message == "simulateresubnostreak" && username_from_cmd(cmd) == "malgasm"  do
+      IO.puts "SIMULATERESUB\n\n\n\n"
+      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=resub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
       IO.inspect prepare_special_event_args("", cmdz)
 
       SoundboardWeb.ProcessHelper.send_process(
@@ -228,10 +234,10 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp handle_tagged_message(_, cmd, arg) do
     IO.puts "unhandled tagged message"
 
-    IO.puts "parsed tags"
-    IO.inspect parse_tags(cmd)
-    IO.puts "arg"
-    IO.inspect arg
+    # IO.puts "parsed tags"
+    # IO.inspect parse_tags(cmd)
+    # IO.puts "arg"
+    # IO.inspect arg
 
     if msg_id_from_cmd(cmd) do
       SoundboardWeb.ProcessHelper.send_process(

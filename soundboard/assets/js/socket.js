@@ -66,7 +66,4 @@ let joined_channel = channel.join()
 joined_channel.receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("ERROR! Unable to join", resp) })
 
-window.c = channel
-window.d = joined_channel
-
 export default socket

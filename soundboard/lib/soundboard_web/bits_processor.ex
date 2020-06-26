@@ -18,26 +18,16 @@ defmodule SoundboardWeb.BitsProcessor do
 
   defp send_message(msg), do: SoundboardWeb.MessagingHelper.send_twitch_chat_message(msg)
 
-  #todo: load bit actions from yaml
   # - amount
   # - actions
   #   - blah
   #   - blah
   #   - and so on
+
   def process_message_for_user(user, message) do
-    IO.puts "bits PMFU"
-    IO.inspect user
-    IO.inspect message
     if user.bits && user.bits > 0 do
       #todo: include username in #bits_action_by_bits
-
       bits_action = bits_action_by_bits(String.to_integer(user.bits))
-
-      IO.puts "ba"
-      IO.inspect bits_action
-
-      IO.puts "ba action"
-      IO.inspect bits_action["actions"]
       process_bits_actions(bits_action["actions"])
     end
   end

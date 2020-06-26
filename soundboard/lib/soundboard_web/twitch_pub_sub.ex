@@ -27,7 +27,7 @@ defmodule SoundboardWeb.TwitchPubSub do
   end
 
   def handle_twitch_pubsub_message({%{"type" => "PONG"}, state}) do
-    Logger.info("PONG received")
+    # Logger.info("PONG received")
     KV.Bucket.put(:streamer_dashboard, "PUBSUB_PONG_RECEIVED", "true")
     Process.send_after(self(), :ping_pong, @ping_pong_delay)
     {:ok, state}
@@ -97,17 +97,17 @@ defmodule SoundboardWeb.TwitchPubSub do
   end
 
   def handle_info(:ping_pong, state) do
-    Logger.info("Twitch PubSub: sending PING")
+    # Logger.info("Twitch PubSub: sending PING")
     Process.send_after(self(), :reconnect_if_no_pong, 10 * 1000)
     {:reply, {:text, ping_message_body}, state}
   end
 
   def handle_info(:reconnect_if_no_pong, state) do
     if KV.Bucket.get(:streamer_dashboard, "PUBSUB_PONG_RECEIVED") == nil do
-      Logger.info("Twitch PubSub: ten seconds has expired and we haven't received a PONG response. Restarting.")
+      # Logger.info("Twitch PubSub: ten seconds has expired and we haven't received a PONG response. Restarting.")
       Kernel.send(self(), :start_link)
     else
-      Logger.info("Twitch PubSub: ten seconds has expired and we've received a PONG malgasWoot")
+      # Logger.info("Twitch PubSub: ten seconds has expired and we've received a PONG malgasWoot")
     end
     {:ok, state}
   end

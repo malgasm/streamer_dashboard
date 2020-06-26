@@ -9,19 +9,20 @@ defmodule Soundboard.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      # Starts a worker by calling: Soundboard.Worker.start_link(arg)
+      # {Soundboard.Worker, arg},
       # Start the Ecto repository
       Soundboard.Repo,
       # Start the endpoint when the application starts
       SoundboardWeb.Endpoint,
       KV.Bucket,
       SoundboardWeb.TwitchPubSub,
-      # Starts a worker by calling: Soundboard.Worker.start_link(arg)
-      # {Soundboard.Worker, arg},
       worker(SoundboardWeb.TwitchIncomingChatHandler, []),
       worker(SoundboardWeb.TwitchOutgoingChatHandler, []),
       SoundboardWeb.IncomingMessageHandler,
       SoundboardWeb.Hue,
-      SoundboardWeb.SpecialEventHandler
+      SoundboardWeb.SpecialEventHandler,
+      SoundboardWeb.WebhookPubSub
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

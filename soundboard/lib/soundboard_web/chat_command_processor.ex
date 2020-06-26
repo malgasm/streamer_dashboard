@@ -2,10 +2,9 @@ defmodule SoundboardWeb.ChatCommandProcessor do
   def process_message_for_user(%{username: "malshypeman", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "MalsHypeMan", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "malgasm", isMod: isMod, isSub: isSub}, message) do
-    IO.puts "PMFU MALGASM"
-    user = "malgasm"
+    user = Application.get_env(:soundboard, :twitch_username_incoming)
     case message do
-      _ -> process_message_for_user(%{username: "@malgasm", isMod: true, isSub: true}, message)
+      _ -> process_message_for_user(%{username: "@" <> user, isMod: true, isSub: true}, message)
     end
 
   end
