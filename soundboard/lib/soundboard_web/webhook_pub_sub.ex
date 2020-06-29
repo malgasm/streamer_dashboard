@@ -5,16 +5,20 @@ defmodule SoundboardWeb.WebhookPubSub do
 	@key Application.get_env(:soundboard, :webhook_websocket_key)
   @channel "webhooks:#{Application.get_env(:soundboard, :webhook_websocket_channel)}"
 
-  @ping_pong_delay 4 * 20 * 1000
+  @ping_pong_delay 4 * 20 #* 1000
 
+  #todo: implement a channel join failure flow
   def init(_) do
     Process.flag(:trap_exit, true)
   end
 
   def start_link(opts \\ []) do
-    {:ok, pid} = WebSockex.start_link(@server, __MODULE__, opts)
+    extra_headers = [
+      {"Authorization", Application.get_env(:soundboard, :webhook_websocket_key)}
+    ]
+    {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{}, extra_headers: extra_headers)
     join_channel(pid)
-    ping_pong(pid)
+    # ping_pong(pid)
     {:ok, pid}
   end
 
@@ -25,7 +29,7 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def terminate(reason, state) do
-    Logger.info "terminating"
+    Logger.info "terminating reason #{inspect reason} state #{inspect state}"
     cleanup(reason, state)
     state
   end
@@ -38,6 +42,11 @@ defmodule SoundboardWeb.WebhookPubSub do
   def echo(client, message) do
     Logger.info("Webhook: Sending message: #{message}")
     WebSockex.send_frame(client, {:text, message})
+  end
+
+  def handle_terminate_close(_conn, state) do
+    Logger.info("Webhook PubSub Terminated!")
+    {:ok, state}
   end
 
   def handle_connect(_conn, state) do
@@ -95,7 +104,7 @@ defmodule SoundboardWeb.WebhookPubSub do
   def handle_webhook_pubsub_message({"phx_reply", %{"response" => %{"event" => "PONG"}}, ref}, state) do
     IO.puts "we def received a pong"
     KV.Bucket.put(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED", "true")
-    Process.send_after(self(), :ping_pong, @ping_pong_delay)
+    # Process.send_after(self(), :ping_pong, @ping_pong_delay)
     {:ok, state}
   end
 
@@ -131,7 +140,7 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def handle_info(:ping_pong, state) do
-    Process.send_after(self(), :reconnect_if_no_pong, 10 * 1000)
+    # Process.send_after(self(), :reconnect_if_no_pong, 10 * 1000)
     {:reply, {:text, ping_message_body}, state}
   end
 
@@ -152,7 +161,7 @@ defmodule SoundboardWeb.WebhookPubSub do
 
   def join_channel(pid) do
     data = join_channel_message_body()
-    echo(pid, data)
+    IO.puts "echo #{ inspect echo(pid, data) }"
     Logger.info("Webhook PubSub joined #{@channel}")
   end
 
@@ -161,7 +170,7 @@ defmodule SoundboardWeb.WebhookPubSub do
       event: "phx_join",
       topic: @channel,
       ref: "client-#{@channel}-join-#{Integer.to_string(:rand.uniform(10000))}",
-      payload: ""
+      payload: Jason.encode!(%{auth: @key})
     })
   end
 
@@ -174,7 +183,7 @@ defmodule SoundboardWeb.WebhookPubSub do
   def ping_message_body do
     Poison.encode!(%{
       topic: @channel,
-      event: "PING",
+      event: "heartbeat",
       ref: "ping",
       payload: ""
     })
