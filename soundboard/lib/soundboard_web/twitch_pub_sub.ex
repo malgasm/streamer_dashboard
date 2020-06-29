@@ -135,7 +135,7 @@ defmodule SoundboardWeb.TwitchPubSub do
   end
 
   def ping_pong(pid) do
-    Logger.info("Sending PING")
+    Logger.info("Twtich PubSub: Sending first PING")
     KV.Bucket.delete(:streamer_dashboard, "PUBSUB_PONG_RECEIVED")
     echo(pid, ping_message_body)
   end

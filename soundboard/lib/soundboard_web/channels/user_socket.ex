@@ -2,7 +2,7 @@ defmodule SoundboardWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "room:*", SoundboardWeb.RoomChannel
+  # channel "room:*", SoundboardWeb.RoomChannel
   channel "stream_session:*", SoundboardWeb.StreamSessionChannel
 
   # Socket params are passed from the client and can

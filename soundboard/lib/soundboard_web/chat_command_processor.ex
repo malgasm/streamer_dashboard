@@ -41,6 +41,15 @@ defmodule SoundboardWeb.ChatCommandProcessor do
 
   defp process_mod_commands(username, message) do
     #addcmd blah sound:awaken message:shtup
+    if String.starts_with?(message, "!authorize") do
+      result = SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.Hue, {:authorize})
+      if result == true do
+        send_message("SeemsGood")
+      else
+        send_message(result)
+      end
+    end
+
     if String.starts_with?(message, "!addcmd") do
       if result = SoundboardWeb.CustomCommandsHelper.add_command(message, username) do
         send_message result
