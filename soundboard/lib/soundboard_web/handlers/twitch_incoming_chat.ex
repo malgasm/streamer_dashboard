@@ -271,7 +271,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp emote_ids(""), do: nil
   defp emote_ids(%{}), do: nil
   defp emote_ids(emotes) do
-    IO.puts "GET: #{inspect emotes}"
     String.split(emotes, "\/")
     |> Enum.map(fn emote_string ->
       [id, occurrences] = String.split(emote_string, ":")
