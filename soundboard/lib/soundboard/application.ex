@@ -22,7 +22,8 @@ defmodule Soundboard.Application do
       SoundboardWeb.IncomingMessageHandler,
       SoundboardWeb.Hue,
       SoundboardWeb.SpecialEventHandler,
-      SoundboardWeb.PeriodicMessage
+      SoundboardWeb.PeriodicMessage,
+      SoundboardWeb.DiscordBot
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

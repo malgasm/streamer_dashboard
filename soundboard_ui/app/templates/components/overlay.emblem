@@ -13,13 +13,10 @@ component animation animationDidFinish=(action 'animationDidFinish')
 /.todaysGoalsContainer
   h3 today's goals:
   ul.todaysGoalsList
-    li AcrizeLights&trade;
-    li
+    li discord sh*t
+    li style="list-style-type:none;"
       ul
         li
-          strike set color
-        li
-          strike convert hex to hsv
-        li hook up to channel point rewards
-        li ensure hex
-        li set brightness?
+          strike list all members of the guild
+        li apply a role to all members of the guild
+        li apply a role to new members of the guild?
