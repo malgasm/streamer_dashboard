@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  streamer_dashboard_ui:
+    image: streamer_dashboard_ui
+    build:
+      context: soundboard_ui
+    ports:
+      - "4201:4200"
+
+  streamer_dashboard_backend:
+    image: streamer_dashboard_backend
+    build:
+      context: soundboard
+    ports:
+      - '4001:4000'

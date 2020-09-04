@@ -60,7 +60,7 @@
     "sass": "^1.22.2"
   },
   "engines": {
-    "node": "11.15"
+    "node": "10.22.0"
   },
   "dependencies": {
     "gulp": "^4.0.2"
