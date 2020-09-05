@@ -7,7 +7,7 @@ defmodule SoundboardWeb.Hue do
   end
 
   def init([config]) do
-    {:ok, Huex.connect(Application.get_env(:soundboard, :philips_hue_ip), KV.Bucket.get(:streamer_dashboard, "PHILIPS_HUE_AUTH"))} #todo: auth if not auth'd
+    {:ok, Huex.connect(System.get_env("PHILIPS_HUE_IP"), KV.Bucket.get(:streamer_dashboard, "PHILIPS_HUE_AUTH"))} #todo: auth if not auth'd
   end
 
   def handle_info({:set_color, color}, bridge) do
@@ -22,7 +22,7 @@ defmodule SoundboardWeb.Hue do
   def handle_call({:authorize}, _from, bridge) do
     IO.puts "authorize"
     bridge = try do
-      Huex.connect(Application.get_env(:soundboard, :philips_hue_ip)) |> Huex.authorize("streamer-dashboard#hue")
+      Huex.connect(System.get_env("PHILIPS_HUE_IP")) |> Huex.authorize("streamer-dashboard#hue")
     catch
       x, _ -> IO.inspect x
       bridge

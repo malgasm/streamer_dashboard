@@ -7,11 +7,11 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defmodule Config do
     defstruct server:  "irc.twitch.tv",
               port:    6667,
-              pass:    Application.get_env(:soundboard, :twitch_oauth_key_chat_incoming),
-              nick:    Application.get_env(:soundboard, :twitch_username_incoming),
-              user:    Application.get_env(:soundboard, :twitch_username_incoming),
-              name:    Application.get_env(:soundboard, :twitch_username_incoming),
-              channel: Application.get_env(:soundboard, :twitch_channel),
+              pass:    System.get_env("TWITCH_OAUTH_KEY_CHAT_INCOMING"),
+              nick:    System.get_env("TWITCH_USERNAME_INCOMING"),
+              user:    System.get_env("TWITCH_USERNAME_INCOMING"),
+              name:    System.get_env("TWITCH_USERNAME_INCOMING"),
+              channel: System.get_env("TWITCH_CHANNEL"),
               client:  nil
 
     def from_params(params) when is_map(params) do

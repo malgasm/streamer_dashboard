@@ -2,7 +2,7 @@ defmodule SoundboardWeb.Youtube do
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, "https://www.googleapis.com/youtube/v3"
-  plug Tesla.Middleware.Query, [key: Application.get_env(:soundboard, :youtube_api_key)]
+  plug Tesla.Middleware.Query, [key: System.get_env("YOUTUBE_API_KEY")]
   plug Tesla.Middleware.JSON
 
   def get_video_info(video_id) do

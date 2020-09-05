@@ -1,9 +1,9 @@
 defmodule SoundboardWeb.WebhookPubSub do
   use WebSockex
   require Logger
-	@server Application.get_env(:soundboard, :webhook_websocket_endpoint)
-	@key Application.get_env(:soundboard, :webhook_websocket_key)
-  @channel "webhooks:#{Application.get_env(:soundboard, :webhook_websocket_channel)}"
+	@server System.get_env("WEBHOOK_WEBSOCKET_ENDPOINT")
+	@key System.get_env("WEBHOOK_WEBSOCKET_KEY")
+  @channel "webhooks:#{System.get_env("WEBHOOK_WEBSOCKET_CHANNEL")}"
 
   @ping_pong_delay 4 * 20 * 1000
 

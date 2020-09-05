@@ -2,7 +2,7 @@ defmodule SoundboardWeb.ChatCommandProcessor do
   def process_message_for_user(%{username: "malshypeman", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "MalsHypeMan", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "malgasm", isMod: isMod, isSub: isSub}, message) do
-    user = Application.get_env(:soundboard, :twitch_username_incoming)
+    user = System.get_env("TWITCH_USERNAME_INCOMING")
     case message do
       _ -> process_message_for_user(%{username: "@" <> user, isMod: true, isSub: true}, message)
     end
@@ -82,8 +82,6 @@ defmodule SoundboardWeb.ChatCommandProcessor do
     SoundboardWeb.CustomCommandsHelper.match_and_process_commands(username, message)
 
     case sanitized_message do
-      "!so shroud" -> send_message("NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO")
-      "!shoutout shroud" -> send_message("NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO")
       "!commands" -> send_message("commands: " <> commands_for_chat_list <> ", mods only: #{mod_commands}")
       "!variables" -> send_message("variables for commands: $sender (whoever runs the command) | $msg (the supplied message)")
       "gimme the codes" -> send_message(SoundboardWeb.NukaCrypt.get_nukacrypt_code_text)

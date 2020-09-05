@@ -6,6 +6,8 @@ services:
       context: soundboard_ui
     ports:
       - "4201:4200"
+    env_file:
+      - ./.env
 
   streamer_dashboard_backend:
     image: streamer_dashboard_backend
@@ -13,3 +15,5 @@ services:
       context: soundboard
     ports:
       - '4001:4000'
+    env_file:
+      - ./.env
