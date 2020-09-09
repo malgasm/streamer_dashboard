@@ -2,9 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :soundboard, Soundboard.Repo,
-  username: "postgres",
-  database: "soundboard_dev",
-  hostname: "127.0.0.1",
+  username: System.get_env("DB_USER") || "postgres",
+  database: System.get_env("DB_NAME") || "soundboard_dev",
+  port: System.get_env("DB_PORT") || "5432",
+  hostname: System.get_env("DB_HOST") || "127.0.0.1",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -19,8 +20,10 @@ config :soundboard, SoundboardWeb.Endpoint,
   https: [
     port: 4001,
     cipher_suite: :strong,
-    keyfile: "priv/cert/selfsigned_key.pem",
-    certfile: "priv/cert/selfsigned.pem"
+    keyfile: "priv/cert/barnes_key.pem",
+    certfile: "priv/cert/barnes.pem"
+    # keyfile: "priv/cert/selfsigned_key.pem",
+    # certfile: "priv/cert/selfsigned.pem"
   ],
   debug_errors: true,
   code_reloader: true,
@@ -78,5 +81,3 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
-
-import_config "dev.secret.exs"

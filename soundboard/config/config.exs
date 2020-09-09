@@ -28,6 +28,27 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :soundboard,
+  twitch_incoming_server:  System.get_env("TWITCH_CHAT_SERVER"),
+  twitch_incoming_port:    System.get_env("TWITCH_CHAT_PORT"),
+  twitch_incoming_pass:    System.get_env("TWITCH_OAUTH_KEY_CHAT_INCOMING"),
+  twitch_incoming_nick:    System.get_env("TWITCH_USERNAME_INCOMING"),
+  twitch_incoming_user:    System.get_env("TWITCH_USERNAME_INCOMING"),
+  twitch_incoming_name:    System.get_env("TWITCH_USERNAME_INCOMING"),
+  twitch_incoming_channel: System.get_env("TWITCH_CHANNEL")
+
+config :soundboard,
+  twitch_outgoing_server:  System.get_env("TWITCH_CHAT_SERVER"),
+  twitch_outgoing_port:    System.get_env("TWITCH_CHAT_PORT"),
+  twitch_outgoing_pass:    System.get_env("TWITCH_OAUTH_KEY_CHAT_OUTGOING"),
+  twitch_outgoing_nick:    System.get_env("TWITCH_USERNAME_OUTGOING"),
+  twitch_outgoing_user:    System.get_env("TWITCH_USERNAME_OUTGOING"),
+  twitch_outgoing_name:    System.get_env("TWITCH_USERNAME_OUTGOING"),
+  twitch_outgoing_channel: System.get_env("TWITCH_CHANNEL")
+
+config :soundboard,
+  ui_url: System.get_env("UI_URL")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

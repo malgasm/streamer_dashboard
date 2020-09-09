@@ -16,14 +16,14 @@ defmodule Soundboard.Application do
       # Start the endpoint when the application starts
       SoundboardWeb.Endpoint,
       KV.Bucket,
+      SoundboardWeb.DiscordBot,
       SoundboardWeb.TwitchPubSub,
-      worker(SoundboardWeb.TwitchIncomingChatHandler, []),
-      worker(SoundboardWeb.TwitchOutgoingChatHandler, []),
-      SoundboardWeb.IncomingMessageHandler,
-      SoundboardWeb.Hue,
       SoundboardWeb.SpecialEventHandler,
+      SoundboardWeb.TwitchIncomingChatHandler,
+      SoundboardWeb.TwitchOutgoingChatHandler,
+      SoundboardWeb.IncomingMessageHandler,
+      SoundboardWeb.Hue
       # SoundboardWeb.PeriodicMessage,
-      SoundboardWeb.DiscordBot
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

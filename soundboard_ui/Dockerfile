@@ -20,5 +20,4 @@ RUN source ~/.nvm/nvm.sh && \
 EXPOSE 4200
 ENV PATH=/root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
-ENV EMBER_ENV="${EMBER_ENV:-test}"
-CMD ["ember", "serve", "-e", "$EMBER_ENV"]
+CMD ["ember", "serve", "-h", "0.0.0.0"]

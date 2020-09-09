@@ -2,7 +2,6 @@ defmodule SoundboardWeb.TwitchPubSub do
   use WebSockex
   require Logger
 	@server "wss://pubsub-edge.twitch.tv"
-  @topics System.get_env("TWITCH_PUBSUB_TOPICS")
   @ping_pong_delay 4 * 20 * 1000
 
   def start_link(opts \\ []) do
@@ -128,7 +127,7 @@ defmodule SoundboardWeb.TwitchPubSub do
       type: "LISTEN",
       nonce: "nonce" <> Integer.to_string(:rand.uniform(1000000000)),
       data: %{
-        topics: @topics,
+        topics: topics,
         auth_token: System.get_env("TWITCH_OAUTH_KEY_PUBSUB")
       }
     })
@@ -144,5 +143,9 @@ defmodule SoundboardWeb.TwitchPubSub do
     Poison.encode!(%{
       type: "PING"
     })
+  end
+
+  defp topics do
+    String.split(System.get_env("TWITCH_PUBSUB_TOPICS", ""))
   end
 end

@@ -1,4 +1,6 @@
 defmodule SoundboardWeb.Sounds do
+  import Plug.Conn
+
   def get_sounds do
     SoundboardWeb.Filesystem.list_files("sounds")
   end
@@ -12,6 +14,6 @@ defmodule SoundboardWeb.Sounds do
 
   def get_sound_relative_path_for_web(sound) do
     %{key: sound_key, path: path} = Enum.at(Enum.filter(get_sounds, fn(item) -> item.key == sound end), 0)
-    path
+    Phoenix.Endpoint.static_path(path)
   end
 end

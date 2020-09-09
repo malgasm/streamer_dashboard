@@ -2,7 +2,7 @@ FROM archlinux:latest
 
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN pacman --noconfirm -Sy && pacman --noconfirm -S elixir sudo git make net-tools iputils
+RUN pacman --noconfirm -Sy && pacman --noconfirm -S elixir sudo git make net-tools iputils iproute2 net-tools
 
 ENV SDUSER=streamerdashboard
 
@@ -21,9 +21,7 @@ USER $SDUSER
 
 RUN mix local.hex --force && \
     mix local.rebar --force && \
-    mix deps.get --force && \
-    bash -c "mix compile 1>&1"
+    mix deps.get --force
 
-ENV MIX_ENV="${MIX_ENV:-test}"
 EXPOSE 4000
 CMD ["mix", "phx.server"]

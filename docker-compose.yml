@@ -1,19 +1,19 @@
-version: "3.7"
+version: "3"
 services:
-  streamer_dashboard_ui:
+  ui:
     image: streamer_dashboard_ui
     build:
       context: soundboard_ui
     ports:
-      - "4201:4200"
+      - "4200:4200"
     env_file:
       - ./.env
 
-  streamer_dashboard_backend:
+  backend:
     image: streamer_dashboard_backend
     build:
       context: soundboard
     ports:
-      - '4001:4000'
+      - '4001:4001'
     env_file:
       - ./.env
