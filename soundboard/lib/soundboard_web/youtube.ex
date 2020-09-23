@@ -6,7 +6,7 @@ defmodule SoundboardWeb.Youtube do
   plug Tesla.Middleware.JSON
 
   def get_video_info(video_id) do
-    youtube_api_video_info(video_id)
+    youtube_api_video_info(ensure_video_id(video_id))
     |> parse_video_info_response(video_id)
   end
 
@@ -25,5 +25,22 @@ defmodule SoundboardWeb.Youtube do
 
   defp youtube_api_video_info(video_id) do
     get("/videos?part=snippet,contentDetails&id=" <> video_id)
+  end
+
+  defp ensure_video_id(video_id) do
+    parsed = URI.parse(String.strip(video_id))
+
+    case parsed.host do
+      "www.youtube.com" ->
+        IO.inspect parsed
+        parsed_query = URI.decode_query(parsed.query)
+        IO.inspect parsed_query
+        parsed_query["v"]
+      "youtu.be" ->
+        String.slice(parsed.path, 1, String.length(parsed.path))
+      _ ->
+        IO.puts "returning default #{video_id}"
+        video_id
+    end
   end
 end
