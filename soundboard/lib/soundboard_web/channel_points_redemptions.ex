@@ -7,6 +7,8 @@ defmodule SoundboardWeb.ChannelPointsRedemptions do
   }
 
   def handle_redemption(user, redemption, entered_text) do
+    SoundboardWeb.MessagingHelper.broadcast_new_channel_points_redemption_event(user, redemption)
+
     case redemption do
       "grinGasm" ->
         SoundboardWeb.MessagingHelper.broadcast_new_animation_event("grin", 50)

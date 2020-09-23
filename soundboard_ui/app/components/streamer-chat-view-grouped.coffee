@@ -18,18 +18,19 @@ export default Ember.Component.extend
   didReceiveStreamAction: (payload) ->
     console.log 'apyload scvg', payload
     if @SUB_ALERT_MESSAGE_TYPES.indexOf(payload.type) != -1
-      @newChatEvent(payload)
+      @newSubEvent(payload)
     else if payload && payload.type == 'message'
       @newMessage(payload)
+    else if payload && payload.type == 'channel-points-redemption'
+      @showChannelPointsRedemption(payload.params)
 
   messageFromPayload: (payload) ->
-    console.log 'user', payload.user
     #todo: create predictibleNumber function based upon textToHex
     #use find_or_create user here instead of always creating a user
     @get('store').createRecord('message',
       id: @get('utility').randNum(),
       text: payload.value,
-      emotes: payload.user.emotes,
+      emotes: payload.user?.emotes,
       user: @get('store').createRecord('user', jQuery.extend(payload.user, {id: @get('utility').randNum()}))
       sentAt: moment()
     )
@@ -70,14 +71,25 @@ export default Ember.Component.extend
       chatEvents: [event]
     )
 
-  newChatEvent: (payload) ->
-    newEvent = @get('store').createRecord('chatEvent', jQuery.extend(payload.params, {eventType: payload.type}))
+  newSubEvent: (payload) ->
+    @addNewMessageGroupFromPayload(
+      value: "#{payload.type} by #{payload.params.username}"
+      user: {
+        username: 'New Sub/Resub!'
+      }
+    )
+    # newEvent = @get('store').createRecord('chatEvent', jQuery.extend(payload.params, {eventType: payload.type}))
+    # #todo: group multiple gift subs and the subsequent sub notifications
+    # eventGroup = @addNewEventGroupFromPayload(payload, newEvent)
+    # @get('groupedMessages').unshiftObject(eventGroup)
 
-    console.log "NCE event: #{JSON.stringify(newEvent)}"
-
-    #todo: group multiple gift subs and the subsequent sub notifications
-    eventGroup = @addNewEventGroupFromPayload(payload, newEvent)
-    @get('groupedMessages').unshiftObject(eventGroup)
+  showChannelPointsRedemption: (params) ->
+    @addNewMessageGroupFromPayload(
+      value: "#{params.name} by #{params.user}"
+      user: {
+        username: 'Channel Points Redemption'
+      }
+    )
 
   newMessage: (payload) ->
     console.log 'newMessage', payload
@@ -94,5 +106,3 @@ export default Ember.Component.extend
     else
       @addNewMessageGroupFromPayload(payload)
       console.log 'no latest message found. creating a new one.'
-
-    window.g = @get('groupedMessages')

@@ -2,9 +2,6 @@ import Ember from 'ember'
 
 export default Ember.Component.extend
   streamSession: Em.inject.service('stream-session-websocket')
-  didInsertElement: ->
-    console.log 'brb didInsertElement'
-    @get('streamSession').listenForStreamSessionEvents(@didReceiveStreamAction.bind(@))
 
   didReceiveStreamAction: (payload) ->
     console.log 'didReceiveStreamAction brb', payload

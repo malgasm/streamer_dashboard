@@ -5,6 +5,10 @@ defmodule SoundboardWeb.MessagingHelper do
     Logger.debug "sent message #{message}"
     SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.TwitchOutgoingChatHandler, {:send_message, message})
   end
+  #todo
+  #- test
+  #- use only type and params as top-level keys
+  #- dry
 
   def broadcast_new_special_event(type, params) do
     SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
@@ -77,6 +81,18 @@ defmodule SoundboardWeb.MessagingHelper do
         type: "play-video",
         value: %{
           video: video
+        }
+      }
+    )
+  end
+
+  def broadcast_new_channel_points_redemption_event(user, redemption) do
+    SoundboardWeb.Endpoint.broadcast("stream_session:lobby", "stream_action",
+      %{
+        type: "channel-points-redemption",
+        params: %{
+          name: redemption,
+          user: user
         }
       }
     )

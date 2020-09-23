@@ -9,7 +9,9 @@ export default Ember.Service.extend
   connected: null
 
   connect: (key) ->
-    unless @get('connected') == true
+    return new Ember.RSVP.Promise( (resolve, reject) =>
+      resolve(@get('channel')) if @get('connected')
+
       socket = new Socket(ENV.websocketURL)
 
       socket.connect()
@@ -28,7 +30,10 @@ export default Ember.Service.extend
           @setProperties
             channel: chan
             connected: true
+
+          resolve(chan)
         )
+    )
 
   sendMessage: (type, value) ->
     @get('channel').push('stream_action', {type: type, value: value})

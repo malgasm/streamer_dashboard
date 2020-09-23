@@ -1,3 +1,4 @@
+script src="https://www.youtube.com/iframe_api"
 // chat
 // audio player
 //tabbed navigation
@@ -7,5 +8,10 @@
   //new follows
   //raids & hosts
 audio-player
+if currentVideo
+  .overlayVideoPlayerContainer
+    = video-player-title currentVideo=currentVideo nextVideo=nextVideo
+    = video-player videoUrl=currentVideo.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
+
 streamer-chat-view-grouped
 streamer-chat-view
