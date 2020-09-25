@@ -4,31 +4,21 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   import SoundboardWeb.TwitchConnectionHandler
   import SoundboardWeb.TwitchTagDecoder
 
-  defmodule Config do
-    defstruct server:  "irc.twitch.tv",
-              port:    6667,
-              pass:    Application.get_env(:soundboard, :twitch_oauth_key_chat_incoming),
-              nick:    Application.get_env(:soundboard, :twitch_username_incoming),
-              user:    Application.get_env(:soundboard, :twitch_username_incoming),
-              name:    Application.get_env(:soundboard, :twitch_username_incoming),
-              channel: Application.get_env(:soundboard, :twitch_channel),
-              client:  nil
-
-    def from_params(params) when is_map(params) do
-      Enum.reduce(params, %Config{}, fn {k, v}, acc ->
-        case Map.has_key?(acc, k) do
-          true  -> Map.put(acc, k, v)
-          false -> acc
-        end
-      end)
-    end
-  end
-
   alias ExIRC.Client
   alias ExIRC.SenderInfo
 
-  def start_link() do
-    config = %Config{}
+  def start_link(_) do
+    config = %{
+      host:  Application.get_env(:soundboard, :twitch_incoming_server) || "irc.twitch.tv",
+      port:    6667,
+      pass:    Application.get_env(:soundboard, :twitch_incoming_pass),
+      nick:    Application.get_env(:soundboard, :twitch_incoming_nick),
+      user:    Application.get_env(:soundboard, :twitch_incoming_user),
+      name:    Application.get_env(:soundboard, :twitch_incoming_name),
+      channel: Application.get_env(:soundboard, :twitch_incoming_channel),
+      client:  nil
+    }
+    IO.puts "incoming start #{inspect config}"
     GenServer.start_link(__MODULE__, [config])
   end
 
@@ -40,26 +30,26 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     Client.add_handler client, self()
 
     # Connect and logon to a server, join a channel and send a simple message
-    Logger.debug "Connecting to #{config.server}:#{config.port}"
-    Client.connect! client, config.server, config.port
+    Logger.debug "(incoming) Connecting to #{config.host}:#{config.port} [#{inspect @config}]"
+    Client.connect! client, config.host, config.port
 
-    {:ok, %Config{config | :client => client}}
+    {:ok, Map.put(config, :client, client)}
   end
 
   def handle_call({:send_message, message}, _from, config) do
-    Logger.info "sending message #{message} to channel #{config.channel}"
+    Logger.info "sending message #{message} to channel #{config}"
     Client.msg config.client, :privmsg, config.channel, message
     {:reply, message, config}
   end
 
   def handle_info({:connected, server, port}, config) do
     Logger.debug "Connected to #{server}:#{port}"
-    Logger.debug "Logging to #{server}:#{port} as #{config.nick}.."
+    Logger.debug "(incoming) Logging to #{server}:#{port} as #{config.nick}(#{config.name})..."
     Client.logon config.client, config.pass, config.nick, config.user, config.name
     {:noreply, config}
   end
   def handle_info(:logged_in, config) do
-    Logger.debug "Logged in to #{config.server}:#{config.port}!!!!!!!!!!!!!!!!!!!!!!!!"
+    Logger.debug "Logged in to #{config.host}:#{config.port}!!!!!!!!!!!!!!!!!!!!!!!!"
     Logger.debug "Joining #{config.channel}.................................................."
     request_twitch_capabilities(config.client)
 		|> join(config.channel)
@@ -71,7 +61,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     {:noreply, config}
   end
   def handle_info(:disconnected, config) do
-    Logger.debug "Disconnected from #{config.server}:#{config.port}"
+    Logger.debug "Disconnected from #{config.host}:#{config.port}"
     {:stop, :normal, config}
   end
   def handle_info({:joined, channel, user_info}, config) do
@@ -271,7 +261,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp emote_ids(""), do: nil
   defp emote_ids(%{}), do: nil
   defp emote_ids(emotes) do
-    IO.puts "GET: #{inspect emotes}"
     String.split(emotes, "\/")
     |> Enum.map(fn emote_string ->
       [id, occurrences] = String.split(emote_string, ":")

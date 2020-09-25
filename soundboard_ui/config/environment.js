@@ -5,8 +5,9 @@ module.exports = function(environment) {
     modulePrefix: 'soundboard-ui',
     environment,
     rootURL: '/',
+    apiHost: process.env.API_HOST,
     locationType: 'auto',
-    websocketURL: 'wss://peanut:4001/socket/websocket',
+    websocketURL: 'wss://' + process.env.API_HOST + '/socket/websocket',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build

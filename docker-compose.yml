@@ -1,0 +1,19 @@
+version: "3"
+services:
+  ui:
+    image: "${FRONTEND_IMAGE:-streamer_dashboard_ui}"
+    build:
+      context: soundboard_ui
+    ports:
+      - "4200:4200"
+    env_file:
+      - ./.env
+
+  backend:
+    image: "${BACKEND_IMAGE:-streamer_dashboard_backend}"
+    build:
+      context: soundboard
+    ports:
+      - '4001:4001'
+    env_file:
+      - ./.env

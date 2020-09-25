@@ -1,5 +1,6 @@
 defmodule SoundboardWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :soundboard
+  @ui_url Application.get_env(:soundboard, :ui_url)
 
   socket "/socket", SoundboardWeb.UserSocket,
     websocket: true,
@@ -14,7 +15,7 @@ defmodule SoundboardWeb.Endpoint do
     from: :soundboard,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt sounds),
-    headers: %{"Access-Control-Allow-Origin" => "*"}
+    headers: [{"access-control-allow-origin", @ui_url}]
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -47,8 +48,7 @@ defmodule SoundboardWeb.Endpoint do
                           "User-Agent", "DNT","Cache-Control", "X-Mx-ReqToken",
                           "Keep-Alive", "X-Requested-With", "If-Modified-Since",
                           "X-CSRF-Token"],
-                 origin: ["https://peanut:4200"]
-
+                 origin: [@ui_url]
 
   plug SoundboardWeb.Router
 end

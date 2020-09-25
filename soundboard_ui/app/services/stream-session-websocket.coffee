@@ -11,4 +11,4 @@ export default Ember.Service.extend
 
   startWebsocketConnection: ->
     if @get('session.hasCurrentSession') && @get('session.hasCurrentRole')
-      @get('websocket').connect(@get('session').getCurrentSession())
+      @get('websocket').connect(@get('session').getCurrentSession()).then =>

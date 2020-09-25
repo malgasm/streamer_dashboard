@@ -1,4 +1,5 @@
 import Ember from 'ember'
+import config from '../config/environment'
 
 export default Ember.Service.extend
   websocket: Em.inject.service()
@@ -10,7 +11,7 @@ export default Ember.Service.extend
       @get('store').findAll('sound').then (sounds) =>
         resolve(sounds)
 
-  getSoundFilePath: (path) -> "http://peanut:4000/#{path}"
+  getSoundFilePath: (path) -> "https://#{config.apiHost}#{path}"
 
   allSounds: -> @get('store').peekAll('sound')
 

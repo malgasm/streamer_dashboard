@@ -12,3 +12,4 @@ export default Ember.Component.extend
 
     skipVideo: ->
       @get('websocket').sendMessage('skip-video', {})
+

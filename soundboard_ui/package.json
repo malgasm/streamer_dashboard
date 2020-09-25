@@ -42,7 +42,7 @@
     "ember-cli-sri": "^2.1.1",
     "ember-cli-template-lint": "^1.0.0-beta.1",
     "ember-cli-uglify": "^2.1.0",
-    "ember-data": "~3.10.0",
+    "ember-data": "^3.21.0",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "^4.0.0-rc.4",
     "ember-load-initializers": "^2.0.0",
@@ -60,7 +60,7 @@
     "sass": "^1.22.2"
   },
   "engines": {
-    "node": "11.15"
+    "node": "10.22.0"
   },
   "dependencies": {
     "gulp": "^4.0.2"
