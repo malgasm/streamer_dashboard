@@ -5,7 +5,7 @@ defmodule SoundboardWeb.WebhookPubSub do
 	@key System.get_env("WEBHOOK_WEBSOCKET_KEY")
   @channel "webhooks:#{System.get_env("WEBHOOK_WEBSOCKET_CHANNEL")}"
 
-  @ping_pong_delay 4 * 20 #* 1000
+  @ping_pong_delay 30 * 1000
 
   #todo: implement a channel join failure flow
   def init(_) do
@@ -13,12 +13,14 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def start_link(opts \\ []) do
-    extra_headers = [
-      {"Authorization", Application.get_env(:soundboard, :webhook_websocket_key)}
-    ]
-    {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{}, extra_headers: extra_headers)
+    # extra_headers = [
+    #   {"Authorization", Application.get_env(:soundboard, :webhook_websocket_key)}
+    # ]
+    IO.puts "server: #{@server}"
+    {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{})
+    # {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{}, extra_headers: extra_headers)
     join_channel(pid)
-    # ping_pong(pid)
+    ping_pong(pid)
     {:ok, pid}
   end
 
@@ -31,7 +33,7 @@ defmodule SoundboardWeb.WebhookPubSub do
   def terminate(reason, state) do
     Logger.info "terminating reason #{inspect reason} state #{inspect state}"
     cleanup(reason, state)
-    state
+    exit(:normal)
   end
 
   defp cleanup(_reason, _state) do
@@ -101,10 +103,9 @@ defmodule SoundboardWeb.WebhookPubSub do
     {:ok, state}
   end
 
-  def handle_webhook_pubsub_message({"phx_reply", %{"response" => %{"event" => "PONG"}}, ref}, state) do
-    IO.puts "we def received a pong"
+  def handle_webhook_pubsub_message({"phx_reply", payload, "ping"}, state) do
     KV.Bucket.put(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED", "true")
-    # Process.send_after(self(), :ping_pong, @ping_pong_delay)
+    Process.send_after(self(), :ping_pong, @ping_pong_delay)
     {:ok, state}
   end
 
@@ -113,12 +114,6 @@ defmodule SoundboardWeb.WebhookPubSub do
     {:ok, state}
   end
 
-  # def handle_webhook_pubsub_message({msg, state}) do
-  #   IO.puts "Webhook PubSub received message -- Message: #{inspect msg}"
-  #   # IO.inspect Jason.decode!(msg["payload"])
-  #   {:ok, state}
-  # end
-  #
   def handle_frame({type, msg}, state) do
     IO.puts "Received Message - Type: #{inspect type} -- Message: #{inspect msg}"
     #catch ping
@@ -140,7 +135,8 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def handle_info(:ping_pong, state) do
-    # Process.send_after(self(), :reconnect_if_no_pong, 10 * 1000)
+    Process.send_after(self(), :reconnect_if_no_pong, 10 * 1000)
+    Logger.debug("Webhook: Sending PING")
     {:reply, {:text, ping_message_body}, state}
   end
 
@@ -149,7 +145,7 @@ defmodule SoundboardWeb.WebhookPubSub do
       # Logger.info("Webhook PubSub: ten seconds has expired and we haven't received a PONG response. Restarting.")
       Kernel.send(self(), :start_link)
     else
-      Logger.info("Webhook PubSub: ten seconds has expired and we've received a PONG malgasWoot")
+      Logger.debug("Webhook PubSub: ten seconds has expired and we've received a PONG malgasWoot")
     end
     {:ok, state}
   end
@@ -165,24 +161,35 @@ defmodule SoundboardWeb.WebhookPubSub do
     Logger.info("Webhook PubSub joined #{@channel}")
   end
 
-  def join_channel_message_body do
+  defp heartbeat_body do
     Poison.encode!(%{
-      event: "phx_join",
-      topic: @channel,
-      ref: "client-#{@channel}-join-#{Integer.to_string(:rand.uniform(10000))}",
-      payload: Jason.encode!(%{auth: @key})
+      "topic": "phoenix",
+      "event": "heartbeat",
+      "payload": %{},
+      "ref": 0
     })
   end
 
+  defp generic_message_body(event, payload) do
+    Poison.encode!(%{
+      event: event,
+      topic: @channel,
+      ref: "client-#{@channel}-join-#{Integer.to_string(:rand.uniform(10000))}",
+      payload: payload
+    })
+  end
+
+  def join_channel_message_body(), do: generic_message_body("phx_join", Jason.encode!(%{auth: @key}))
+
   def ping_pong(pid) do
-    Logger.info("Webhook: Sending PING")
+    Logger.debug("Webhook: Sending PING")
     KV.Bucket.delete(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED")
     echo(pid, ping_message_body)
   end
 
   def ping_message_body do
     Poison.encode!(%{
-      topic: @channel,
+      topic: "phoenix",
       event: "heartbeat",
       ref: "ping",
       payload: ""
