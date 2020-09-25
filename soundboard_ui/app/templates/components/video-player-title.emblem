@@ -6,4 +6,3 @@ p.marquee
     span
       | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Up next:&nbsp;
       = nextVideo.title
-
