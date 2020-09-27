@@ -7,7 +7,7 @@ defmodule Soundboard.SoundboardWeb.StreamMessages do
     field :message_text, :string
     belongs_to :stream_user, Soundboard.SoundboardWeb.StreamUsers, foreign_key: :stream_user_id
 
-    timestamps()
+    timestamps
   end
 
   def all_messages() do

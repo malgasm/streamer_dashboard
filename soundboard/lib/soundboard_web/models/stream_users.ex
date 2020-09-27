@@ -7,7 +7,7 @@ defmodule Soundboard.SoundboardWeb.StreamUsers do
     field :username, :string
     has_many :stream_messages, Soundboard.SoundboardWeb.StreamMessages, foreign_key: :stream_user_id
 
-    timestamps()
+    timestamps
   end
 
   def find_or_create_user(nil) do

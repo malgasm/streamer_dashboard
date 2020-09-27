@@ -61,22 +61,9 @@ defmodule SoundboardWeb.WebhookPubSub do
     {:ok, state}
   end
 
-  def handle_frame({:text, %{event: "NEW_MESSAGE"}}, state) do
-    IO.puts "huh?"
-    {:ok, state}
-  end
-
-  def handle_frame({:text, %{"event": "NEW_MESSAGE", "payload": payload, "ref": ref}}, state) do
-    IO.inspect "new message #{inspect Jason.decode!(payload)}"
-    {:ok, state}
-  end
-
   def handle_frame({:text, msg}, state) do
-    IO.puts "Webhook handle_frame :text #{inspect msg}"
     try do
       decoded = Poison.decode!(msg)
-      IO.inspect decoded
-
       handle_webhook_pubsub_message({decoded["event"], decoded["payload"], decoded["ref"]}, state)
     rescue e in RuntimeError -> e
       IO.puts "ran into an error decoding the response"
@@ -99,11 +86,12 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def handle_webhook_pubsub_message({"NEW_MESSAGE", payload, ref}, state) do
-    IO.puts "new_message pls #{inspect Jason.decode!(payload["message"])}"
+    IO.puts "new_message #{inspect Jason.decode!(payload["message"])}"
     {:ok, state}
   end
 
   def handle_webhook_pubsub_message({"phx_reply", payload, "ping"}, state) do
+    Logger.debug "Webhook: PONG received! waiting #{@ping_pong_delay}ms for next heartbeat"
     KV.Bucket.put(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED", "true")
     Process.send_after(self(), :ping_pong, @ping_pong_delay)
     {:ok, state}

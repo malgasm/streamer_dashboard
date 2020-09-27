@@ -12,17 +12,18 @@ defmodule Soundboard.Application do
       # Starts a worker by calling: Soundboard.Worker.start_link(arg)
       # {Soundboard.Worker, arg},
       # Start the Ecto repository
-      Soundboard.Repo,
+      # Soundboard.Repo,
       # Start the endpoint when the application starts
-      SoundboardWeb.Endpoint,
+      # SoundboardWeb.Endpoint,
       KV.Bucket,
-      SoundboardWeb.DiscordBot,
-      SoundboardWeb.TwitchPubSub,
-      SoundboardWeb.SpecialEventHandler,
-      SoundboardWeb.TwitchIncomingChatHandler,
-      SoundboardWeb.TwitchOutgoingChatHandler,
-      SoundboardWeb.IncomingMessageHandler,
-      SoundboardWeb.Hue
+      # SoundboardWeb.DiscordBot,
+      # SoundboardWeb.TwitchPubSub,
+      # SoundboardWeb.SpecialEventHandler,
+      # SoundboardWeb.TwitchIncomingChatHandler,
+      # SoundboardWeb.TwitchOutgoingChatHandler,
+      # SoundboardWeb.IncomingMessageHandler,
+      SoundboardWeb.WebhookPubSub
+      # SoundboardWeb.Hue
       # SoundboardWeb.PeriodicMessage,
     ]
 
