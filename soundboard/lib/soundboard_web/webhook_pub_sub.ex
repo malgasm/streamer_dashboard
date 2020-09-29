@@ -2,17 +2,17 @@ defmodule SoundboardWeb.WebhookPubSub do
   use WebSockex
   require Logger
 	@server System.get_env("WEBHOOK_WEBSOCKET_ENDPOINT")
+
 	@key System.get_env("WEBHOOK_WEBSOCKET_KEY")
   @channel "webhooks:#{System.get_env("WEBHOOK_WEBSOCKET_CHANNEL")}"
 
   @ping_pong_delay 30 * 1000
 
   def start_link(opts \\ []) do
-    # extra_headers = [
-    #   {"Authorization", Application.get_env(:soundboard, :webhook_websocket_key)}
-    # ]
-    IO.puts "server: #{@server}"
-    handle_connect(WebSockex.start_link(@server, __MODULE__, %{handle_initial_conn_failure: true, async: true}))
+    auth_channel = String.replace(@channel, "webhooks:", "")
+    connect_string = "#{@server}?auth=#{auth_channel}.#{@key}"
+    IO.puts "server: #{@server}\n#{connect_string}"
+    handle_connect(WebSockex.start_link(connect_string, __MODULE__, %{handle_initial_conn_failure: true}))
     # {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{}, extra_headers: extra_headers)
   end
 
@@ -22,11 +22,10 @@ defmodule SoundboardWeb.WebhookPubSub do
     {:ok, pid}
   end
 
-  def handle_connect({:error, pid}) do
-
-		{:reconnect, pid}
-  end
-
+  # def handle_connect({:error, pid}) do
+	# 	{:reconnect, pid}
+  # end
+  #
 	def handle_connect_failure(_failure_map, state) do
 		{:reconnect, state}
 	end
@@ -36,13 +35,14 @@ defmodule SoundboardWeb.WebhookPubSub do
     WebSockex.send_frame(client, {:text, message})
   end
 
-  def handle_terminate_close(_conn, state) do
-    Logger.info("Webhook PubSub Terminated!")
-    {:ok, state}
-  end
+  # def handle_terminate_close(_conn, state) do
+  #   Logger.info("Webhook PubSub Terminated!")
+  #   {:ok, state}
+  # end
 
   def handle_connect(_conn, state) do
     Logger.info("Webhook PubSub Connected")
+    #todo: need to join channel again here
     {:ok, state}
   end
 
@@ -116,7 +116,13 @@ defmodule SoundboardWeb.WebhookPubSub do
   def handle_disconnect(disconnect_map, state) do
     Logger.error "Webhook Websocket disconnected. reconnecting in 1000ms..."
     :timer.sleep 1000 #todo: is this the correct way to do this?
+    Kernel.send(self(), :join_channels)
 		{:reconnect, state}
+  end
+
+  def handle_info(:join_channels, state) do
+   join_channel(SoundboardWeb.ProcessHelper.process_pid(SoundboardWeb.WebhookPubSub))
+    {:ok, state}
   end
 
   def handle_info(:ping_pong, state) do
@@ -141,7 +147,7 @@ defmodule SoundboardWeb.WebhookPubSub do
 
   def join_channel(pid) do
     data = join_channel_message_body()
-    IO.puts "echo #{ inspect echo(pid, data) }"
+    IO.puts "join #{ inspect echo(pid, data) }"
     Logger.info("Webhook PubSub joined #{@channel}")
   end
 
