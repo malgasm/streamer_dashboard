@@ -5,6 +5,7 @@ export default Ember.Component.extend
   store: Em.inject.service()
   video: null
   classNames: ['videoPlayerComponent']
+  control: false
 
   newVideoId: -> "video_#{@get('utility').randNum(10)}"
 
@@ -15,7 +16,7 @@ export default Ember.Component.extend
     videoElem = document.getElementById(@get('videoId'))
 
     Em.run.next =>
-      @get('youtube').createVideo(videoElem, @get('videoUrl')).then((video)=>
+      @get('youtube').createVideo(videoElem, @get('videoUrl'), @get('control')).then((video)=>
         @set('video', video)
         video.on('didFinishPlayingVideo', =>
           @didFinishPlayingVideo(video.player.getVideoData().video_id)

@@ -1,5 +1,6 @@
 defmodule SoundboardWeb.StreamSessionChannel do
   use Phoenix.Channel
+  require Logger
 
   def join("stream_session:lobby", _message, socket) do
     {:ok, socket}

@@ -132,7 +132,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
 
       IO.puts "TESTVIDEO\n\n\n\n"
 
-      SoundboardWeb.MessagingHelper.broadcast_new_play_video_event("8TGUnriw9k4")
+      SoundboardWeb.MessagingHelper.broadcast_new_play_video_event("wZ4ypPf6_bQ")
     end
 
     if message == "simulatesub" && username_from_cmd(cmd) == "malgasm"  do

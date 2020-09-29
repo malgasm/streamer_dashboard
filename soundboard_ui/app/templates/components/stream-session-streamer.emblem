@@ -11,7 +11,7 @@ audio-player
 if currentVideo
   .overlayVideoPlayerContainer
     = video-player-title currentVideo=currentVideo nextVideo=nextVideo
-    = video-player videoUrl=currentVideo.url didFinishPlayingVideo=(action 'didFinishPlayingVideo')
+    = video-player videoUrl=currentVideo.url didFinishPlayingVideo=(action 'didFinishPlayingVideo') control=true
 
 streamer-chat-view-grouped
 streamer-chat-view

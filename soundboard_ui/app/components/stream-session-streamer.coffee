@@ -41,4 +41,3 @@ export default Ember.Component.extend
     if nextVideo
       console.log 'playing video', nextVideo.video
       @set('currentVideo', nextVideo)
-
