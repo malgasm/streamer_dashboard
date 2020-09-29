@@ -7,39 +7,29 @@ defmodule SoundboardWeb.WebhookPubSub do
 
   @ping_pong_delay 30 * 1000
 
-  #todo: implement a channel join failure flow
-  def init(_) do
-    Process.flag(:trap_exit, true)
-  end
-
   def start_link(opts \\ []) do
     # extra_headers = [
     #   {"Authorization", Application.get_env(:soundboard, :webhook_websocket_key)}
     # ]
     IO.puts "server: #{@server}"
-    {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{})
+    handle_connect(WebSockex.start_link(@server, __MODULE__, %{handle_initial_conn_failure: true, async: true}))
     # {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{}, extra_headers: extra_headers)
+  end
+
+  def handle_connect({:ok, pid}) do
     join_channel(pid)
     ping_pong(pid)
     {:ok, pid}
   end
 
-  def handle_info({:EXIT, _from, reason}, state) do
-    Logger.info "exiting"
-    cleanup(reason, state)
-    {:stop, reason, state} # see GenServer docs for other return types
+  def handle_connect({:error, pid}) do
+
+		{:reconnect, pid}
   end
 
-  def terminate(reason, state) do
-    Logger.info "terminating reason #{inspect reason} state #{inspect state}"
-    cleanup(reason, state)
-    exit(:normal)
-  end
-
-  defp cleanup(_reason, _state) do
-    Kernel.send(self(), :start_link)
-    # Cleanup whatever you need cleaned up
-  end
+	def handle_connect_failure(_failure_map, state) do
+		{:reconnect, state}
+	end
 
   def echo(client, message) do
     Logger.info("Webhook: Sending message: #{message}")
@@ -114,12 +104,19 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def handle_disconnect(%{reason: {:local, reason}}, state) do
-    Logger.info("Webhook PubSub disconnected. reason: #{inspect reason}")
+    Logger.error("Webhook PubSub disconnected. reason: #{inspect reason}")
+    {:ok, state}
+  end
+
+  def handle_disconnect({:local, reason}, state) do
+    Logger.error("Webhook PubSub disconnected. reason: #{inspect reason}")
     {:ok, state}
   end
 
   def handle_disconnect(disconnect_map, state) do
-    super(disconnect_map, state)
+    Logger.error "Webhook Websocket disconnected. reconnecting in 1000ms..."
+    :timer.sleep 1000 #todo: is this the correct way to do this?
+		{:reconnect, state}
   end
 
   def handle_info(:ping_pong, state) do
@@ -130,7 +127,6 @@ defmodule SoundboardWeb.WebhookPubSub do
 
   def handle_info(:reconnect_if_no_pong, state) do
     if KV.Bucket.get(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED") == nil do
-      # Logger.info("Webhook PubSub: ten seconds has expired and we haven't received a PONG response. Restarting.")
       Kernel.send(self(), :start_link)
     else
       Logger.debug("Webhook PubSub: ten seconds has expired and we've received a PONG malgasWoot")

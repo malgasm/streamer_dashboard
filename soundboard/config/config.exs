@@ -55,4 +55,4 @@ import_config "#{Mix.env()}.exs"
 
 config :nostrum,
   token: System.get_env("DISCORD_BOT_TOKEN"),
-  num_shards: 2
+  num_shards: :auto
