@@ -170,7 +170,9 @@ defmodule SoundboardWeb.CustomCommandsHelper do
 
   defp process_commands("anywhere", commands, user, message) do
     Enum.each commands, fn(command) ->
+      Logger.debug "Custom Commands: checking input against command #{command["matching_text"]}"
       if String.contains?(sanitize_message(message), command["matching_text"]) do
+        Logger.debug "Custom Commands: match found. executing command #{command["matching_text"]} for user #{user}."
         process_command_actions(Map.merge(command, %{"user" =>  user, "original_message" => message}))
       end
     end
