@@ -6,6 +6,8 @@ defmodule SoundboardWeb.WebhookPubSub do
 	@key System.get_env("WEBHOOK_WEBSOCKET_KEY")
   @channel "webhooks:#{System.get_env("WEBHOOK_WEBSOCKET_CHANNEL")}"
 
+  @connect_retry_delay 10000
+
   @ping_pong_delay 30 * 1000
 
   def start_link(opts \\ []) do
@@ -16,16 +18,19 @@ defmodule SoundboardWeb.WebhookPubSub do
     # {:ok, pid} = WebSockex.start_link(@server, __MODULE__, %{}, extra_headers: extra_headers)
   end
 
+  def handle_connect({:error, error}) do
+    Logger.error "Webhook Websocket disconnected due to error #{Map.get(error, :message)} (code #{inspect Map.get(error, :code)}). reconnecting in 10000ms..."
+    :timer.sleep @connect_retry_delay
+    start_link
+		{:ok, self()}
+  end
+
   def handle_connect({:ok, pid}) do
     join_channel(pid)
     ping_pong(pid)
     {:ok, pid}
   end
 
-  # def handle_connect({:error, pid}) do
-	# 	{:reconnect, pid}
-  # end
-  #
 	def handle_connect_failure(_failure_map, state) do
 		{:reconnect, state}
 	end
