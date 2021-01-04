@@ -29,7 +29,7 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     Client.add_handler client, self()
 
     # Connect and logon to a server, join a channel and send a simple message
-    Logger.debug "Connecting to #{config.host}:#{config.port}"
+    Logger.debug "(outgoing) Connecting to #{config.host}:#{config.port}"
     Client.connect! client, config.host, config.port
 
     {:ok, Map.put(config, :client, client)}
@@ -75,29 +75,10 @@ defmodule SoundboardWeb.TwitchOutgoingChatHandler do
     Logger.info "Users logged in to #{channel}:\n#{names}"
     {:noreply, config}
   end
+
   def handle_info({:received, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.info "#{nick} from #{channel}: #{msg} (outgoing)"
-    {:noreply, config}
-  end
-
-  def handle_info({:mentioned, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.warn "#{nick} mentioned you in #{channel}"
-    case String.contains?(msg, "hi") do
-      true ->
-        reply = "#{nick} malgasLove malgasLove malgasLove malgasLove malgasLove"
-        Client.msg config.client, :privmsg, config.channel, reply
-        Logger.info "Sent #{reply} to #{config.channel}"
-      false ->
-        :ok
-    end
-    {:noreply, config}
-  end
-
-  def handle_info({:received, msg, %SenderInfo{:nick => nick}}, config) do
-    Logger.warn "#{nick}: #{msg}"
-    reply = "Hi!"
-    Client.msg config.client, :privmsg, nick, reply
-    Logger.info "Sent #{reply} to #{nick}"
+    # message received in chat
+    # Logger.info "#{nick} from #{channel}: #{msg} (outgoing)"
     {:noreply, config}
   end
 

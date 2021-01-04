@@ -72,6 +72,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     Soundboard.SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_LEFT", %{})
     {:noreply, config}
   end
+
   def handle_info({:parted, channel}, config) do
     Logger.error "user parted #{channel} (incoming handler /2)"
     {:noreply, config}
@@ -82,23 +83,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
               Soundboard.SoundboardWeb.StreamEvents.create_event(name, "USER_JOINED", %{})
               " #{name}\n"
             end)
-    {:noreply, config}
-  end
-  def handle_info({:received, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.info "#{nick} from #{channel}: #{msg} (incoming handler)"
-    {:noreply, config}
-  end
-
-  def handle_info({:mentioned, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.error "#{nick} mentioned you in #{channel}"
-    case String.contains?(msg, "hi") do
-      true ->
-        reply = "Hi #{nick}!"
-        Client.msg config.client, :privmsg, config.channel, reply
-        Logger.info "Sent #{reply} to #{config.channel}"
-      false ->
-        :ok
-    end
     {:noreply, config}
   end
 
@@ -125,6 +109,9 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
 
     message = message_from_tagged_arg(arg)
     # IO.puts "EMOTES\n\n\n\n\n\n"
+    #
+
+    Logger.info "(incoming chat) Received message #{inspect message} from user #{username_from_cmd(cmd)}"
 
     SoundboardWeb.AnimationCommandsHelper.animate_emotes(emote_ids_from_cmd(cmd))
 

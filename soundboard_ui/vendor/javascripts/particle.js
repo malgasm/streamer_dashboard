@@ -105,7 +105,7 @@ class ParticleAnimation {
     this.buildupAnimation([e.grin, e.love, e.fire, e.peace, e.woot], numFrames);
   }
 
-  buildupAnimation(emotes, numFrames = 100, maxParticles=50) {
+  buildupAnimation(emotes, numFrames = 100, maxParticles=35) {
     var frames = [],
       timeout = 10000,
       count = 1,

@@ -18,8 +18,14 @@ defmodule Soundboard.MixProject do
   #
   # Type `mix help compile.app` for more information.
   def application do
+    applications = if Mix.env == :test do
+      [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex]
+    else
+      [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex, :nostrum]
+    end
+
     [
-      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex, :nostrum],
+      applications: applications,
       mod: {Soundboard.Application, []},
       extra_applications: [:logger, :runtime_tools, :ecto, :postgrex, :httpoison]
     ]

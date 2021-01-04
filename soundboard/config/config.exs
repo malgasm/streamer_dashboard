@@ -49,10 +49,10 @@ config :soundboard,
 config :soundboard,
   ui_url: System.get_env("UI_URL")
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env()}.exs"
-
 config :nostrum,
   token: System.get_env("DISCORD_BOT_TOKEN"),
   num_shards: 2
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env()}.exs"
