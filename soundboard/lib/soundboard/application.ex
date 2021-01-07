@@ -33,8 +33,8 @@ defmodule Soundboard.Application do
         SoundboardWeb.TwitchIncomingChatHandler,
         SoundboardWeb.TwitchOutgoingChatHandler,
         SoundboardWeb.IncomingMessageHandler,
-        SoundboardWeb.Hue
-        # SoundboardWeb.PeriodicMessage,
+        SoundboardWeb.Hue,
+        SoundboardWeb.PeriodicMessage
       ]
     end
 

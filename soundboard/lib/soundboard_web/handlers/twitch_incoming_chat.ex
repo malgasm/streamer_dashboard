@@ -117,20 +117,13 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     SoundboardWeb.AnimationCommandsHelper.animate_emotes(emote_ids_from_cmd(cmd))
 
     if message == "testvideo" && username_from_cmd(cmd) == "malgasm"  do
-
       IO.puts "TESTVIDEO\n\n\n\n"
-
       SoundboardWeb.MessagingHelper.broadcast_new_play_video_event("8TGUnriw9k4")
     end
   end
 
   def handle_tagged_message(_, cmd, arg) do
     IO.puts "unhandled tagged message"
-
-    # IO.puts "parsed tags"
-    # IO.inspect parse_tags(cmd)
-    # IO.puts "arg"
-    # IO.inspect arg
 
     if msg_id_from_cmd(cmd) do
       SoundboardWeb.ProcessHelper.send_process(
@@ -139,7 +132,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
       )
     end
 
-    IO.inspect cmd
+    Logger.debug "(incoming chat) #{inspect cmd}"
   end
 
   defp prepare_message_from_irc(arg, cmd) do
