@@ -76,7 +76,6 @@ defmodule SoundboardWeb.ChatCommandProcessor do
             Logger.debug "error parsing #{num_times} as an integer"
             List.first(args)
         end
-        IO.puts "NT #{inspect num_times}"
 
         to_spam = String.replace(sanitized, List.first(args), "")
                   |> String.trim()

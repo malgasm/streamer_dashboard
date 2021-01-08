@@ -13,10 +13,15 @@ component animation animationDidFinish=(action 'animationDidFinish')
 /.todaysGoalsContainer
   h3 today's goals:
   ul.todaysGoalsList
-    li discord sh*t
+    li emotes
     li style="list-style-type:none;"
       ul
-        li
-          strike list all members of the guild
-        li apply a role to all members of the guild
-        li apply a role to new members of the guild?
+        li betterttv emotes on the overlay
+        li frankerzfacez emotes on the overlay
+        li prereqs
+          ul
+            li detect emotes in chat along with the number of times they are seen
+            li send those emotes as `animate-overlay` events
+            li generate URLs in each of the emote services
+            li load all emotes from the api when the app loads
+            li write a command to refresh emotes from the api
