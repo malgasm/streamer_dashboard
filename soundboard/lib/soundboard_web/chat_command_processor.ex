@@ -1,4 +1,6 @@
 defmodule SoundboardWeb.ChatCommandProcessor do
+  require Logger
+
   def process_message_for_user(%{username: "malshypeman", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "MalsHypeMan", isMod: isMod, isSub: isSub}, message), do: nil
   def process_message_for_user(%{username: "malgasm", isMod: isMod, isSub: isSub}, message) do
@@ -41,6 +43,8 @@ defmodule SoundboardWeb.ChatCommandProcessor do
 
   defp process_mod_commands(username, message) do
     #addcmd blah sound:awaken message:shtup
+    #todo: add control around stopping or continuing the processing of these commands.
+    #currently this method will only respect the final conditional
     if String.starts_with?(message, "!authorize") do
       result = SoundboardWeb.ProcessHelper.call_process(SoundboardWeb.Hue, {:authorize})
       if result == true do
@@ -56,6 +60,32 @@ defmodule SoundboardWeb.ChatCommandProcessor do
       end
     end
 
+    if String.starts_with?(message, "!spam") do
+      sanitized = String.replace(message, "!spam", "")
+                  |> String.trim()
+
+      args = String.split(sanitized, " ")
+
+      if Kernel.length(args) > 1 do
+        num_times = List.first(args)
+
+        num_times = try do
+          String.to_integer(num_times)
+        rescue
+          RuntimeError ->
+            Logger.debug "error parsing #{num_times} as an integer"
+            List.first(args)
+        end
+
+        to_spam = String.replace(sanitized, List.first(args), "")
+                  |> String.trim()
+
+        Logger.debug "spamming #{to_spam} #{num_times} times"
+
+        process_spam(num_times, to_spam)
+      end
+    end
+
     if String.starts_with?(message, "!sounds") do
       send_message("#{username} sounds: " <> Enum.join(SoundboardWeb.Sounds.get_sound_names, ","))
     end
@@ -64,12 +94,23 @@ defmodule SoundboardWeb.ChatCommandProcessor do
       send_message SoundboardWeb.CustomCommandsHelper.remove_command(message, username)
     end
 
-    case sanitize_message(message) do
-      # "status" ->
-      #   send_message("@#{username}, you're a mod and a sub.")
-      #   true
-      _ -> false
-    end
+    # case sanitize_message(message) do
+    #   "spam" ->
+    #     true
+    #   _ -> false
+    # end
+  end
+
+  defp process_spam(num_times, to_spam) when is_integer(num_times) do
+    Enum.each(1..num_times, fn x ->
+      Logger.debug "sending message #{to_spam}"
+      send_message to_spam
+    end)
+  end
+
+  defp process_spam(num_times, to_spam) do
+    Logger.error "Error processing !spam command. Invalid arguments."
+    send_message "NOPERS"
   end
 
   defp sanitize_message(msg), do: String.downcase(msg)
@@ -80,13 +121,19 @@ defmodule SoundboardWeb.ChatCommandProcessor do
     sanitized_message = sanitize_message(message)
 
     SoundboardWeb.CustomCommandsHelper.match_and_process_commands(username, message)
+    SoundboardWeb.BuiltInCommandsHelper.process_built_in_command(username, message)
+  end
 
-    case sanitized_message do
-      "!commands" -> send_message("commands: " <> commands_for_chat_list <> ", mods only: #{mod_commands}")
-      "!variables" -> send_message("variables for commands: $sender (whoever runs the command) | $msg (the supplied message)")
-      "gimme the codes" -> send_message(SoundboardWeb.NukaCrypt.get_nukacrypt_code_text)
-      _ -> nil
-    end
+  def commands_for_chat_list do
+    SoundboardWeb.CustomCommandsHelper.list_commands
+    |> Enum.filter(fn(cmd) ->
+      String.starts_with?(cmd, "!")
+    end)
+    |> Enum.join(", ")
+  end
+
+  def mod_commands do
+    "!addcmd, !delcmd, !sounds, !variables"
   end
 
   defp send_message(msg), do: SoundboardWeb.MessagingHelper.send_twitch_chat_message(msg)
@@ -97,17 +144,5 @@ defmodule SoundboardWeb.ChatCommandProcessor do
   end
 
   defp process_remove_command(user, message) do
-  end
-
-  defp commands_for_chat_list do
-    SoundboardWeb.CustomCommandsHelper.list_commands
-    |> Enum.filter(fn(cmd) ->
-      String.starts_with?(cmd, "!")
-    end)
-    |> Enum.join(", ")
-  end
-
-  defp mod_commands do
-    "!addcmd, !delcmd, !sounds, !variables"
   end
 end

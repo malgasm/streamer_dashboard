@@ -72,6 +72,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     Soundboard.SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_LEFT", %{})
     {:noreply, config}
   end
+
   def handle_info({:parted, channel}, config) do
     Logger.error "user parted #{channel} (incoming handler /2)"
     {:noreply, config}
@@ -82,23 +83,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
               Soundboard.SoundboardWeb.StreamEvents.create_event(name, "USER_JOINED", %{})
               " #{name}\n"
             end)
-    {:noreply, config}
-  end
-  def handle_info({:received, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.info "#{nick} from #{channel}: #{msg} (incoming handler)"
-    {:noreply, config}
-  end
-
-  def handle_info({:mentioned, msg, %SenderInfo{:nick => nick}, channel}, config) do
-    Logger.error "#{nick} mentioned you in #{channel}"
-    case String.contains?(msg, "hi") do
-      true ->
-        reply = "Hi #{nick}!"
-        Client.msg config.client, :privmsg, config.channel, reply
-        Logger.info "Sent #{reply} to #{config.channel}"
-      false ->
-        :ok
-    end
     {:noreply, config}
   end
 
@@ -113,11 +97,12 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     {:noreply, config}
   end
 
-  defp handle_tagged_message("CLEARCHAT", cmd, arg) do
+  def handle_tagged_message("CLEARCHAT", cmd, arg) do
     IO.puts "CLEARCHAT request received"
   end
 
-  defp handle_tagged_message("PRIVMSG", cmd, arg) do
+  #todo: figure out a better way to test this and make it private again
+  def handle_tagged_message("PRIVMSG", cmd, arg) do
     SoundboardWeb.ProcessHelper.send_process(
       SoundboardWeb.IncomingMessageHandler,
       prepare_message_from_irc(arg, cmd)
@@ -126,67 +111,28 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     message = message_from_tagged_arg(arg)
     # IO.puts "EMOTES\n\n\n\n\n\n"
 
+    Logger.info "(incoming chat) PRIVMSG #{inspect arg} #{inspect cmd}"
+    Logger.info "(incoming chat) Received message #{inspect message} from user #{username_from_cmd(cmd)}"
+
     SoundboardWeb.AnimationCommandsHelper.animate_emotes(emote_ids_from_cmd(cmd))
 
     if message == "testvideo" && username_from_cmd(cmd) == "malgasm"  do
-
       IO.puts "TESTVIDEO\n\n\n\n"
-
       SoundboardWeb.MessagingHelper.broadcast_new_play_video_event("8TGUnriw9k4")
     end
+  end
 
-    if message == "simulatesub" && username_from_cmd(cmd) == "malgasm"  do
-      IO.puts "SIMULATESUB\n\n\n\n"
-      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=sub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
-      # IO.inspect prepare_special_event_args("", cmdz)
+  def handle_tagged_message(_, cmd, arg) do
+    IO.puts "unhandled tagged message"
 
+    if msg_id_from_cmd(cmd) do
       SoundboardWeb.ProcessHelper.send_process(
         SoundboardWeb.SpecialEventHandler,
-        prepare_special_event_args("", cmdz)
-      )
-    end
-    if message == "simulateresub" && username_from_cmd(cmd) == "malgasm"  do
-      IO.puts "SIMULATERESUB\n\n\n\n"
-      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=resub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=6;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
-      IO.inspect prepare_special_event_args("", cmdz)
-
-      SoundboardWeb.ProcessHelper.send_process(
-        SoundboardWeb.SpecialEventHandler,
-        prepare_special_event_args("", cmdz)
+        prepare_special_event_args(arg, cmd)
       )
     end
 
-    if message == "simulateresubnostreak" && username_from_cmd(cmd) == "malgasm"  do
-      IO.puts "SIMULATERESUB\n\n\n\n"
-      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=1399c486-1376-48f1-8489-f313af16d507;login=Shroud;mod=1;msg-id=resub;msg-param-cumulative-months=6;msg-param-months=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s6\\smonths,\\scurrently\\son\\sa\\s6\\smonth\\sstreak!;tmi-sent-ts=1568082484294;user-id=129228929;user-type=mod"
-      IO.inspect prepare_special_event_args("", cmdz)
-
-      SoundboardWeb.ProcessHelper.send_process(
-        SoundboardWeb.SpecialEventHandler,
-        prepare_special_event_args("", cmdz)
-      )
-    end
-
-    if message == "simulatemultiplegiftsubs" && username_from_cmd(cmd) == "malgasm"  do
-      IO.puts "SIMULATE MULTIPLE GIFT SUBS\n\n\n\n\n\n"
-      cmdz = "@badge-info=subscriber/6;badges=moderator/1,subscriber/6,overwatch-league-insider_2019A/1;color=#FF0000;display-name=Shroud;emotes=;flags=;id=75cf0038-ab1e-4842-82ce-b35f214f8eca;login=Shroud;mod=1;msg-id=submysterygift;msg-param-mass-gift-count=5;msg-param-origin-id=69\s46\s38\sfc\s9b\see\s7f\sb5\s3d\s1b\s81\s8d\s58\s91\s02\s21\s59\s86\s1b\s5d;msg-param-sender-count=45;msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=Shroud\sis\sgifting\s5\sTier\s1\sSubs\sto\smalgasm's\scommunity!\sThey've\sgifted\sa\stotal\sof\s45\sin\sthe\schannel!;tmi-sent-ts=1568090502470;user-id=129228929;user-type=mod"
-
-      SoundboardWeb.ProcessHelper.send_process(
-        SoundboardWeb.SpecialEventHandler,
-        prepare_special_event_args("", cmdz)
-      )
-    end
-
-    if message == "simulategiftsub" && username_from_cmd(cmd) == "malgasm" do
-      IO.puts "SIMULATEGIFTSUB\n\n\n\n"
-      cmdz = "@badge-info=subscriber/12;badges=broadcaster/1,subscriber/12,sub-gifter/1;color=#22DD13;display-name=malgasm;emotes=;flags=;id=281ce9a4-e4eb-4a63-a58e-8503b33a1b69;login=malgasm;mod=0;msg-id=subgift;msg-param-months=1;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=phnxdwn_n;msg-param-recipient-id=81307341;msg-param-recipient-user-name=phnxdwn_n;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(malgasm);msg-param-sub-plan=1000;room-id=158826258;subscriber=1;system-msg=malgasm\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sphnxdwn_n!;tmi-sent-ts=1568084845220;user-id=158826258;user-type="
-      IO.inspect prepare_special_event_args("", cmdz)
-
-      SoundboardWeb.ProcessHelper.send_process(
-        SoundboardWeb.SpecialEventHandler,
-        prepare_special_event_args("", cmdz)
-      )
-    end
+    Logger.debug "(incoming chat) #{inspect cmd}"
   end
 
   defp prepare_message_from_irc(arg, cmd) do
@@ -219,24 +165,6 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
         gift_sub_quantity: gift_sub_quantity_from_cmd(cmd)
       }
     }
-  end
-
-  defp handle_tagged_message(_, cmd, arg) do
-    IO.puts "unhandled tagged message"
-
-    # IO.puts "parsed tags"
-    # IO.inspect parse_tags(cmd)
-    # IO.puts "arg"
-    # IO.inspect arg
-
-    if msg_id_from_cmd(cmd) do
-      SoundboardWeb.ProcessHelper.send_process(
-        SoundboardWeb.SpecialEventHandler,
-        prepare_special_event_args(arg, cmd)
-      )
-    end
-
-    IO.inspect cmd
   end
 
   def handle_info(msg, config) do

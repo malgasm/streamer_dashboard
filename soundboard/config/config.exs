@@ -10,7 +10,7 @@ use Mix.Config
 config :soundboard,
   ecto_repos: [Soundboard.Repo]
 
-config :phoenix_live_reload,
+config :soundboard, :phoenix_live_reload,
   backend: :fs_poll
 
 # Configures the endpoint
@@ -49,10 +49,10 @@ config :soundboard,
 config :soundboard,
   ui_url: System.get_env("UI_URL")
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env()}.exs"
-
 config :nostrum,
   token: System.get_env("DISCORD_BOT_TOKEN"),
   num_shards: :auto
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env()}.exs"

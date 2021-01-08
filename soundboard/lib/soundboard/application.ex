@@ -8,24 +8,36 @@ defmodule Soundboard.Application do
 
   def start(_type, _args) do
     # List all child processes to be supervised
-    children = [
-      # Starts a worker by calling: Soundboard.Worker.start_link(arg)
-      # {Soundboard.Worker, arg},
-      # Start the Ecto repository
-      # Soundboard.Repo,
-      # Start the endpoint when the application starts
-      # SoundboardWeb.Endpoint,
-      KV.Bucket,
-      # SoundboardWeb.DiscordBot,
-      # SoundboardWeb.TwitchPubSub,
-      # SoundboardWeb.SpecialEventHandler,
-      # SoundboardWeb.TwitchIncomingChatHandler,
-      # SoundboardWeb.TwitchOutgoingChatHandler,
-      # SoundboardWeb.IncomingMessageHandler,
-      SoundboardWeb.WebhookPubSub
-      # SoundboardWeb.Hue
-      # SoundboardWeb.PeriodicMessage,
-    ]
+    children = if Mix.env == :test do
+      [
+        # Starts a worker by calling: Soundboard.Worker.start_link(arg)
+        # {Soundboard.Worker, arg},
+        # Start the Ecto repository
+        Soundboard.Repo,
+        # Start the endpoint when the application starts
+        SoundboardWeb.Endpoint,
+        KV.Bucket
+      ]
+    else
+      [
+        # Starts a worker by calling: Soundboard.Worker.start_link(arg)
+        # {Soundboard.Worker, arg},
+        # Start the Ecto repository
+        Soundboard.Repo,
+        # Start the endpoint when the application starts
+        SoundboardWeb.Endpoint,
+        KV.Bucket,
+        SoundboardWeb.DiscordBot,
+        SoundboardWeb.TwitchPubSub,
+        SoundboardWeb.SpecialEventHandler,
+        SoundboardWeb.TwitchIncomingChatHandler,
+        SoundboardWeb.TwitchOutgoingChatHandler,
+        SoundboardWeb.IncomingMessageHandler,
+        SoundboardWeb.Hue,
+        SoundboardWeb.PeriodicMessage,
+        SoundboardWeb.WebhookPubSub
+      ]
+    end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

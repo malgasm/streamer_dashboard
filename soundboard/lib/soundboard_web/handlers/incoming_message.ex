@@ -22,6 +22,8 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     SoundboardWeb.BitsProcessor.process_message_for_user(user, message)
     SoundboardWeb.ChatCommandProcessor.process_message_for_user(user, message)
 
-    Soundboard.SoundboardWeb.StreamMessages.create_message(user.username, message) #todo: GenServer this
+    unless String.downcase(user.username) == System.get_env("TWITCH_USERNAME_OUTGOING") do
+      Soundboard.SoundboardWeb.StreamMessages.create_message(user.username, message) #todo: GenServer this
+    end
   end
 end

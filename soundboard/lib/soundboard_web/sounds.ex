@@ -14,6 +14,6 @@ defmodule SoundboardWeb.Sounds do
 
   def get_sound_relative_path_for_web(sound) do
     %{key: sound_key, path: path} = Enum.at(Enum.filter(get_sounds, fn(item) -> item.key == sound end), 0)
-    Phoenix.Endpoint.static_path(path)
+    path
   end
 end
