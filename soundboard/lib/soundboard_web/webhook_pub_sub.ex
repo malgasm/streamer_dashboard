@@ -86,7 +86,7 @@ defmodule SoundboardWeb.WebhookPubSub do
   end
 
   def handle_webhook_pubsub_message({"phx_reply", payload, "ping"}, state) do
-    Logger.debug "Webhook: PONG received! waiting #{@ping_pong_delay}ms for next heartbeat"
+    #Logger.debug "Webhook: PONG received! waiting #{@ping_pong_delay}ms for next heartbeat"
     KV.Bucket.put(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED", "true")
     Process.send_after(self(), :ping_pong, @ping_pong_delay)
     {:ok, state}
@@ -132,7 +132,7 @@ defmodule SoundboardWeb.WebhookPubSub do
 
   def handle_info(:ping_pong, state) do
     Process.send_after(self(), :reconnect_if_no_pong, 10 * 1000)
-    Logger.debug("Webhook: Sending PING")
+    #Logger.debug("Webhook: Sending PING")
     {:reply, {:text, ping_message_body}, state}
   end
 
@@ -140,7 +140,7 @@ defmodule SoundboardWeb.WebhookPubSub do
     if KV.Bucket.get(:streamer_dashboard, "WEBHOOK_PUBSUB_PONG_RECEIVED") == nil do
       Kernel.send(self(), :start_link)
     else
-      Logger.debug("Webhook PubSub: ten seconds has expired and we've received a PONG malgasWoot")
+      #Logger.debug("Webhook PubSub: ten seconds has expired and we've received a PONG malgasWoot")
     end
     {:ok, state}
   end

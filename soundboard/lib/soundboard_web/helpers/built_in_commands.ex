@@ -5,6 +5,8 @@ defmodule SoundboardWeb.BuiltInCommandsHelper do
   def process_built_in_command(username, message) do
     case message do
       "!commands" -> send_message("commands: " <> commands_for_chat_list <> ", mods only: #{mod_commands}")
+      "!bttv" -> send_message(Enum.join(SoundboardWeb.BetterTTV.emote_codes(), " "))
+      "!ffz" -> send_message(Enum.join(SoundboardWeb.Frankerfacez.emote_codes(), " "))
       "!variables" -> send_message("variables for commands: $sender (whoever runs the command) | $msg (the supplied message)")
       "gimme the codes" -> send_message(SoundboardWeb.NukaCrypt.get_nukacrypt_code_text)
       _ -> nil

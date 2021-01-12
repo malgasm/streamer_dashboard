@@ -1,6 +1,8 @@
 defmodule KV.Bucket do
   use Agent
 
+  @default_bucket :streamer_dashboard
+
   @doc """
   Starts a new bucket.
   """
@@ -15,6 +17,10 @@ defmodule KV.Bucket do
     Agent.get(bucket, &Map.get(&1, key))
   end
 
+  def get(key) do
+    Agent.get(@default_bucket, &Map.get(&1, key))
+  end
+
   @doc """
   Puts the `value` for the given `key` in the `bucket`.
   """
@@ -22,8 +28,16 @@ defmodule KV.Bucket do
     Agent.update(bucket, &Map.put(&1, key, value))
   end
 
+  def put(key, value) do
+    Agent.update(@default_bucket, &Map.put(&1, key, value))
+  end
+
   def delete(bucket, key) do
     Agent.get_and_update(bucket, &Map.pop(&1, key))
+  end
+
+  def delete(key) do
+    Agent.get_and_update(@default_bucket, &Map.pop(&1, key))
   end
 end
 

@@ -18,6 +18,9 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
       channel: Application.get_env(:soundboard, :twitch_incoming_channel),
       client:  nil
     }
+    SoundboardWeb.Frankerfacez.fetch_emotes()
+    SoundboardWeb.BetterTTV.fetch_emotes_for_channel(System.get_env("TWITCH_USER_ID"))
+
     IO.puts "incoming start #{inspect config}"
     GenServer.start_link(__MODULE__, [config])
   end

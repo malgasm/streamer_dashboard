@@ -46,6 +46,7 @@ defmodule Soundboard.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:huex, git: "https://github.com/brousalis/huex.git"},
+      {:finch, "~> 0.5"},
       {:mock, "~> 0.3.0", only: [:test]},
 			{:nostrum, "~> 0.4"},
       {:phoenix, "~> 1.4.7"},

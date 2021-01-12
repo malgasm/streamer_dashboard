@@ -27,6 +27,7 @@ defmodule Soundboard.Application do
         # Start the endpoint when the application starts
         SoundboardWeb.Endpoint,
         KV.Bucket,
+        {Finch, name: SoundboardFinch},
         SoundboardWeb.DiscordBot,
         SoundboardWeb.TwitchPubSub,
         SoundboardWeb.SpecialEventHandler,

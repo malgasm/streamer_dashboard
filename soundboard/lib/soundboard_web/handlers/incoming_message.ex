@@ -22,6 +22,9 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     SoundboardWeb.BitsProcessor.process_message_for_user(user, message)
     SoundboardWeb.ChatCommandProcessor.process_message_for_user(user, message)
 
+    SoundboardWeb.BetterTTV.detect_emotes_and_notify(message)
+    SoundboardWeb.Frankerfacez.detect_emotes_and_notify(message)
+
     unless String.downcase(user.username) == System.get_env("TWITCH_USERNAME_OUTGOING") do
       Soundboard.SoundboardWeb.StreamMessages.create_message(user.username, message) #todo: GenServer this
     end

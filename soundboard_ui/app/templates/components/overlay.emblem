@@ -10,7 +10,7 @@ if currentVideo
 
 component animation animationDidFinish=(action 'animationDidFinish')
 
-/.todaysGoalsContainer
+//.todaysGoalsContainer
   h3 today's goals:
   ul.todaysGoalsList
     li emotes
@@ -20,8 +20,8 @@ component animation animationDidFinish=(action 'animationDidFinish')
         li frankerzfacez emotes on the overlay
         li prereqs
           ul
+            li load all emotes from the api when the app loads
             li detect emotes in chat along with the number of times they are seen
             li send those emotes as `animate-overlay` events
             li generate URLs in each of the emote services
-            li load all emotes from the api when the app loads
             li write a command to refresh emotes from the api
