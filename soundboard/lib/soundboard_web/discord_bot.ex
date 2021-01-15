@@ -103,16 +103,27 @@ defmodule SoundboardWeb.DiscordBot do
 
     case message do
       "test" ->
-        create_message(channel, SoundboardWeb.SevenDaysManager.test)
-      "7d2dstatus" ->
-        create_message(channel, SoundboardWeb.SevenDaysManager.status)
-      "restart7d2d" ->
-        create_message(channel, SoundboardWeb.SevenDaysManager.stop)
-        create_message(channel, SoundboardWeb.SevenDaysManager.start)
-      "backup7d2d" ->
-        create_message(channel, SoundboardWeb.SevenDaysManager.backup)
+        create_message(channel, "Hewwo")
+
+      # "7d2dstatus" ->
+      #   create_message(channel, SoundboardWeb.SevenDaysManager.status)
+      # "restart7d2d" ->
+      #   create_message(channel, SoundboardWeb.SevenDaysManager.stop)
+      #   create_message(channel, SoundboardWeb.SevenDaysManager.start)
+      # "backup7d2d" ->
+      #   create_message(channel, SoundboardWeb.SevenDaysManager.backup)
       _ ->
         :noop
+    end
+
+    if String.starts_with?(message, "!steamid") do
+      #todo: only enable this command if a steam key is present and it's active
+      cmds = String.split(message, " ")
+      if Kernel.length(cmds) == 2 do
+        create_message(channel, SoundboardWeb.Steam.get_steamid(Enum.at(cmds, 1)))
+      else
+        create_message(channel, "!steamid takes one argument, the steam id. e.g. `!steamid shroud`")
+      end
     end
 
     if String.starts_with?(message, "updatestatusstreaming") do
@@ -133,6 +144,35 @@ defmodule SoundboardWeb.DiscordBot do
         :ignore
     end
 
+    if String.starts_with?(message, "!whitelist") do
+      args = String.split(message, " ")
+
+      Logger.error Kernel.length(args)
+      KV.Bucket.put(:steamid_discord_channel, channel)
+      case Kernel.length(args) do
+        1 ->
+          KV.Bucket.put(:steamid_discord_channel, channel)
+          Logger.warn "chan #{channel}"
+          {:ok, pid} = RustRcon.start_link()
+          RustRcon.get_whitelist(pid)
+        2 ->
+          create_message(channel, "uwu")
+        3 ->
+          case Enum.at(args, 1) do
+            "add" ->
+              {:ok, pid} = RustRcon.start_link()
+              to_add = Enum.at(args, 2)
+              RustRcon.authorize_user(pid, to_add)
+            "delete" ->
+              to_delete = Enum.at(args, 2)
+              {:ok, pid} = RustRcon.start_link()
+              RustRcon.revoke_user_authorization(pid, to_delete)
+            _->
+              create_message(channel, "valid operations are `add` and `delete`")
+          end
+        _->
+      end
+    end
   end
 
   # Default event handler, if you don't include this, your consumer WILL crash if
