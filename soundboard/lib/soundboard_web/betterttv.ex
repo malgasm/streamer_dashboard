@@ -20,6 +20,8 @@ defmodule SoundboardWeb.BetterTTV do
     err
   end
 
+  def is_emote?(emote_code), do: Enum.member?(emote_codes(), emote_code)
+
   defp emotes(), do: KV.Bucket.get(@bucket_name) || []
 
   def emote_codes() do
@@ -43,7 +45,7 @@ defmodule SoundboardWeb.BetterTTV do
     end)
   end
 
-  defp emote_url(code, size \\ "3") do
+  def emote_url(code, size \\ "3") do
     id = (Enum.filter(emotes(), fn(emote) -> emote["code"] == code end) |> Enum.at(0))["id"]
     @image_base_url <> id <> "/" <> size <> "x"
   end

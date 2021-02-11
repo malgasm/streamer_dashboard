@@ -22,6 +22,8 @@ defmodule SoundboardWeb.Frankerfacez do
     Enum.map(emotes(), fn(emote_obj) -> emote_obj["name"] end)
   end
 
+  def is_emote?(emote_code), do: Enum.member?(emote_codes(), emote_code)
+
   defp parse_response({:error, err}) do
     Logger.error("Frankerfacez: Error fetching emotes: #{inspect err}")
     err
@@ -45,7 +47,7 @@ defmodule SoundboardWeb.Frankerfacez do
     end)
   end
 
-  defp emote_url(code, size \\ "4") do
+  def emote_url(code, size \\ "4") do
     emote = (Enum.filter(emotes(), fn(emote) -> emote["name"] == code end) |> Enum.at(0))
     if emote["urls"][size] do
       "https:" <> emote["urls"][size]

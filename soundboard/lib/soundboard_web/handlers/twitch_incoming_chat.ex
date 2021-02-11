@@ -18,6 +18,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
       channel: Application.get_env(:soundboard, :twitch_incoming_channel),
       client:  nil
     }
+    #todo: is there a better place to fetch these?
     SoundboardWeb.Frankerfacez.fetch_emotes()
     SoundboardWeb.BetterTTV.fetch_emotes_for_channel(System.get_env("TWITCH_USER_ID"))
 
@@ -147,7 +148,8 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
         isMod: mod_status_from_cmd(cmd),
         isSub: sub_status_from_cmd(cmd),
         bits: bits_from_cmd(cmd),
-        emotes: emotes_from_cmd(cmd)
+        emotes: emotes_from_cmd(cmd),
+        other_emotes: SoundboardWeb.Utility.get_emote_usage(message_from_tagged_arg(arg))
       },
       message_from_tagged_arg(arg)
     }
@@ -227,6 +229,8 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   defp username_from_cmd(cmd), do: display_name_from_cmd(cmd)
 
   defp emotes_from_cmd(cmd), do: parse_tags(cmd)["emotes"]
+  #sample emote message
+  #emotes=302303590:0-7,9-16,18-25,27-34,36-43/304432163:45-56,58-69,71-82,84-95,97-108/1531122:110-116,118-124,126-132,134-140,142-148
 
   defp emote_ids_from_cmd(cmd), do: parse_tags(cmd)["emotes"] |> emote_ids
 

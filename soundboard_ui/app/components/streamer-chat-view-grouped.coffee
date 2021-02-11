@@ -31,6 +31,7 @@ export default Ember.Component.extend
       id: @get('utility').randNum(),
       text: payload.value,
       emotes: payload.user?.emotes,
+      other_emotes: payload.user?.other_emotes,
       user: @get('store').createRecord('user', jQuery.extend(payload.user, {id: @get('utility').randNum()}))
       sentAt: moment()
     )
