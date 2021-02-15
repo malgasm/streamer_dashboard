@@ -7,5 +7,6 @@ Router = EmberRouter.extend
 
 Router.map ->
   @route('overlay')
+  @route('chat')
 
 export default Router

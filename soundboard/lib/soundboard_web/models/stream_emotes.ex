@@ -1,4 +1,4 @@
-defmodule Soundboard.SoundboardWeb.StreamEmotes do
+defmodule SoundboardWeb.StreamEmotes do
   use Ecto.Schema
   import Ecto.Changeset
 

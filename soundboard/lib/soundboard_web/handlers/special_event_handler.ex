@@ -69,12 +69,12 @@ defmodule SoundboardWeb.SpecialEventHandler do
 
   defp handle_sub(params) do
     send_message "YOOO #{params.username}!! Welcome to the MalPals!!!! malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
-    Soundboard.SoundboardWeb.StreamEvents.create_event(params.username, "SUB", %{})
+    SoundboardWeb.StreamEvents.create_event(params.username, "SUB", %{})
   end
 
   defp handle_multiple_gift_subs(params) do
     send_message "HOLY SH*T!! #{params.username} just gifted #{params.gift_sub_quantity} subs!!! malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove malgasWoot malgasLove Thank you #{params.username}!!!"
-    Soundboard.SoundboardWeb.StreamEvents.create_event(params.username, "GIFT_SUB", %{ quantity: params.gift_sub_quantity }) #todo: recipient
+    SoundboardWeb.StreamEvents.create_event(params.username, "GIFT_SUB", %{ quantity: params.gift_sub_quantity }) #todo: recipient
     play_airhorn(String.to_integer(params.gift_sub_quantity)*3)
   end
 
@@ -94,7 +94,7 @@ defmodule SoundboardWeb.SpecialEventHandler do
       "anonymous"
     end
 
-    Soundboard.SoundboardWeb.StreamEvents.create_event(params.username, "GIFT_SUB", %{quantity: 1, recipient: params.gift_sub_recipient})
+    SoundboardWeb.StreamEvents.create_event(params.username, "GIFT_SUB", %{quantity: 1, recipient: params.gift_sub_recipient})
     send_message("Thank you #{username} for gifting a sub to #{params.gift_sub_recipient}!!! malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin")
     #todo: special messages for tier 2 & 3 subs
     #todo: sounds
@@ -102,12 +102,12 @@ defmodule SoundboardWeb.SpecialEventHandler do
 
   defp handle_resub(params, nil) do
     send_message "Thank you #{params.username} for continuing your sub for #{params.sub_months} friggin months!!! malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
-    Soundboard.SoundboardWeb.StreamEvents.create_event(params.username, "RESUB", %{ months: params.sub_months })
+    SoundboardWeb.StreamEvents.create_event(params.username, "RESUB", %{ months: params.sub_months })
   end
 
   defp handle_resub(params, _) do
     send_message "Thank you #{params.username} for continuing your sub for #{params.sub_months} friggin months!!! Look at you go with that #{params.sub_streak} month streak malgasLove malgasLove malgasLove malgasLove malgasLove malgasGrin"
-    Soundboard.SoundboardWeb.StreamEvents.create_event(params.username, "RESUB", %{ months: params.sub_months, streak: params.sub_streak })
+    SoundboardWeb.StreamEvents.create_event(params.username, "RESUB", %{ months: params.sub_months, streak: params.sub_streak })
   end
 
   defp broadcast_new_special_event(type, params) do

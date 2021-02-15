@@ -26,7 +26,7 @@ defmodule SoundboardWeb.IncomingMessageHandler do
     SoundboardWeb.Frankerfacez.detect_emotes_and_notify(message)
 
     unless String.downcase(user.username) == System.get_env("TWITCH_USERNAME_OUTGOING") do
-      Soundboard.SoundboardWeb.StreamMessages.create_message(user.username, message) #todo: GenServer this
+      SoundboardWeb.StreamMessages.create_message(user.username, message) #todo: GenServer this
     end
   end
 end

@@ -1,11 +1,11 @@
-defmodule Soundboard.SoundboardWeb.StreamUsers do
+defmodule SoundboardWeb.StreamUsers do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
 
   schema "stream_users" do
     field :username, :string
-    has_many :stream_messages, Soundboard.SoundboardWeb.StreamMessages, foreign_key: :stream_user_id
+    has_many :stream_messages, SoundboardWeb.StreamMessages, foreign_key: :stream_user_id
 
     timestamps
   end
@@ -16,7 +16,7 @@ defmodule Soundboard.SoundboardWeb.StreamUsers do
 
   def find_or_create_user(username) when is_binary(username) do
     user = handle_create_user(Soundboard.Repo.insert(
-      changeset(%Soundboard.SoundboardWeb.StreamUsers{}, %{username: sanitize_username(username)}),
+      changeset(%SoundboardWeb.StreamUsers{}, %{username: sanitize_username(username)}),
         on_conflict: :nothing
       )
     )
@@ -25,11 +25,11 @@ defmodule Soundboard.SoundboardWeb.StreamUsers do
 
   defp handle_create_user({:error, _}), do: nil
 
-  defp handle_create_user({:ok, %Soundboard.SoundboardWeb.StreamUsers{id: nil}}), do: nil
+  defp handle_create_user({:ok, %SoundboardWeb.StreamUsers{id: nil}}), do: nil
   defp handle_create_user({:ok, user}), do: user
 
   defp find_user_if_already_created(username, nil) do
-    (from u in Soundboard.SoundboardWeb.StreamUsers,
+    (from u in SoundboardWeb.StreamUsers,
       where: u.username == ^sanitize_username(username))
     |> Soundboard.Repo.one
   end

@@ -69,11 +69,11 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
     {:stop, :normal, config}
   end
   def handle_info({:joined, channel, user_info}, config) do
-    Soundboard.SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_JOINED", %{})
+    SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_JOINED", %{})
     {:noreply, config}
   end
   def handle_info({:parted, channel, user_info}, config) do
-    Soundboard.SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_LEFT", %{})
+    SoundboardWeb.StreamEvents.create_event(user_info.nick, "USER_LEFT", %{})
     {:noreply, config}
   end
 
@@ -84,7 +84,7 @@ defmodule SoundboardWeb.TwitchIncomingChatHandler do
   def handle_info({:names_list, channel, names_list}, config) do
     names = String.split(names_list, " ", trim: true)
             |> Enum.map(fn name ->
-              Soundboard.SoundboardWeb.StreamEvents.create_event(name, "USER_JOINED", %{})
+              SoundboardWeb.StreamEvents.create_event(name, "USER_JOINED", %{})
               " #{name}\n"
             end)
     {:noreply, config}

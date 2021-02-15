@@ -1,4 +1,4 @@
-defmodule Soundboard.SoundboardWeb.StreamEvents do
+defmodule SoundboardWeb.StreamEvents do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
@@ -7,16 +7,16 @@ defmodule Soundboard.SoundboardWeb.StreamEvents do
     field :event_data, :map
     field :event_type, :string
     field :stream_session_id, :id
-    belongs_to :stream_user, Soundboard.SoundboardWeb.StreamUsers, foreign_key: :stream_user_id
+    belongs_to :stream_user, SoundboardWeb.StreamUsers, foreign_key: :stream_user_id
 
     timestamps()
   end
 
   def create_event(username, event_type, event_data) do
-    user = Soundboard.SoundboardWeb.StreamUsers.find_or_create_user(username)
+    user = SoundboardWeb.StreamUsers.find_or_create_user(username)
 
     Soundboard.Repo.insert(
-      changeset(%Soundboard.SoundboardWeb.StreamEvents{},
+      changeset(%SoundboardWeb.StreamEvents{},
         %{
           stream_user_id: user.id,
           event_type: event_type,
@@ -27,7 +27,7 @@ defmodule Soundboard.SoundboardWeb.StreamEvents do
   end
 
   def all_events() do
-    (from u in Soundboard.SoundboardWeb.StreamEvents, preload: [:stream_user])
+    (from u in SoundboardWeb.StreamEvents, preload: [:stream_user])
     |> Soundboard.Repo.all
   end
 

@@ -47,6 +47,7 @@ export default Ember.Component.extend
   addMessageToGroup: (group, message) ->
     group.set('lastMessageSentAt', moment())
     group.get('messages').addObject(message)
+    @get('messages').push(message)
 
   groupedMessagesSortedByLastMessage: Em.computed.sort('groupedMessages.@each.lastMessageSentAt', (a, b) ->
     if moment(a.get('lastMessageSentAt')) > moment(b.get('lastMessageSentAt'))

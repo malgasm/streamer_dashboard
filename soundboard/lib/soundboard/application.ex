@@ -36,7 +36,8 @@ defmodule Soundboard.Application do
         SoundboardWeb.IncomingMessageHandler,
         SoundboardWeb.Hue,
         SoundboardWeb.PeriodicMessage,
-        SoundboardWeb.WebhookPubSub
+        SoundboardWeb.WebhookPubSub,
+        SoundboardWeb.ObsWebsocket
       ]
     end
 

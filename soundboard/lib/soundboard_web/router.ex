@@ -14,6 +14,7 @@ defmodule SoundboardWeb.Router do
 
     resources "/sounds", SoundsController
     resources "/youtube_videos", YoutubeVideosController
+    resources "/messages", StreamMessagesController
   end
 
   pipeline :api do

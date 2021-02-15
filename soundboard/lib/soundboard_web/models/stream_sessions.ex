@@ -1,4 +1,4 @@
-defmodule Soundboard.SoundboardWeb.StreamSessions do
+defmodule SoundboardWeb.StreamSessions do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
@@ -14,13 +14,13 @@ defmodule Soundboard.SoundboardWeb.StreamSessions do
   end
 
   defp handle_find_stream_session(nil) do
-    Soundboard.Repo.insert(changeset(%Soundboard.SoundboardWeb.StreamSessions{}, %{}))
+    Soundboard.Repo.insert(changeset(%SoundboardWeb.StreamSessions{}, %{}))
   end
 
   defp handle_find_stream_session(stream_session), do: stream_session
 
   defp find_stream_session(id) do
-    (from s in Soundboard.SoundboardWeb.StreamSessions,
+    (from s in SoundboardWeb.StreamSessions,
       where: s.id == ^id)
     |> Soundboard.Repo.one
   end

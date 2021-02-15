@@ -67,4 +67,8 @@ defmodule SoundboardWeb.Utility do
 
   defp handle_fetch_result({:ok, _res}), do: true
   defp handle_fetch_result(_res), do: false
+
+  def sha256_base64_hash(input) do
+    :crypto.hash(:sha256, input) |> Base.encode64
+  end
 end
