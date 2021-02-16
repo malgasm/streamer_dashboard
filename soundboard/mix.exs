@@ -21,7 +21,7 @@ defmodule Soundboard.MixProject do
     applications = if Mix.env == :test do
       [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex]
     else
-      [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex, :nostrum]
+      [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :exirc, :websockex, :gun]
     end
 
     [

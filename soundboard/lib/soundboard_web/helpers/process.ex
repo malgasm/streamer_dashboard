@@ -10,7 +10,7 @@ defmodule SoundboardWeb.ProcessHelper do
   def process_pid(klass) do
     pid = nil
 
-    proc = List.keyfind(Supervisor.which_children(Soundboard.Supervisor), klass, 0)
+    proc = List.keyfind(DynamicSupervisor.which_children(Soundboard.DynamicSupervisor), [klass], 3)
 
     pid = if proc != nil do
       {_, pid, _, _} = proc

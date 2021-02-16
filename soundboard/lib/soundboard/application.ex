@@ -5,9 +5,9 @@ defmodule Soundboard.Application do
 
   use Application
   import Supervisor.Spec
+  use DynamicSupervisor
 
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = if Mix.env == :test do
       [
         # Starts a worker by calling: Soundboard.Worker.start_link(arg)
@@ -27,7 +27,6 @@ defmodule Soundboard.Application do
         # Start the endpoint when the application starts
         SoundboardWeb.Endpoint,
         KV.Bucket,
-        {Finch, name: SoundboardFinch},
         SoundboardWeb.DiscordBot,
         SoundboardWeb.TwitchPubSub,
         SoundboardWeb.SpecialEventHandler,
@@ -43,8 +42,22 @@ defmodule Soundboard.Application do
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Soundboard.Supervisor, restart: :transient]
-    Supervisor.start_link(children, opts)
+    opts = [strategy: :one_for_one, restart: :transient]
+    {:ok, pid} = Soundboard.DynamicSupervisor.start_link([])
+
+    Soundboard.DynamicSupervisor.start_child(Finch, [name: SoundboardFinch])
+    Enum.map(children, fn(child) ->
+      Soundboard.DynamicSupervisor.start_child(child)
+    end)
+    {:ok, pid}
+  end
+
+  @impl true
+  def init(init_arg) do
+    DynamicSupervisor.init(
+      strategy: :one_for_one,
+      extra_arguments: [init_arg]
+    )
   end
 
   # Tell Phoenix to update the endpoint configuration
